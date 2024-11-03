@@ -28,6 +28,16 @@ footer {
     width: 100%; /* Make footer full width */
 }
 
+.btn-custom {
+    background-color: rgb(65, 59, 77); /* Custom background color */
+    color: white; /* White text */
+}
+
+.btn-custom:hover {
+    background-color: rgb(65, 59, 77); /* Keep the same background color on hover */
+    color: white; /* Keep text color white */
+}
+
 
 /* Card styles */
 .functionality-card {

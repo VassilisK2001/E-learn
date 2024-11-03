@@ -14,22 +14,22 @@
 
     <nav class="navbar navbar-expand-lg mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp">
                 <img src="<%=request.getContextPath()%>/elearn/logo.svg" alt="Logo" width="150" height="48">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/index.jsp">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign Up</a>
+                        <a class="nav-link"  href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign In</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/signin.jsp">Sign In</a>
                     </li>
                 </ul>
             </div>
@@ -40,7 +40,7 @@
         <h1>Welcome to E-Learn</h1>
         <p>Your platform for connecting students and teachers.</p>
         
-        <div class="row">
+        <div class="row mb-5">
             <!-- Functionality Section 1 -->
             <div class="col-md-4 my-3">
                 <div class="card functionality-card p-4">
@@ -80,6 +80,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Encouragement Section -->
+        <div class="row">
+            <h2>Join E-Learn Today!</h2>
+            <p>Sign up to connect with expert teachers or eager students.</p>
+            <p>Empower your learning journey or share your knowledge!</p>
+            <a href="signup.jsp" class="btn btn-custom btn-lg">Sign Up Now</a>
         </div>
     </main>
 
