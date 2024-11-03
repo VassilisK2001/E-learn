@@ -1,0 +1,70 @@
+/* Body styling for flex layout */
+body {
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Arrange children in a column */
+    min-height: 100vh; /* Full viewport height */
+}
+
+
+/* Navbar styles */
+.navbar {
+    background-color: rgb(65, 59, 77); /* Set navbar color */
+}
+
+/* Navbar text color */
+.navbar .nav-link, .navbar .navbar-brand {
+    color: white; /* Set text color of navbar links and brand to white */
+}
+
+/* Active link styles */
+.navbar .navbar-nav .nav-link.active {
+    font-weight: bold; 
+}
+
+/* Footer styles */
+footer {
+    background-color: rgb(65, 59, 77); /* Set footer color */
+    color: white; /* Optional: set footer text color to white */
+    width: 100%; /* Make footer full width */
+}
+
+
+/* Card styles */
+.functionality-card {
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 20px; /* Padding inside the card */
+    background-color:rgb(65, 59, 77); /* White background for cards */
+    color: white; /* Change text color to white */
+    border: 1px solid #dee2e6; /* Light border for definition */
+    border-radius: 8px; /* Rounded corners for cards */
+}
+
+/* Hover effect for cards */
+.functionality-card:hover {
+    transform: scale(1.05); /* Slightly enlarge the card on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+}
+
+/* Title styles */
+.functionality-title {
+    font-size: 1.5rem; /* Title font size */
+    font-weight: bold; /* Bold title */
+    margin-bottom: 10px; /* Spacing below the title */
+}
+
+/* Description styles */
+.functionality-description {
+    display: none; /* Initially hide the description */
+    font-size: 1rem; /* Font size for description */
+}
+
+/* Show description on card hover */
+.functionality-card:hover .functionality-description {
+    display: block; /* Show the description on hover */
+}
+
+/* Hide title on card hover */
+.functionality-card:hover .functionality-title {
+    display: none; /* Hide the title on hover */
+}
