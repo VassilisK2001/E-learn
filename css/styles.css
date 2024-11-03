@@ -78,3 +78,17 @@ footer {
 .functionality-card:hover .functionality-title {
     display: none; /* Hide the title on hover */
 }
+
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+}
+.tag .remove-tag {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #fff;
+}
