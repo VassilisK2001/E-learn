@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign In</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
-
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -22,13 +21,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
                     </li>
                 </ul>
             </div>
@@ -37,20 +36,18 @@
 
     <!-- Main Content -->
     <main class="container my-5 flex-grow-1">
-        <div id="signupCarousel" class="carousel slide mx-auto" style="max-width: 600px;" data-bs-interval="false">
-            <div class="carousel-inner shadow-lg p-4 rounded bg-white">
-
-                <!-- Slide 1: Personal Information -->
-                <div class="carousel-item active">
-                    <h3 class="mb-4">Personal Information</h3>
-                    <form id="signupForm">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" required>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg p-4 rounded">
+                    <h3 class="mb-4 text-center">Sign In</h3>
+                    <form>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -58,31 +55,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
-                            <select class="form-select" id="role" required onchange="adjustSecondSlide()">
+                            <select class="form-select" id="role" required>
                                 <option value="">Select your role</option>
                                 <option value="student">Student</option>
                                 <option value="teacher">Teacher</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
+                        <button type="submit" class="btn btn-primary w-100 mt-4">Sign In</button>
                     </form>
-                </div>
-
-                <!-- Slide 2: Dynamic Student/Teacher Information -->
-                <div class="carousel-item" id="dynamicSlide">
-                    <h3 class="mb-4" id="dynamicTitle"></h3>
-                    <div id="dynamicFields"></div>
-                    <div id="selectedTags" class="mb-3"></div>
-                    <button type="button" class="btn btn-secondary mt-4 me-2" onclick="prevSlide()">Back</button>
-                    <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
-                </div>
-
-                <!-- Slide 3: Submit -->
-                <div class="carousel-item">
-                    <h3 class="mb-4">Complete Signup</h3>
-                    <button type="button" class="btn btn-secondary mt-4 me-2" onclick="prevSlide()">Back</button>
-                    <button type="submit" class="btn btn-primary mt-4">Sign Up</button>
-                    <p class="mt-3">Already have an account? <a href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a></p>
+                    <p class="text-center mt-3">Don't have an account? <a href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a></p>
                 </div>
             </div>
         </div>
@@ -94,6 +75,5 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<%=request.getContextPath()%>/elearn/js/signup.js"></script>
 </body>
 </html>

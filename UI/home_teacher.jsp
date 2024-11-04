@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Learn - Connect Students & Teachers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
     
 </head>
@@ -23,7 +24,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
+                        <a class="nav-link">Signed in as Mary Smith</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"  href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
@@ -31,64 +35,44 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></span></a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <main class="container my-4 flex-grow-1">
-        <h1>Welcome to E-Learn</h1>
-        <p>Your platform for connecting students and teachers.</p>
+        <h1>Hello Mary Smith. Welcome to E-Learn!</h1>
         
         <div class="row mb-5">
             <!-- Functionality Section 1 -->
-            <div class="col-md-4 my-3">
-                <div class="card functionality-card p-4">
-                    <div class="functionality-title">Profile Creation</div>
-                    <div class="functionality-description">
-                        Teachers and students create profiles to identify their interests and needs.
-                    </div>
+                <div class="col-md-4 my-3">
+                    <a href="<%=request.getContextPath()%>/elearn/UI/my_requests.jsp" class="text-decoration-none">
+                        <div class="card functionality-card p-4">
+                            <div class="functionality-title">Requested lessons</div>
+                            <div class="functionality-description">
+                                View  the students who have sent you a request to schedule a lesson or have sent you a message and chat  with them online.
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-
+            
             <!-- Functionality Section 2 -->
             <div class="col-md-4 my-3">
-                <div class="card functionality-card p-4">
-                    <div class="functionality-title">Search and Book Lessons</div>
-                    <div class="functionality-description">
-                        Students can search for teachers based on subject, experience, and availability.
+                <a href="<%=request.getContextPath()%>/elearn/UI/share_notes.jsp" class="text-decoration-none">
+                    <div class="card functionality-card p-4">
+                        <div class="functionality-title">Upload educational material</div>
+                        <div class="functionality-description">
+                            Share educational material in the courses of your expertise and attract hundreds of students for private lessons.
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <!-- Functionality Section 3 -->
-            <div class="col-md-4 my-3">
-                <div class="card functionality-card p-4">
-                    <div class="functionality-title">Note Management</div>
-                    <div class="functionality-description">
-                        Users can upload, share, and view notes and course materials.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Functionality Section 4 -->
-            <div class="col-md-4 my-3">
-                <div class="card functionality-card p-4">
-                    <div class="functionality-title">Communication Platform</div>
-                    <div class="functionality-description">
-                        An integrated messaging system for easy communication between students and teachers.
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Encouragement Section -->
-        <div class="row">
-            <h2>Join E-Learn Today!</h2>
-            <p>Sign up to connect with expert teachers or eager students.</p>
-            <p>Empower your learning journey or share your knowledge!</p>
-            <a href="signup.jsp" class="btn btn-custom btn-lg">Sign Up Now</a>
-        </div>
     </main>
 
     <footer class="text-center text-lg-start mt-auto">
