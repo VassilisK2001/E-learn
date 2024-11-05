@@ -101,9 +101,9 @@
                         <div id="priceRange" class="range-slider"></div>
                         <div>Selected: <span id="priceOutput">$0 - $100</span></div>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary mt-4" onclick="prevSlide()">Back</button>
-                        <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextSlide()">Next</button>
                     </div>
                 </div>
 
@@ -114,18 +114,18 @@
                         <label for="scheduleDate" class="form-label">Date</label>
                         <input type="date" class="form-control" id="scheduleDate" required>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary mt-4" onclick="prevSlide()">Back</button>
-                        <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextSlide()">Next</button>
                     </div>
                 </div>
 
                 <!-- Slide 4: Submit -->
                 <div class="carousel-item">
                     <h3 class="mb-4">Submit Criteria</h3>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary mt-4" onclick="prevSlide()">Back</button>
-                        <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
