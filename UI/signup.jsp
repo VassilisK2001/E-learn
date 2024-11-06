@@ -48,7 +48,7 @@
                     <form id="signupForm">
                         <div class="mb-3">
                             <label for="photo" class="form-label">Photo (optional)</label>
-                            <input type="file" class="form-control" id="photo">
+                            <input type="file" class="form-control" id="photo" accept="image/*">
                         </div>
                         <div class="mb-3">
                             <label for="fullname" class="form-label">Full Name</label>
