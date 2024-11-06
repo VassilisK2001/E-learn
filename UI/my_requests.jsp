@@ -75,7 +75,7 @@
                                             <p><strong>Course:</strong> Algebra 101</p>
                                             <p><strong>Lesson Date:</strong> 2024-11-10</p>
                                             <div class="mb-3">
-                                                <label for="status1" class="form-label">Request State</label>
+                                                <label for="status1" class="form-label">Update request state</label>
                                                 <select class="form-select" id="status1" onchange="updateStatus('status1')">
                                                     <option value="pending" selected>Pending</option>
                                                     <option value="accepted">Accepted</option>
@@ -128,14 +128,14 @@
                                             <p><strong>Course:</strong> Computer Science 101</p>
                                             <p><strong>Lesson Date:</strong> 2024-11-12</p>
                                             <div class="mb-3">
-                                                <label for="status2" class="form-label">Request State</label>
+                                                <label for="status2" class="form-label">Update request state</label>
                                                 <select class="form-select" id="status2" onchange="updateStatus('status2')">
-                                                    <option value="pending" selected>Pending</option>
-                                                    <option value="accepted">Accepted</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="accepted" selected>Accepted</option>
                                                     <option value="rejected">Rejected</option>
                                                 </select>
                                             </div>
-                                            <p>Status: <span id="statusValue2">Pending</span></p>
+                                            <p>Status: <span id="statusValue2">Accepted</span></p>
                                             <button class="btn btn-secondary mt-3" data-bs-target="#studentCarousel2" data-bs-slide="prev">Back</button>
                                         </div>
                                     </div>
@@ -181,14 +181,14 @@
                                             <p><strong>Course:</strong> Physics 101</p>
                                             <p><strong>Lesson Date:</strong> 2024-11-18</p>
                                             <div class="mb-3">
-                                                <label for="status3" class="form-label">Request State</label>
+                                                <label for="status3" class="form-label">Update request state</label>
                                                 <select class="form-select" id="status3" onchange="updateStatus('status3')">
-                                                    <option value="pending" selected>Pending</option>
+                                                    <option value="pending">Pending</option>
                                                     <option value="accepted">Accepted</option>
-                                                    <option value="rejected">Rejected</option>
+                                                    <option value="rejected" selected>Rejected</option>
                                                 </select>
                                             </div>
-                                            <p>Status: <span id="statusValue3">Pending</span></p>
+                                            <p>Status: <span id="statusValue3">Rejected</span></p>
                                             <button class="btn btn-secondary mt-3" data-bs-target="#studentCarousel3" data-bs-slide="prev">Back</button>
                                         </div>
                                     </div>
