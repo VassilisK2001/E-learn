@@ -27,7 +27,7 @@
                         <a class="nav-link">Signed in as John Doe</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>

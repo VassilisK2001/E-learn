@@ -1,1 +1,6 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
+
+Notes
+1. Add age field in signup form for teachers and students
+2. Add price range in signup form for teachers
+3. Add optional photo field in signup form for students

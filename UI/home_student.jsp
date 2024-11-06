@@ -49,7 +49,7 @@
         <div class="row mb-5">
             <!-- Functionality Section 1 -->
                 <div class="col-md-4 my-3">
-                    <a href="<%=request.getContextPath()%>/elearn/UI/search_teacher.jsp" class="text-decoration-none">
+                    <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher.jsp" class="text-decoration-none">
                         <div class="card functionality-card p-4">
                             <div class="functionality-title">Find teacher</div>
                             <div class="functionality-description">
