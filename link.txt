@@ -1,4 +1,3 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
-Notes
-- Add price range in signup form for teachers
+

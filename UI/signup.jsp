@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/slider_styles.css">
 
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -106,6 +108,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
     <script src="<%=request.getContextPath()%>/elearn/js/signup.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
- // Function to navigate to the next slide with role validation on first slide
- function nextSlide() {
+// Function to navigate to the next slide with role validation on first slide
+function nextSlide() {
     const carousel = new bootstrap.Carousel(document.querySelector('#signupCarousel'));
     const currentSlide = document.querySelector('.carousel-item.active');
     const isFirstSlide = currentSlide === document.querySelector('.carousel-item.active:first-child');
@@ -29,8 +29,8 @@ function adjustSecondSlide() {
     selectedTags.innerHTML = ''; // Clear selected tags
 
     if (role === "student") {
+        // Student-specific fields
         dynamicTitle.innerText = "Student Information";
-
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="subjects" class="form-label">Subjects of Interest</label>
@@ -40,22 +40,19 @@ function adjustSecondSlide() {
                     <option value="History">History</option>
                 </select>
             </div>`;
-        
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" rows="3" placeholder="Describe your interests..."></textarea>
             </div>`;
     } else if (role === "teacher") {
+        // Teacher-specific fields
         dynamicTitle.innerText = "Teacher Information";
-
-        
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="experience" class="form-label">Years of Experience</label>
                 <input type="number" class="form-control" id="experience" min="0" max="10">
             </div>`;
-        
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="specializations" class="form-label">Specialization Courses</label>
@@ -65,12 +62,35 @@ function adjustSecondSlide() {
                     <option value="Computer Science">Computer Science</option>
                 </select>
             </div>`;
-
+        dynamicFields.innerHTML += `
+            <div class="mb-3">
+                <label for="priceRange" class="form-label">Price Range</label>
+                <div id="priceRange" class="range-slider"></div>
+                <div>Selected: <span id="priceOutput">$0 - $100</span></div>
+            </div>`;
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="teacherDescription" class="form-label">Description</label>
                 <textarea class="form-control" id="teacherDescription" rows="3" placeholder="Describe your background..."></textarea>
             </div>`;
+
+        // Initialize noUiSlider on the priceRange element
+        const priceSlider = document.getElementById("priceRange");
+        if (priceSlider) {
+            noUiSlider.create(priceSlider, {
+                start: [0, 100],         // Start range
+                connect: true,           // Connect range
+                range: {
+                    'min': 0,
+                    'max': 100
+                }
+            });
+
+            // Update output display for slider values
+            priceSlider.noUiSlider.on('update', function(values) {
+                document.getElementById("priceOutput").innerText = `$${Math.round(values[0])} - $${Math.round(values[1])}`;
+            });
+        }
     }
 }
 
