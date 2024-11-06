@@ -24,10 +24,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
