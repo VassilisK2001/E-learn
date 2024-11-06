@@ -4,3 +4,4 @@ Notes
 1. Add age field in signup form for teachers and students
 2. Add price range in signup form for teachers
 3. Add optional photo field in signup form for students
+4. Add full name for students and teachers in signup

@@ -1,26 +1,6 @@
- // Function to navigate to the next slide with role validation on first slide
- function nextSlide() {
-    const carousel = new bootstrap.Carousel(document.querySelector('#signupCarousel'));
-    const currentSlide = document.querySelector('.carousel-item.active');
-    const isFirstSlide = currentSlide === document.querySelector('.carousel-item.active:first-child');
-    const role = document.getElementById("role").value;
-
-    if (isFirstSlide && !role) {
-        alert("Please select a role (Student or Teacher) before proceeding.");
-    } else {
-        carousel.next(); // Move to the next slide
-    }
-}
-
-// Function to navigate to the previous slide
-function prevSlide() {
-    const carousel = new bootstrap.Carousel(document.querySelector('#signupCarousel'));
-    carousel.prev();
-}
-
-// Adjust fields on the second slide based on role selection
 function adjustSecondSlide() {
     const role = document.getElementById("role").value;
+    console.log("Role selected:", role); // For debugging purposes
     const dynamicFields = document.getElementById("dynamicFields");
     const dynamicTitle = document.getElementById("dynamicTitle");
     const selectedTags = document.getElementById("selectedTags");
@@ -40,7 +20,7 @@ function adjustSecondSlide() {
                     <option value="History">History</option>
                 </select>
             </div>`;
-        
+
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
@@ -51,16 +31,10 @@ function adjustSecondSlide() {
 
         dynamicFields.innerHTML += `
             <div class="mb-3">
-                <label for="photo" class="form-label">Photo (optional)</label>
-                <input type="file" class="form-control" id="photo">
-            </div>`;
-        
-        dynamicFields.innerHTML += `
-            <div class="mb-3">
                 <label for="experience" class="form-label">Years of Experience</label>
                 <input type="number" class="form-control" id="experience" min="0" max="10">
             </div>`;
-        
+
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="specializations" class="form-label">Specialization Courses</label>
@@ -77,32 +51,6 @@ function adjustSecondSlide() {
                 <textarea class="form-control" id="teacherDescription" rows="3" placeholder="Describe your background..."></textarea>
             </div>`;
     }
-}
 
-// Function to update tags based on selections
-function updateTags(type) {
-    const selectedTags = document.getElementById("selectedTags");
-    const selectedOptions = document.getElementById(type === 'subjects' ? 'subjects' : 'specializations').selectedOptions;
-
-    // Create an array of currently selected tags
-    const currentTags = Array.from(selectedTags.children).map(tag => tag.innerText.replace('×', '').trim());
-
-    // Add new tags for each selected option
-    Array.from(selectedOptions).forEach(option => {
-        const optionValue = option.value;
-
-        // Avoid duplicates
-        if (!currentTags.includes(optionValue)) {
-            const tagElement = document.createElement("span");
-            tagElement.className = "tag";
-            tagElement.textContent = optionValue;
-            tagElement.innerHTML += `<span class="remove-tag" onclick="removeTag(this)">×</span>`; // Remove icon
-            selectedTags.appendChild(tagElement);
-        }
-    });
-}
-
-// Function to remove a tag
-function removeTag(tagElement) {
-    tagElement.parentElement.remove();
+    // Ensure no photo field is added here for both roles
 }

@@ -45,6 +45,18 @@
                     <h3 class="mb-4">Personal Information</h3>
                     <form id="signupForm">
                         <div class="mb-3">
+                            <label for="photo" class="form-label">Photo (optional)</label>
+                            <input type="file" class="form-control" id="photo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullname" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="text" class="form-control" id="age" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" required>
                         </div>

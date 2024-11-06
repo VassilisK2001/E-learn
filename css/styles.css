@@ -92,3 +92,8 @@ footer {
     cursor: pointer;
     color: #fff;
 }
+
+/* Hide photo field on the second slide */
+#dynamicSlide #photo {
+    display: none;
+}
