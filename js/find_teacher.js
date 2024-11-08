@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'min': 0,
             'max': 40
         },
-        step: 1,
-        tooltips: [true, true]
+        step: 1
     });
     experienceSlider.noUiSlider.on('update', function(values) {
         document.getElementById('experienceOutput').innerText = `${values[0]} - ${values[1]} years`;
@@ -24,8 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'min': 0,
             'max': 100
         },
-        step: 1,
-        tooltips: [true, true]
+        step: 0.5
     });
     priceSlider.noUiSlider.on('update', function(values) {
         document.getElementById('priceOutput').innerText = `$${values[0]} - $${values[1]}`;

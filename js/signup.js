@@ -83,12 +83,13 @@ function adjustSecondSlide() {
                 range: {
                     'min': 0,
                     'max': 100
-                }
+                },
+                step: 0.5
             });
 
             // Update output display for slider values
             priceSlider.noUiSlider.on('update', function(values) {
-                document.getElementById("priceOutput").innerText = `$${Math.round(values[0])} - $${Math.round(values[1])}`;
+                document.getElementById("priceOutput").innerText = `$${values[0]} - $${values[1]}`;
             });
         }
     }
