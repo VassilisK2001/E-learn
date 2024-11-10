@@ -85,7 +85,7 @@
 
             <!-- Functionality Section 4 -->
             <div class="col-md-4 my-3">
-                <a href="<%=request.getContextPath()%>/elearn/UI/share_notes.jsp" class="text-decoration-none">
+                <a href="<%=request.getContextPath()%>/elearn/UI/upload_material.jsp" class="text-decoration-none">
                     <div class="card functionality-card p-4">
                         <div class="functionality-title">Share notes</div>
                         <div class="functionality-description">

@@ -1,3 +1,10 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
+Notes
+- Add "open_note" button in my_notes.jsp
+- Add description in Personal Information for both students and teachers
+- Switch specialization courses to teacher specialty in signup page for teachers
+- Remove schedule date from find_teacher.jsp and add it in another page that will be 
+displayed when student selects "Schedule lesson" button in page teacher_results.jsp.
+
 

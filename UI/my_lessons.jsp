@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <button type="button" id="submitBtn1" class="btn btn-primary">Contact Teacher</button>
+                        <button type="button" id="submitBtn1" class="btn btn-outline-secondary">Contact Teacher</button>
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <button type="button" id="submitBtn2" class="btn btn-primary">Contact Teacher</button>
+                        <button type="button" id="submitBtn2" class="btn btn-outline-secondary">Contact Teacher</button>
                     </div>
                 </div>
             </div>
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="card-footer text-center">
-                        <button type="button" id="submitBtn3" class="btn btn-primary">Contact Teacher</button>
+                        <button type="button" id="submitBtn3" class="btn btn-outline-secondary">Contact Teacher</button>
                     </div>
                 </div>
             </div>
