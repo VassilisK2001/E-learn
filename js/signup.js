@@ -43,7 +43,7 @@ function adjustSecondSlide() {
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" rows="3" placeholder="Describe your interests..."></textarea>
+                <textarea class="form-control" id="description" rows="3" placeholder="Describe your background and interests..."></textarea>
             </div>`;
     } else if (role === "teacher") {
         // Teacher-specific fields
@@ -55,7 +55,7 @@ function adjustSecondSlide() {
             </div>`;
         dynamicFields.innerHTML += `
             <div class="mb-3">
-                <label for="specializations" class="form-label">Specialization Courses</label>
+                <label for="specializations" class="form-label">Teacher specializations</label>
                 <select class="form-select" id="specializations" multiple onchange="updateTags('specializations')">
                     <option value="Math">Math</option>
                     <option value="Science">Science</option>

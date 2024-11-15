@@ -76,11 +76,11 @@
                 <div class="carousel-item">
                     <h3 class="mb-4">Teacher Filters</h3>
                     <div class="mb-3">
-                        <label for="teacherSpecialty" class="form-label">Teacher Specialty</label>
+                        <label for="teacherSpecialty" class="form-label">Teacher Specializations</label>
                         <select class="form-select" id="teacherSpecialty" multiple onchange="addTag('teacherSpecialty', 'specialtyTags')">
-                            <option value="Math Expert">Math Expert</option>
-                            <option value="Science Expert">Science Expert</option>
-                            <option value="Art Instructor">Art Instructor</option>
+                            <option value="Math">Math</option>
+                            <option value="Science">Science</option>
+                            <option value="Art">Art</option>
                             <!-- Add more specialties as needed -->
                         </select>
                     </div>
@@ -104,20 +104,7 @@
                     </div>
                 </div>
 
-                <!-- Slide 3: Schedule Date -->
-                <div class="carousel-item">
-                    <h3 class="mb-4">Schedule Date</h3>
-                    <div class="mb-3">
-                        <label for="scheduleDate" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="scheduleDate" required>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextSlide()">Next</button>
-                    </div>
-                </div>
-
-                <!-- Slide 4: Submit -->
+                <!-- Slide 3: Submit -->
                 <div class="carousel-item">
                     <h3 class="mb-4">Submit Criteria</h3>
                     <div class="d-flex gap-2">
