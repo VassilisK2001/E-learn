@@ -1,0 +1,7 @@
+http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
+
+Notes
+- Add "open_note" button in my_notes.jsp (?)
+
+
+
