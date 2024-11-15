@@ -15,7 +15,7 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp">
+            <a class="navbar-brand">
                 <img src="<%=request.getContextPath()%>/elearn/logo.svg" alt="Logo" width="150" height="48">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,13 +24,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">Home</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp"><b>Sign Up</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp"><b>Sign In</b></a>
                     </li>
                 </ul>
             </div>
@@ -104,7 +104,7 @@
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <p class="mb-0">© 2024 E-Learn. All rights reserved.</p>
+        <p class="mb-0"><b>© 2024 E-Learn. All rights reserved.</b></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

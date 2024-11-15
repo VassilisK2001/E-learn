@@ -15,7 +15,7 @@
 
     <nav class="navbar navbar-expand-lg mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp">
+            <a class="navbar-brand">
                 <img src="<%=request.getContextPath()%>/elearn/logo.svg" alt="Logo" width="150" height="48">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,19 +24,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link">Signed in as John Doe</a>
+                        <a class="nav-link"><b>Signed in as John Doe</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp">Home</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp">Sign In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></span></a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span></a>
                     </li>
                 </ul>
             </div>
@@ -200,7 +197,7 @@
 
     <footer class="text-center text-lg-start mt-auto">
         <div class="text-center p-3">
-            © 2024 E-Learn. All rights reserved.
+            <b>© 2024 E-Learn. All rights reserved.</b>
         </div>
     </footer>
 
