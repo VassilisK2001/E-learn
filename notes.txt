@@ -1,7 +1,23 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
-Notes
+TO DO
 - Add "open_note" button in my_notes.jsp (?)
+
+CLASSES + DATABASE (18 NOV - 22 NOV)
+- Implement classes
+- Insert dummy data into database
+
+JSP CONTROLLER PAGES ANDLINK WITH BACKEND (3 DEC - 10 DEC)
+- Create controller pages that answer to forms
+- Error handling
+- Implement live chat
+
+ADDITIONAL FIXES (10 DEC UNTIL DEADLINE)
+
+
+
+
+
 
 
 
