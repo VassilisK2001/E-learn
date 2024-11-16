@@ -85,7 +85,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <h5>Selected Specialties:</h5>
+                        <h5>Selected Specializations:</h5>
                         <div id="specialtyTags"></div>
                     </div>
                     <div class="mb-3">

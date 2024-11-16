@@ -71,10 +71,15 @@
                                     <!-- Slide 2: Additional Information -->
                                     <div class="carousel-item">
                                         <div class="card-body">
-                                            <p><strong>Specialization:</strong></p>
+                                            <p><strong>Specializations:</strong></p>
                                             <div>
                                                 <span class="badge bg-secondary me-2">Math</span>
                                                 <span class="badge bg-secondary me-2">Science</span>
+                                            </div>
+                                            <p><strong>Specialization courses:</strong></p>
+                                            <div>
+                                                <span class="badge bg-secondary me-2">Linear Algebra</span>
+                                                <span class="badge bg-secondary me-2">Physics</span>
                                             </div>
                                             <p class="mt-2"><strong>Experience:</strong> 10 years</p>
                                             <p><strong>Price Range:</strong> $30 - $60</p>
@@ -124,10 +129,15 @@
                                     <!-- Slide 2: Additional Information -->
                                     <div class="carousel-item">
                                         <div class="card-body">
-                                            <p><strong>Specialization:</strong></p>
+                                            <p><strong>Specializations:</strong></p>
+                                            <div>
+                                                <span class="badge bg-secondary me-2">Languages</span>
+                                                <span class="badge bg-secondary me-2">History</span>
+                                            </div>
+                                            <p><strong>Specialization courses:</strong></p>
                                             <div>
                                                 <span class="badge bg-secondary me-2">English</span>
-                                                <span class="badge bg-secondary me-2">History</span>
+                                                <span class="badge bg-secondary me-2">Roman History</span>
                                             </div>
                                             <p class="mt-2"><strong>Experience:</strong> 8 years</p>
                                             <p><strong>Price Range:</strong> $40 - $70</p>
@@ -181,6 +191,11 @@
                                             <div>
                                                 <span class="badge bg-secondary me-2">Literature</span>
                                                 <span class="badge bg-secondary me-2">Writing</span>
+                                            </div>
+                                            <p><strong>Specialization courses:</strong></p>
+                                            <div>
+                                                <span class="badge bg-secondary me-2">English Literature</span>
+                                                <span class="badge bg-secondary me-2">Essays</span>
                                             </div>
                                             <p class="mt-2"><strong>Experience:</strong> 12 years</p>
                                             <p><strong>Price Range:</strong> $50 - $80</p>

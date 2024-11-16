@@ -2,6 +2,8 @@ http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
 - Add "open_note" button in my_notes.jsp (?)
+- Add specialization courses in teacher signup form and in teacher results page
+- Add a "back to home" button for each page in students and teachers  
 
 CLASSES + DATABASE (18 NOV - 22 NOV)
 - Implement classes
@@ -13,6 +15,17 @@ JSP CONTROLLER PAGES ANDLINK WITH BACKEND (3 DEC - 10 DEC)
 - Implement live chat
 
 ADDITIONAL FIXES (10 DEC UNTIL DEADLINE)
+
+
+
+FIND TEACHER 
+--> Load the course titles that belong to the course category the user has selected
+--> Preprocess the entered course title and loaded course titles: remove stopwords, convert to lowercase and tokenize text using Apache Lucene library
+--> Calculate course titles embeddings: use DL4J library to load pretrained embedding model and compute embeddings by averaging word vectors for each course title.
+--> Calculate cosine similarity between user course title and all course titles loaded from the database 
+--> In teacher_results.jsp:
+    --> If there are teachers whose specialization courses have cosine similarity score of at least 0.7 with user course title then keep those teachers 
+    --> If there are no such teachers, then keep  teachers that have the same teacher specialization with the one selected by the user.
 
 
 
