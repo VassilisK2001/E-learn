@@ -2,8 +2,9 @@ http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
 - Add "open_note" button in my_notes.jsp (?)
-- Add specialization courses in teacher signup form and in teacher results page
-- Add a "back to home" button for each page in students and teachers  
+- Add a "back to home" button for each page in students and teachers
+- Create a many to many association between teacher and course. A teacher can specialize in many courses and 
+a course can be specialization course for many teachers.  
 
 CLASSES + DATABASE (18 NOV - 22 NOV)
 - Implement classes

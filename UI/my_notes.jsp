@@ -118,6 +118,12 @@
             </div>
         </div>
 
+        <!-- Back Button Below Teacher Cards -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
     </main>
 
     <!-- Footer -->

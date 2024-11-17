@@ -220,6 +220,13 @@
             </div>
   
         </div>
+
+        <!-- Back Button Below Teacher Cards -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to search teacher form
+            </a>
+        </div>
     </main>
 
     <footer class="text-center text-lg-start mt-auto">
