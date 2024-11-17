@@ -79,6 +79,11 @@ footer {
     display: none; /* Hide the title on hover */
 }
 
+/* Ensure the carousel item can grow in height based on content */
+.carousel-item {
+    transition: transform 0.5s ease; /* Smooth transition for height change */
+}
+
 /* Suggestions dropdown */
 .suggestions-list {
     position: absolute;
@@ -128,4 +133,29 @@ footer {
 /* Hide photo field on the second slide */
 #dynamicSlide #photo {
     display: none;
+}
+
+#courseSuggestions {
+    max-height: 200px; /* Maximum height for the suggestion list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ced4da; /* Styling for visibility */
+    border-radius: 0.25rem; /* Rounded corners */
+    background-color: white; /* Background color for better readability */
+    position: absolute; /* To make it float below the input */
+    z-index: 1000; /* Ensure it appears above other elements */
+    display: none; /* Initially hidden */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+    width: 100%; /* Ensures it spans the full width of the input field */
+}
+
+#courseSuggestions .list-group-item {
+    cursor: pointer; /* Pointer cursor for interactive items */
+}
+
+#courseSuggestions .list-group-item:hover {
+    background-color: #f8f9fa; /* Highlight on hover */
+}
+
+#courseSuggestions.scrollable {
+    overflow-y: auto; /* Add vertical scrollbar when class 'scrollable' is added */
 }

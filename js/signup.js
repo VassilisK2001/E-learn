@@ -75,7 +75,7 @@ function adjustSecondSlide() {
             <div class="mb-3">
                 <label for="specializationInput" class="form-label">Specialization Courses (optional)</label>
                 <input type="text" class="form-control" id="specializationInput" placeholder="Type to search courses">
-                <div id="suggestions" class="suggestions-list"></div>
+                <div id="courseSuggestions" class="suggestions-list"></div>
             </div>`;
         dynamicFields.innerHTML += `
             <div id="selectedTags" class="tags-container"></div>`;
@@ -111,12 +111,12 @@ function initializeSpecializationsDropdown() {
 // Function to initialize autocomplete for specialization courses
 function initializeSpecializationAutocomplete() {
     const specializationInput = document.getElementById("specializationInput");
-    const suggestionsList = document.getElementById("suggestions");
+    const courseSuggestions = document.getElementById("courseSuggestions");
     const selectedTagsContainer = document.getElementById("selectedTags");
 
     specializationInput.addEventListener("input", () => {
         const query = specializationInput.value.trim().toLowerCase();
-        suggestionsList.innerHTML = ''; // Clear suggestions
+        courseSuggestions.innerHTML = ''; // Clear previous suggestions
 
         if (query) {
             const matchedCourses = predefinedCourses.filter(course =>
@@ -125,23 +125,39 @@ function initializeSpecializationAutocomplete() {
 
             matchedCourses.forEach(course => {
                 const suggestion = document.createElement("div");
-                suggestion.className = "suggestion-item";
+                suggestion.className = "list-group-item"; // Use Bootstrap's list-group-item for better styling
                 suggestion.textContent = course;
 
                 suggestion.addEventListener("click", () => {
                     addTag(course, selectedTagsContainer);
                     specializationInput.value = ''; // Clear input
-                    suggestionsList.innerHTML = ''; // Clear suggestions
+                    courseSuggestions.innerHTML = ''; // Clear suggestions
+                    courseSuggestions.style.display = 'none'; // Hide suggestions after selection
                 });
 
-                suggestionsList.appendChild(suggestion);
+                courseSuggestions.appendChild(suggestion);
             });
+
+            // Show the suggestion list if there are any results
+            if (matchedCourses.length > 0) {
+                courseSuggestions.style.display = 'block';
+            }
+
+            // Dynamically add the scrollbar if the number of suggestions exceeds a threshold
+            if (matchedCourses.length > 5) {
+                courseSuggestions.classList.add('scrollable');
+            } else {
+                courseSuggestions.classList.remove('scrollable');
+            }
+        } else {
+            courseSuggestions.style.display = 'none'; // Hide suggestion list if input is empty
         }
     });
 
     document.addEventListener("click", (event) => {
-        if (!suggestionsList.contains(event.target) && event.target !== specializationInput) {
-            suggestionsList.innerHTML = '';
+        if (!courseSuggestions.contains(event.target) && event.target !== specializationInput) {
+            courseSuggestions.innerHTML = '';
+            courseSuggestions.style.display = 'none'; // Hide suggestion list when clicked outside
         }
     });
 }
