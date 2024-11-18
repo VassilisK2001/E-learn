@@ -79,23 +79,33 @@ function addTag(selectId, containerId) {
     const selectElement = document.getElementById(selectId);
     const container = document.getElementById(containerId);
     const selectedOptions = Array.from(selectElement.selectedOptions);
-    
-    container.innerHTML = ""; // Clear the existing tags
 
+    // Loop through each selected option and create a new tag
     selectedOptions.forEach(option => {
+        // Create the tag element
         const tag = document.createElement("span");
-        tag.classList.add("tag");
+        tag.classList.add("tag", "bg-primary", "me-2"); // Added Bootstrap classes for styling
         tag.textContent = option.text;
-        
+
+        // Create a remove button for the tag
         const removeButton = document.createElement("span");
-        removeButton.classList.add("remove-tag");
+        removeButton.classList.add("remove-tag", "ms-2", "cursor-pointer");
         removeButton.innerHTML = "&times;"; // Cross icon to remove the tag
-        removeButton.onclick = () => tag.remove(); // Remove the tag on click
         
+        // Add remove functionality to the tag
+        removeButton.onclick = () => {
+            tag.remove(); // Remove the tag from the container
+            selectElement.querySelector(`option[value="${option.value}"]`).selected = false; // Deselect the option
+        };
+
+        // Append the remove button to the tag
         tag.appendChild(removeButton);
+
+        // Append the tag to the container
         container.appendChild(tag);
     });
 }
+
 
 // Function to initialize the range sliders for experience and price
 function initializeRangeSliders() {

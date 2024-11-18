@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
+    
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -30,7 +31,7 @@
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a> <!--If role is teacher href will redirect to home_teachers page-->
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp">
@@ -48,29 +49,37 @@
         
         <!-- Upload Form -->
         <form action="<%=request.getContextPath()%>/uploadMaterial" method="post" enctype="multipart/form-data" class="p-4 border rounded bg-light">
-            <div class="mb-3">
+            <!-- Course Title Input -->
+            <div class="mb-3 position-relative">
                 <label for="courseTitle" class="form-label">Course Title</label>
-                <input type="text" class="form-control" id="courseTitle" name="courseTitle" placeholder="Enter the course title" required>
+                <input type="text" class="form-control" id="courseTitle" name="courseTitle" placeholder="Enter the course title" required oninput="fetchCourseSuggestions(this.value)">
+                <!-- Suggestions Container -->
+                <div id="courseSuggestions" class="list-group"></div>
             </div>
+
+            <!-- Note Title Input -->
             <div class="mb-3">
                 <label for="noteTitle" class="form-label">Note Title</label>
                 <input type="text" class="form-control" id="noteTitle" name="noteTitle" placeholder="Enter the note title" required>
             </div>
+
+            <!-- File Upload Input -->
             <div class="mb-3">
                 <label for="fileUpload" class="form-label">Upload File</label>
                 <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".pdf, .doc, .docx" required>
                 <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX</small>
             </div>
+
+            <!-- Submit Button -->
             <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
 
         <!-- Back Button Below Teacher Cards -->
         <div class="text-center mt-4">
-            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary"> <!-- if role is teacher the button will redirect to home_teacher page  -->
+            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Home
             </a>
         </div>
-
     </main>
 
     <!-- Footer -->
@@ -81,5 +90,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/elearn/js/course_title.js"></script>
+
 </body>
 </html>

@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
+
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -48,9 +49,11 @@
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/elearn/available_notes.jsp" method="POST">
                     <!-- Course Title Input -->
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label for="courseTitle" class="form-label">Course Title</label>
-                        <input type="text" class="form-control" id="courseTitle" name="courseTitle" placeholder="Enter the course title" required>
+                        <input type="text" class="form-control" id="courseTitle" name="courseTitle" placeholder="Enter the course title" required oninput="fetchCourseSuggestions(this.value)">
+                        <!-- Suggestions Container -->
+                        <div id="courseSuggestions" class="list-group"></div>
                     </div>
 
                     <!-- Academic Year Input -->
@@ -92,5 +95,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/elearn/js/course_title.js"></script>
 </body>
 </html>

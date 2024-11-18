@@ -148,6 +148,14 @@ footer {
     width: 100%; /* Ensures it spans the full width of the input field */
 }
 
+#courseSuggestions .suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+#courseSuggestions .suggestion-item:hover {
+    background-color: #f1f1f1;
+}
+
 #courseSuggestions .list-group-item {
     cursor: pointer; /* Pointer cursor for interactive items */
 }

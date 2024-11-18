@@ -1,14 +1,81 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
-- Add "open_note" button in my_notes.jsp (?)
-- Add a "back to home" button for each page in students and teachers
-- Create a many to many association between teacher and course. A teacher can specialize in many courses and 
-a course can be specialization course for many teachers.  
+- Implement "open_note" button in my_notes.jsp 
+- Implement "download" button in my_notes.jsp
 
-CLASSES + DATABASE (18 NOV - 22 NOV)
+
+
+CLASSES + DATABASE (18 NOV - 24 NOV)
 - Implement classes
-- Insert dummy data into database
+- Insert dummy data into database 
+1. Teacher (Teacher, TeacherDAO): 
+    - teacher_id
+    - fullname 
+    - age 
+    - username 
+    - password 
+    - email 
+    - desc 
+    - photo                                          * If a photo is not inserted there will be a default photo
+    - years_of_experience                                 
+    - min_price
+    - max_price 
+    - List<String> specializations 
+    - List<String> specialization_courses            * Include two constructors, one with specialization courses and one without this field.
+    + authenticate(username, password) 
+    + insertTeacher(fullname, age, username, password, email, desc, photo, max_price, min_price, specializations, specialization_courses) 
+    + checkTeacherExists(username, password) 
+    + getTeacherResults(String, String, specializations, min_exp, max_exp, min_price, max_price) --> List<Teacher> teacher_results 
+
+
+2. Student (Student, StudentDAO): 
+    - student_id
+    - fullname 
+    - age 
+    - username 
+    - password 
+    - email 
+    - desc 
+    - photo 
+    - List<String> interest_subjects                            
+    + authenticate(username, password)
+    + insertStudent(fullname, age, username, password, email, desc, photo, interest_subjects)
+    + checkStudentExists(username, password)                
+
+3. Note (Note, NoteDAO): 
+    - note_id 
+    - title 
+    - file 
+    - upload_date 
+    - uploader_type
+    - uploader_name
+    - course_title: String
+    + searchNotes(String, year, uploader_type) --> List<Note> available_notes
+    + uploadNote(String, title, file, date, uploader_type, uploader_name) 
+    + saveNote(student_id, note_id) 
+    + getFavNotes(student_id) --> List<Notes> fav_notes 
+    + deleteFavNote(student_id, note_id)
+
+4. LessonReq (LessonReq, LessonReqDAO):
+    - lesson_req_id 
+    - schedule_date    
+    - request_status
+    - course: String  
+    - sent_from: Student 
+    - sent_to: Teacher
+    + getLessonRequests(teacher_id) --> List<LessonReq> requests 
+    + updateLessonRequest(lesson_req_id) 
+    + getLessons(student_id) --> List<LessonReq> lessons   
+
+5. Message (Message, MessageDAO):
+    - message_id 
+    - message_content 
+    - sent_date 
+    - from
+    - to 
+
+
 
 JSP CONTROLLER PAGES AND LINK WITH BACKEND (3 DEC - 15 DEC)
 - Create controller pages that answer to forms
