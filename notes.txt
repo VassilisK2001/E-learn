@@ -1,15 +1,16 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
-- Add "open_note" button in my_notes.jsp (?)
-- Add specialization courses in teacher signup form and in teacher results page
-- Add a "back to home" button for each page in students and teachers  
+- Add "open_note" button in my_notes.jsp
+- Add a "back to home" button for each page in students and teachers
+- Create a many to many association between teacher and course. A teacher can specialize in many courses and a course 
+can be a specialization subject by many teachers.    
 
 CLASSES + DATABASE (18 NOV - 22 NOV)
 - Implement classes
 - Insert dummy data into database
 
-JSP CONTROLLER PAGES ANDLINK WITH BACKEND (3 DEC - 10 DEC)
+JSP CONTROLLER PAGES AND LINK WITH BACKEND (3 DEC - 15 DEC)
 - Create controller pages that answer to forms
 - Error handling
 - Implement live chat
@@ -17,15 +18,12 @@ JSP CONTROLLER PAGES ANDLINK WITH BACKEND (3 DEC - 10 DEC)
 ADDITIONAL FIXES (10 DEC UNTIL DEADLINE)
 
 
-
 FIND TEACHER 
---> Load the course titles that belong to the course category the user has selected
---> Preprocess the entered course title and loaded course titles: remove stopwords, convert to lowercase and tokenize text using Apache Lucene library
---> Calculate course titles embeddings: use DL4J library to load pretrained embedding model and compute embeddings by averaging word vectors for each course title.
---> Calculate cosine similarity between user course title and all course titles loaded from the database 
---> In teacher_results.jsp:
-    --> If there are teachers whose specialization courses have cosine similarity score of at least 0.7 with user course title then keep those teachers 
-    --> If there are no such teachers, then keep  teachers that have the same teacher specialization with the one selected by the user.
+--> User selects course category
+--> User types course title and eventually selects one of the course titles from the database that correspond to the course category they have selected.
+--> User selects teacher specializations and other filters 
+--> In teacher_results.jsp the relevant teachers are displayed. If a teacher has the course_title selected by the user 
+as part of their specialization courses then this teacher will be displayed first and the other teachers will be displayed after this teacher. 
 
 
 
