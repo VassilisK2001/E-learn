@@ -9,10 +9,10 @@
     <!-- Include Bootstrap and noUiSlider CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/slider_styles.css">
+
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -62,9 +62,12 @@
                                 <!-- Add more categories as needed -->
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             <label for="courseTitle" class="form-label">Course Title</label>
-                            <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title" required>
+                            <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title" required oninput="fetchCourseSuggestions(this.value)">
+                            <div id="courseSuggestions" class="list-group position-absolute w-100">
+                                <!-- Suggestions will be dynamically populated here -->
+                            </div>
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
@@ -114,7 +117,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- Back Button Below Teacher Cards -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
     </main>
+
+    
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
