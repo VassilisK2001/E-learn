@@ -76,6 +76,16 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     - to 
 
 
+USE CASES DEADLINE 
+
+-- 19 NOV --                       -- 20 NOV --              -- 21 NOV --           -- 22 NOV --         -- 23-24 -- 
+
+--> Register Controller            --> Find Teacher          --> Upload material    --> Lesson request   --> Live chat (?)
+--> Login Controller               --> Search Notes          --> Share notes        --> My Notes 
+                                                                                    --> My Lessons 
+
+
+
 
 JSP CONTROLLER PAGES AND LINK WITH BACKEND (3 DEC - 15 DEC)
 - Create controller pages that answer to forms

@@ -99,7 +99,7 @@
                     <div class="mb-3">
                         <label for="priceRange" class="form-label">Price Range</label>
                         <div id="priceRange" class="range-slider"></div>
-                        <div>Selected: <span id="priceOutput">$0 - $100</span></div>
+                        <div>Selected: <span id="priceOutput"> 0 - 100</span></div>
                     </div>
                     <div class="d-flex gap-2">
                         <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
