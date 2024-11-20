@@ -1,16 +1,3 @@
-const predefinedCourseTitles = [
-    "Mathematics 101",
-    "Science for Beginners",
-    "Advanced Physics",
-    "History of Art",
-    "Introduction to Programming",
-    "Robotics",
-    "Advanced Math",
-    "Martial Arts",
-    "Science",
-    "History"
-];
-
 function fetchCourseSuggestions(query) {
     const suggestionsContainer = document.getElementById("courseSuggestions");
     
@@ -22,29 +9,33 @@ function fetchCourseSuggestions(query) {
         return;
     }
 
-    // Filter suggestions
-    const matches = predefinedCourseTitles.filter(title =>
-        title.toLowerCase().includes(query.toLowerCase())
-    );
+    // Ensure `coursesData` is available and filter suggestions
+    if (Array.isArray(coursesData)) {
+        const matches = coursesData.filter(title =>
+            title.toLowerCase().includes(query.toLowerCase())
+        );
 
-    if (matches.length > 0) {
-        suggestionsContainer.style.display = "block";
+        if (matches.length > 0) {
+            suggestionsContainer.style.display = "block";
 
-        matches.forEach(title => {
-            const item = document.createElement("div");
-            item.className = "suggestion-item list-group-item list-group-item-action";
-            item.textContent = title;
+            matches.forEach(title => {
+                const item = document.createElement("div");
+                item.className = "suggestion-item list-group-item list-group-item-action";
+                item.textContent = title;
 
-            // Set value when clicked
-            item.onclick = () => {
-                document.getElementById("courseTitle").value = title;
-                suggestionsContainer.style.display = "none";
-            };
+                // Set value when clicked
+                item.onclick = () => {
+                    document.getElementById("courseTitle").value = title;
+                    suggestionsContainer.style.display = "none";
+                };
 
-            suggestionsContainer.appendChild(item);
-        });
+                suggestionsContainer.appendChild(item);
+            });
+        } else {
+            suggestionsContainer.style.display = "none";
+        }
     } else {
-        suggestionsContainer.style.display = "none";
+        console.error("coursesData is not defined or is not an array.");
     }
 }
 

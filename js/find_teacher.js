@@ -1,16 +1,6 @@
-// Predefined course titles (hardcoded for now)
-const predefinedCourseTitles = [
-    "Mathematics 101",
-    "Science for Beginners",
-    "Advanced Physics",
-    "History of Art",
-    "Introduction to Programming",
-    "Robotics",
-    "Advanced Math",
-    "Martial Arts",
-    "Science",
-    "History"
-];
+// Use the global coursesData variable from find_teacher.jsp
+// This contains the course titles fetched from the database
+const courseTitles = coursesData; // coursesData is provided globally by find_teacher.jsp
 
 // Minimum height for the carousel item (to prevent shrinking too much)
 const MIN_CAROUSEL_HEIGHT = 300; // Minimum height in pixels to ensure space for the course title field and form
@@ -21,7 +11,7 @@ function fetchCourseSuggestions(query) {
     const carouselItem = document.querySelector(".carousel-item.active");
 
     // Filter suggestions based on the user's query
-    const matches = predefinedCourseTitles.filter(title =>
+    const matches = courseTitles.filter(title =>
         title.toLowerCase().includes(query.toLowerCase())
     );
 
@@ -106,7 +96,6 @@ function addTag(selectId, containerId) {
     });
 }
 
-
 // Function to initialize the range sliders for experience and price
 function initializeRangeSliders() {
     const experienceSlider = document.getElementById('experienceRange');
@@ -119,7 +108,7 @@ function initializeRangeSliders() {
             'min': 0,
             'max': 40
         },
-        step:1
+        step: 1
     });
 
     noUiSlider.create(priceSlider, {

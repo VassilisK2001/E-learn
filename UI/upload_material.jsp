@@ -1,4 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="elearn_classes.*" %>
+<%@ page import="com.google.gson.Gson" %>
+
+
+<%
+// Create CourseDAO object
+CourseDAO courseDAO = new CourseDAO();
+
+// Fetch data from the database
+List<String> courses = courseDAO.getCourseTitles();
+
+// Convert lists to JSON using Gson library
+Gson gson = new Gson();
+String coursesJson = gson.toJson(courses);
+%>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -90,6 +108,10 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Inject the data into JavaScript as global variables -->
+    <script>
+        const coursesData = <%= coursesJson %>;
+    </script>
     <script src="<%=request.getContextPath()%>/elearn/js/course_title.js"></script>
 
 </body>
