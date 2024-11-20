@@ -166,6 +166,13 @@ public class TeacherDAO {
         }
     }
 
+       /**
+     * Checks if a teacher with the given username or password already exists in the database.
+     *
+     * @param username The username to check for existence.
+     * @param password The password to check for existence.
+     * @throws Exception If a teacher with the given username or password exists, or if there is a database error.
+     */
     public void checkTeacherExists(String username, String password) throws Exception {
 
         Connection con = null;
@@ -223,6 +230,7 @@ public class TeacherDAO {
         PreparedStatement teacherStmt = null;
         PreparedStatement specializationStmt = null;
         PreparedStatement courseStmt = null;
+        ResultSet generatedKeys = null;
 
         try {
             con = db.getConnection();
@@ -240,11 +248,9 @@ public class TeacherDAO {
             teacherStmt.setDouble(10, teacher.getMax_price());
             teacherStmt.executeUpdate();
 
-            teacherStmt.close();
-
-            // Retrive the generated teacher ID
+            // Retrieve the generated teacher ID
             try {
-                ResultSet generatedKeys = teacherStmt.getGeneratedKeys();
+                generatedKeys = teacherStmt.getGeneratedKeys();
                 if(generatedKeys.next()) {
                     int teacherID = generatedKeys.getInt(1);
 
@@ -258,7 +264,6 @@ public class TeacherDAO {
                         }
                         specializationStmt.executeBatch();
 
-                        specializationStmt.close();
                     } catch(Exception e){
                         throw new Exception(e.getMessage());
                     } 
@@ -273,7 +278,6 @@ public class TeacherDAO {
                                 courseStmt.addBatch();
                             }
                             courseStmt.executeBatch();
-                            courseStmt.close();
                         } catch(Exception e) {
                             throw new Exception(e.getMessage());
                         }
@@ -286,6 +290,10 @@ public class TeacherDAO {
             throw new Exception(e.getMessage());
         } finally {
             try {
+                generatedKeys.close();
+                courseStmt.close();
+                specializationStmt.close();
+                teacherStmt.close();
                 db.close();
             } catch(Exception e) {
 
