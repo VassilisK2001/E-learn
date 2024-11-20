@@ -1,3 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="elearn_classes.*" %>
+<%@ page import="com.google.gson.Gson" %>
+
+<%
+    // Create CourseDAO object
+    CourseDAO courseDAO = new CourseDAO();
+
+    // Fetch data from the database
+    List<String> courses = courseDAO.getCourseTitles();
+    List<String> specializations = courseDAO.getCourseCategoryTitles();
+    List<String> subjects = courseDAO.getCourseCategoryTitles();
+
+    // Convert lists to JSON using Gson library
+    Gson gson = new Gson();
+    String coursesJson = gson.toJson(courses);
+    String specializationsJson = gson.toJson(specializations);
+    String subjectsJson = gson.toJson(subjects);
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +29,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/slider_styles.css">
-
 </head>
 <body class="d-flex flex-column min-vh-100">
-
     <!-- Header -->
     <nav class="navbar navbar-expand-lg mb-5">
         <div class="container-fluid">
@@ -37,11 +56,9 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container my-5 flex-grow-1">
         <div id="signupCarousel" class="carousel slide mx-auto" style="max-width: 600px;" data-bs-interval="false">
             <div class="carousel-inner shadow-lg p-4 rounded bg-white">
-
                 <!-- Slide 1: Personal Information -->
                 <div class="carousel-item active">
                     <h3 class="mb-4">Personal Information</h3>
@@ -102,13 +119,19 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
         <p class="mb-0"><b>© 2024 E-Learn. All rights reserved.</b></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
+
+    <!-- Inject the data into JavaScript as global variables -->
+    <script>
+        const coursesData = <%= coursesJson %>;
+        const specializationsData = <%= specializationsJson %>;
+        const subjectsData = <%= subjectsJson %>;
+    </script>
     <script src="<%=request.getContextPath()%>/elearn/js/signup.js"></script>
 </body>
 </html>
