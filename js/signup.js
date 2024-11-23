@@ -1,15 +1,54 @@
-// Function to navigate to the next slide with role validation on the first slide
 function nextSlide() {
     const carousel = new bootstrap.Carousel(document.querySelector('#signupCarousel'));
     const currentSlide = document.querySelector('.carousel-item.active');
     const isFirstSlide = currentSlide === document.querySelector('.carousel-item:first-child');
     const role = document.getElementById("role").value;
 
+    // Check if on the first slide and validate the role field
     if (isFirstSlide && !role) {
         alert("Please select a role (Student or Teacher) before proceeding.");
-    } else {
-        carousel.next(); // Move to the next slide
+        return;
     }
+
+    // Collect all required fields on the current slide
+    const requiredFields = currentSlide.querySelectorAll("input[required], textarea[required], select[required]");
+    let allFieldsFilled = true;
+    let emailValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            allFieldsFilled = false; // Mark as invalid if any required field is empty
+        }
+
+        // Check for email validity specifically if it's an email field
+        if (field.id === "email") {
+            const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if (!emailRegex.test(field.value.trim())) {
+                emailValid = false;
+            }
+        }
+    });
+
+    // Show appropriate alert message based on validation results
+    if (!allFieldsFilled && !emailValid) {
+        alert("Please fill out all fields and enter a valid email.");
+        return;
+    } else if (!allFieldsFilled) {
+        alert("Please fill out all fields.");
+        return;
+    } else if (!emailValid) {
+        alert("Please enter a valid email.");
+        return;
+    }
+
+    // Update hidden inputs before moving to the next slide
+    updateHiddenInputs();
+
+    // Log values of specializations, specialization courses, and subjects of interest
+    logSelectedValues();
+
+    // Navigate to the next slide
+    carousel.next();
 }
 
 // Function to navigate to the previous slide
@@ -31,15 +70,15 @@ function adjustSecondSlide() {
 
         dynamicFields.innerHTML += `
             <div class="mb-3">
-                <label for="subjects" class="form-label">Subjects of Interest</label>
-                <select class="form-select" id="subjects" multiple></select>
+                <label for="subjects" class="form-label">Subjects of Interest (Hold Ctrl key to select)</label>
+                <select class="form-select" id="subjects" name="subjectsOfInterest" multiple required></select>
                 <div id="subjectTags" class="tags-container mt-2"></div>
             </div>`;
         
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" rows="3" placeholder="Describe your background and interests..."></textarea>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Describe your background and interests..." required></textarea>
             </div>`;
         
         // Populate subjects dropdown and initialize tagging
@@ -51,44 +90,46 @@ function adjustSecondSlide() {
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="experience" class="form-label">Years of Experience</label>
-                <input type="number" class="form-control" id="experience" min="0" max="50">
+                <input type="text" class="form-control" id="experience" name="experience" required>
             </div>`;
 
         dynamicFields.innerHTML += `
             <div class="mb-3">
-                <label for="teacherSpecializations" class="form-label">Teacher Specializations</label>
-                <select id="teacherSpecializations" class="form-select" multiple></select>
+                <label for="teacherSpecializations" class="form-label">Teacher Specializations (Hold Ctrl key to select)</label>
+                <select id="teacherSpecializations" name="teacherSpecializations" class="form-select" multiple required></select>
                 <div id="specializationTags" class="tags-container mt-2"></div>
             </div>`;
 
         dynamicFields.innerHTML += `
             <div class="mb-3">
-                <label for="specializationInput" class="form-label">Specialization Courses (optional)</label>
-                <input type="text" class="form-control" id="specializationInput" placeholder="Type to search courses">
+                <label for="specializationInput" class="form-label">Specialization Courses</label>
+                <input type="text" class="form-control" id="specializationInput" name="specializationCourses" placeholder="Type to search courses">
                 <div id="courseSuggestions" class="suggestions-list"></div>
             </div>`;
         
         dynamicFields.innerHTML += `
             <div id="selectedTags" class="tags-container"></div>`;
 
+
         dynamicFields.innerHTML += `
-            <div class="mb-3">
-                <label for="priceRange" class="form-label">Price Range</label>
-                <div id="priceRange" class="range-slider"></div>
-                <div>Selected: <span id="priceOutput"> 0 - 100</span></div>
-            </div>`;
+        <div class="mb-3">
+            <label for="priceRange" class="form-label">Price Range</label>
+            <div class="d-flex gap-2">
+                <input type="text" class="form-control" id="minPrice" name="minPrice" placeholder="Minimum price for your services" required> 
+                <input type="text" class="form-control" id="maxPrice" name="maxPrice" placeholder="Maximum price for your services" required>
+            </div>
+        </div>`;
 
         dynamicFields.innerHTML += `
             <div class="mb-3">
                 <label for="teacherDescription" class="form-label">Description</label>
-                <textarea class="form-control" id="teacherDescription" rows="3" placeholder="Describe your background..."></textarea>
+                <textarea class="form-control" id="teacherDescription" name="teacherDescription" rows="3" placeholder="Describe your background..." required></textarea>
             </div>`;
 
         // Populate specializations and initialize course suggestions
         populateSpecializations();
         initializeSpecializationsDropdown();
         initializeCourseSuggestions();
-        initializeRangeSliders();
     }
 }
 
@@ -192,6 +233,7 @@ function initializeSpecializationsDropdown() {
 
 // Add a tag for selected items (subjects, specializations, or courses)
 function addTag(item, container, selectElement = null) {
+    // Prevent adding duplicate tags
     if (Array.from(container.children).some(tag => tag.dataset.value === item)) return;
 
     const tag = document.createElement("span");
@@ -204,37 +246,48 @@ function addTag(item, container, selectElement = null) {
     removeButton.textContent = " ×";
     removeButton.addEventListener("click", () => {
         tag.remove();
+
         if (selectElement) {
+            // Deselect the corresponding option in the select dropdown
             const option = Array.from(selectElement.options).find(opt => opt.value === item);
-            if (option) option.selected = false;
+            if (option) option.selected = false; // Deselect option without removing it
         }
     });
 
     tag.appendChild(removeButton);
     container.appendChild(tag);
+
+    // If there's a select element (for teacher specializations), select the corresponding option
+    if (selectElement) {
+        const option = Array.from(selectElement.options).find(opt => opt.value === item);
+        if (option && !option.selected) {
+            option.selected = true; // Select the option in the dropdown
+        }
+    }
 }
 
-// Function to initialize the range sliders for experience and price
-function initializeRangeSliders() {
-    const priceSlider = document.getElementById('priceRange');
-    
-    noUiSlider.create(priceSlider, {
-        start: [0, 100],
-        connect: true,
-        range: {
-            'min': 0,
-            'max': 100
-        },
-        step: 0.5
-    });
+// Helper to update hidden inputs with tag values
+function updateHiddenInputs() {
+    const subjectsTags = Array.from(document.querySelectorAll("#subjectTags .tag")).map(tag => tag.dataset.value);
+    const specializationsTags = Array.from(document.querySelectorAll("#specializationTags .tag")).map(tag => tag.dataset.value);
+    const courseTags = Array.from(document.querySelectorAll("#selectedTags .tag")).map(tag => tag.dataset.value);
 
-    priceSlider.noUiSlider.on('update', (values) => {
-        document.getElementById('priceOutput').textContent = `${values[0]} - ${values[1]} USD`;
-    });
+    document.getElementById("subjectsOfInterestHidden").value = subjectsTags.join(","); // Convert array to comma-separated string
+    document.getElementById("teacherSpecializationsHidden").value = specializationsTags.join(",");
+    document.getElementById("specializationCoursesHidden").value = courseTags.join(",");   
 }
 
-// Initialize on page load
-window.onload = function() {
-    populateSubjects();
-    populateSpecializations();
-};
+// Function to log values to the console
+function logSelectedValues() {
+    // Log Specializations
+    const specializationsTags = Array.from(document.querySelectorAll("#specializationTags .tag")).map(tag => tag.dataset.value);
+    console.log("Selected Specializations: ", specializationsTags);
+
+    // Log Specialization Courses
+    const courseTags = Array.from(document.querySelectorAll("#selectedTags .tag")).map(tag => tag.dataset.value);
+    console.log("Selected Specialization Courses: ", courseTags);
+
+    // Log Subjects of Interest
+    const subjectTags = Array.from(document.querySelectorAll("#subjectTags .tag")).map(tag => tag.dataset.value);
+    console.log("Selected Subjects of Interest: ", subjectTags);
+}

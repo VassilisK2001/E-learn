@@ -3,6 +3,13 @@ http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 TO DO
 - Implement "open_note" button in my_notes.jsp 
 - Implement "download" button in my_notes.jsp
+- Check if request method is "post" in all pages
+
+COMPILE CLASSES
+javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
+
+LINK
+C:\\Program Files\\Apache Software Foundation\\Tomcat 6.0\\webapps\\ismgroup63\\images
 
 
 
@@ -76,23 +83,7 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     - to 
 
 
-USE CASES DEADLINE 
 
--- 19 NOV --                       -- 20 NOV --              -- 21 NOV --           -- 22 NOV --         -- 23-24 -- 
-
---> Register Controller            --> Find Teacher          --> Upload material    --> Lesson request   --> Live chat (?)
---> Login Controller               --> Search Notes          --> Share notes        --> My Notes 
-                                                                                    --> My Lessons 
-
-
-
-
-JSP CONTROLLER PAGES AND LINK WITH BACKEND (3 DEC - 15 DEC)
-- Create controller pages that answer to forms
-- Error handling
-- Implement live chat
-
-ADDITIONAL FIXES (10 DEC UNTIL DEADLINE)
 
 
 
@@ -105,6 +96,30 @@ Eventually, the student has to select one of the courses available
     --> all the teachers that have at least one of the filtered teacher specializations and meet student 
     criteria will be displayed 
     --> if a teacher specializes in the course the student has entered, this teacher will be displayed higher in the page. 
+
+
+
+DEADLINE (18 January)
+
+SignUp + SignIn : 22-23 November 
+
+Search Teacher: 25 November - 2 December 
+- find_teacher.jsp 
+- teacher_reults.jsp
+
+LessonRequests: 3 December - 5 December 
+- my_lessons.jsp 
+- my_requests.jsp 
+
+Note Management: 6 December - 11 December 
+- search_notes.jsp
+- available_notes.jsp  
+- my_notes.jsp  
+- upload_material 
+
+Live Chat: 12 December - 30 December 
+
+Adjustments/ Leftovers: 30 December - 18 January
 
 
 

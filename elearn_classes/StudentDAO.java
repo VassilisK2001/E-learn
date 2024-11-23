@@ -160,7 +160,8 @@ public class StudentDAO {
      * @throws Exception If there is an error in inserting data into the database.
      */
 
-    public void insertStudent(Student student) throws Exception {
+    public void insertStudent(String fullname, int age, String username, String password, String email, 
+    String studentDescription, String photo, List<String> subjects) throws Exception {
         Connection con = null;
 
         String insertStudentSQL = "INSERT INTO student (full_name, username, password, email, age, description, photo_url) " +
@@ -179,13 +180,13 @@ public class StudentDAO {
 
             // Insert student details
             studentStmt = con.prepareStatement(insertStudentSQL, Statement.RETURN_GENERATED_KEYS);
-            studentStmt.setString(1, student.getFullName());
-            studentStmt.setString(2, student.getUsername());
-            studentStmt.setString(3, student.getPassword());
-            studentStmt.setString(4, student.getEmail()); 
-            studentStmt.setInt(5, student.getAge());
-            studentStmt.setString(6, student.getDescription());
-            studentStmt.setString(7, student.getPhotoUrl());
+            studentStmt.setString(1, fullname);
+            studentStmt.setString(2, username);
+            studentStmt.setString(3, password);
+            studentStmt.setString(4, email); 
+            studentStmt.setInt(5, age);
+            studentStmt.setString(6, studentDescription);
+            studentStmt.setString(7, photo);
             studentStmt.executeUpdate();
 
             // Retrieve the generated student ID
@@ -196,7 +197,7 @@ public class StudentDAO {
                 // Insert student interest
                 try {
                     interestStmt = con.prepareStatement(insertInterestSQL);
-                    for(String interest: student.getInterestSubjects()) {
+                    for(String interest: subjects) {
                         interestStmt.setInt(1, studentID);
                         interestStmt.setInt(2, courseDAO.getCourseCategoryId(interest));
                         interestStmt.addBatch();
@@ -206,16 +207,17 @@ public class StudentDAO {
                     throw new Exception(e.getMessage());
 
                 }
-            }
+            } 
         } catch(Exception e) {
             throw new Exception(e.getMessage());
         } finally {
             try {
                 generatedKeys.close();
-                interestStmt.close();
+                interestStmt.close(); 
                 studentStmt.close();
                 db.close();
             } catch(Exception e) {
+                throw new Exception("Error with database");
 
             }
         }

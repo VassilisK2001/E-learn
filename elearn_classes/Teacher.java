@@ -1,7 +1,6 @@
 package elearn_classes;
 
 import java.util.List;
-import java.util.ArrayList;
 
 public class Teacher {
 
@@ -55,7 +54,7 @@ public class Teacher {
         this.min_price = min_price;
         this.max_price = max_price;
         this.teacher_specializations = teacher_specializations;
-        this.specialization_courses = (specialization_courses == null) ? new ArrayList<>() : specialization_courses;
+        this.specialization_courses =  specialization_courses;
     }
 
     // Getter and Setter Methods

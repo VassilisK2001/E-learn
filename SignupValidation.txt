@@ -1,0 +1,42 @@
+
+Full Name: ^[A-Za-z]{3,60}$ 
+- 2 words exactly
+- At least 3 characters and max 60 characters													
+- No special symbols or numbers
+
+Age: CanBeInteger()
+- integer greater than 18 and less than or equal to 80   											
+
+Username: ^(?=(.*[A-Za-z]){3,}).{5,}$
+- At least 5 characters 
+- 3 letters at least
+
+Email: ^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}
+
+Password: ^.{5,}$
+- At least 5 characters long
+
+STUDENT
+
+Subjects of Interest
+
+Student Description: countWords()
+- From 5 to 20 words
+
+TEACHER
+
+Years of experience: CanBeInteger() 
+- integer greater than 0 and less or equal to 40
+
+Teacher Specializations
+
+Specialization courses
+
+Min price:  ^(100(\.00?)?|(\d|[1-9]\d)(\.\d{1,2})?)$
+- number greater than 0 and less or equal to 100, up to 2 decimals
+
+Max price: ^(100(\.00?)?|(\d|[1-9]\d)(\.\d{1,2})?)$
+- number greater than 0 and less or equal to 100, up to 2 decimals, greater than min_price
+ 
+Teacher Description: countWords()
+- From 5 to 20 words

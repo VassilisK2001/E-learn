@@ -214,7 +214,8 @@ public class TeacherDAO {
      * @param teacher The Teacher object containing the teacher's information.
      * @throws Exception If credentials are invalid or there is a database error.
      */
-    public void insertTeacher(Teacher teacher) throws Exception {
+    public void insertTeacher(String fullname, String username, String password, String email, int age, String teacherDescription,
+    String photo, double minPrice, double maxPrice, int experience, List<String> teacherSpecializations, List<String> specializationCourses) throws Exception {
 
         Connection con = null;
 
@@ -236,16 +237,16 @@ public class TeacherDAO {
             con = db.getConnection();
             teacherStmt = con.prepareStatement(insertTeacherSQL, Statement.RETURN_GENERATED_KEYS);
             // Insert teacher into the `teacher` table
-            teacherStmt.setString(1, teacher.getName());
-            teacherStmt.setInt(2, teacher.getAge());
-            teacherStmt.setString(3, teacher.getUsername());
-            teacherStmt.setString(4, teacher.getPassword()); // Ensure the password is hashed
-            teacherStmt.setString(5, teacher.getEmail());
-            teacherStmt.setString(6, teacher.getDesc());
-            teacherStmt.setString(7, teacher.getPhoto());
-            teacherStmt.setInt(8, teacher.getYears_of_experience());
-            teacherStmt.setDouble(9, teacher.getMin_price());
-            teacherStmt.setDouble(10, teacher.getMax_price());
+            teacherStmt.setString(1, fullname);
+            teacherStmt.setString(2, username);
+            teacherStmt.setString(3, password);
+            teacherStmt.setString(4, email); 
+            teacherStmt.setInt(5, age);
+            teacherStmt.setString(6, teacherDescription);
+            teacherStmt.setString(7, photo);
+            teacherStmt.setDouble(9, minPrice);
+            teacherStmt.setDouble(10, maxPrice);
+            teacherStmt.setInt(8, experience);
             teacherStmt.executeUpdate();
 
             // Retrieve the generated teacher ID
@@ -257,7 +258,7 @@ public class TeacherDAO {
                     // Insert teacher's specializations into the `teacher_course_category` table
                     try {
                         specializationStmt = con.prepareStatement(insertSpecializationSQL);
-                        for(String specialization: teacher.getTeacher_specializations()){
+                        for(String specialization: teacherSpecializations){
                             specializationStmt.setInt(1, teacherID);
                             specializationStmt.setInt(2, courseDAO.getCourseCategoryId(specialization)); // Helper method to get course category ID
                             specializationStmt.addBatch();
@@ -269,19 +270,17 @@ public class TeacherDAO {
                     } 
 
                     // Insert teacher's courses into the `teacher_course` table
-                    if(!teacher.getSpecialization_courses().isEmpty()) {
-                        try {
-                            courseStmt = con.prepareStatement(insertCourseSQL);
-                            for(String course: teacher.getSpecialization_courses()) {
-                                courseStmt.setInt(1, teacherID);
-                                courseStmt.setInt(2, courseDAO.getCourseId(course));
-                                courseStmt.addBatch();
-                            }
-                            courseStmt.executeBatch();
-                        } catch(Exception e) {
-                            throw new Exception(e.getMessage());
+                    try {
+                        courseStmt = con.prepareStatement(insertCourseSQL);
+                        for(String course: specializationCourses) {
+                            courseStmt.setInt(1, teacherID);
+                            courseStmt.setInt(2, courseDAO.getCourseId(course));
+                            courseStmt.addBatch();
                         }
-                    }
+                        courseStmt.executeBatch();
+                    } catch(Exception e) {
+                        throw new Exception(e.getMessage());
+                    }  
                 }
             } catch(Exception e) {
                 throw new Exception(e.getMessage());
@@ -300,22 +299,5 @@ public class TeacherDAO {
             }
         }
     }
-
-
-
- 
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
