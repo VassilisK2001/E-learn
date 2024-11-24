@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,32 +40,38 @@
     <!-- Main Content -->
     <main class="container my-5 flex-grow-1">
         <div class="row justify-content-center">
+        <!-- Insert the box with the request message here  -->
+        <% if (request.getAttribute("message") != null) { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= request.getAttribute("message") %>
+            </div>
+        <% } %>
             <div class="col-md-6">
                 <div class="card shadow-lg p-4 rounded">
+                <form action="signinController.jsp" method="post" accept-charset="UTF-8">
                     <h3 class="mb-4 text-center">Sign In</h3>
-                    <form>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" required>
+                            <input type="text" class="form-control" id="username" name="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
+                            <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
-                            <select class="form-select" id="role" required>
+                            <select class="form-select" id="role" name="role" required>
                                 <option value="">Select your role</option>
                                 <option value="student">Student</option>
                                 <option value="teacher">Teacher</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mt-4">Sign In</button>
-                    </form>
+                </form>
                     <p class="text-center mt-3">Don't have an account? <a href="<%=request.getContextPath()%>/elearn/UI/signup.jsp">Sign Up</a></p>
                 </div>
             </div>

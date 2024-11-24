@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+
+<%
+Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +29,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as Mary Smith</b></a>
+                        <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
@@ -41,7 +46,7 @@
     </nav>
 
     <main class="container my-4 flex-grow-1">
-        <h1>Hello Mary Smith. Welcome to E-Learn!</h1>
+        <h1>Hello <%= teacher.getName()%>. Welcome to E-Learn!</h1>
         
         <div class="row mb-5">
             <!-- Functionality Section 1 -->

@@ -181,7 +181,7 @@ public static List<String> convertStringToList(String input) {
                 String fieldValue = item.getString("UTF-8");
 
                 if (fieldName.equals("fullname")) {
-                    if ((countWords(fieldValue) != 2) || (!matches("^[A-Za-z]{3,30} [A-Za-z]{3,30}$", fieldValue))) {
+                    if ((countWords(fieldValue) != 2) || (!matches("^[\\p{L}]{3,30} [\\p{L}]{3,30}$", fieldValue))) {
                         countErrors ++;
                         errorMessages.add("Your <b>full name</b> must include both a first name and a last name, each containing 3 to 60 alphabetic characters without any special symbols or numbers.");
                     } else {
@@ -208,7 +208,7 @@ public static List<String> convertStringToList(String input) {
                 if (fieldName.equals("username")) {
                     if (!matches("^(?=(.*[A-Za-z]){3,})\\S{5,19}$",fieldValue)) {
                         countErrors ++;
-                        errorMessages.add("Your <b>username</b> bust be at least 5 and maximum 20 characters long, include at least 3 letters and not have whitespaces.");
+                        errorMessages.add("Your <b>username</b> must be at least 5 and maximum 20 characters long (latin characters only), include at least 3 letters and not have whitespaces.");
                     } else {
                         username = fieldValue;
                     }
@@ -221,7 +221,7 @@ public static List<String> convertStringToList(String input) {
                 if (fieldName.equals("password")) {
                     if(!matches("^.{5,20}$", fieldValue)) {
                         countErrors ++;
-                        errorMessages.add("Your <b>password</b> needs to be at least 5 and no more than 20 characters long.");
+                        errorMessages.add("Your <b>password</b> needs to be at least 5 and no more than 20 characters long and include only latin characters.");
                     } else {
                         password = fieldValue;
                     }

@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+
+<%
+// Get the student object from session
+Student student = (Student) session.getAttribute("studentObj");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as John Doe</b></a>
+                        <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
@@ -41,7 +47,7 @@
     </nav>
 
     <main class="container my-4 flex-grow-1">
-        <h1>Hello John Doe. Welcome to E-Learn!</h1>
+        <h1>Hello <%= student.getFullName()%>. Welcome to E-Learn!</h1>
         
         <div class="row mb-5">
             <!-- Functionality Section 1 -->
@@ -113,7 +119,7 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-WofnHkT9V+gBoOwXpTVSgTsAA13RYqArvDjNkHH4iy0Tx4sLIFEd5lfjqBa8TobC" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

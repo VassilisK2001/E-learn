@@ -3,7 +3,9 @@ http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 TO DO
 - Implement "open_note" button in my_notes.jsp 
 - Implement "download" button in my_notes.jsp
-- Check if request method is "post" in all pages
+- Check if request method is "post" in all pages 
+- Set sessionTimeOut in all pages
+- Prevent page caching for all pages 
 
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
