@@ -174,6 +174,43 @@ public class CourseDAO {
     }
 
 
+/**
+ * Checks if a course with the given title exists in the database.
+ *
+ * @param course_title The title of the course to check.
+ * @throws Exception If the course title does not exist in the database or if a database error occurs.
+ */
+    public void checkCourseExists(String course_title) throws Exception {
 
-    
+        Connection con = null;
+
+        String sql = "SELECT * FROM course WHERE course_title = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1,course_title);
+            rs = stmt.executeQuery();
+
+            if(!rs.next()) {
+                throw new Exception("Please enter a valid course title from the list.");
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }   
 }

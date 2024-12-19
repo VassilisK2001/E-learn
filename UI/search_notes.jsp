@@ -4,6 +4,9 @@
 <%@ page import="com.google.gson.Gson" %>
 
 <%
+// Get the student object from the session
+Student student = (Student) session.getAttribute("studentObj");
+
 // Create CourseDAO object
 CourseDAO courseDAO = new CourseDAO();
 
@@ -40,7 +43,7 @@ String coursesJson = gson.toJson(courses);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as John Doe</b></a>
+                        <a class="nav-link"><b>Signed in as <%=student.getFullName()%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
@@ -62,7 +65,7 @@ String coursesJson = gson.toJson(courses);
         <!-- Search Form -->
         <div class="card shadow-lg">
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/elearn/available_notes.jsp" method="POST">
+                <form action="<%=request.getContextPath()%>/elearn/UI/searchnotes_Controller.jsp" method="POST">
                     <!-- Course Title Input -->
                     <div class="mb-3 position-relative">
                         <label for="courseTitle" class="form-label">Course Title</label>
@@ -72,9 +75,19 @@ String coursesJson = gson.toJson(courses);
                     </div>
 
                     <!-- Academic Year Input -->
+                    <!-- Academic Year Range Input -->
                     <div class="mb-3">
-                        <label for="academicYear" class="form-label">Academic Year</label>
-                        <input type="text" class="form-control" id="academicYear" name="academicYear" placeholder="Please enter in YYYY-YYYY format (e.g., 2024-2025)" required>
+                        <label for="academicYearRange" class="form-label">Academic Year Range</label>
+                        <div class="d-flex justify-content-between">
+                            <div class="input-group me-2">
+                                <span class="input-group-text">From</span>
+                                <input type="number" id="minYear" class="form-control" name="minYear" value="1980" min="1980" max="<%= new java.util.Date().getYear() + 1900 %>" required>
+                            </div>
+                            <div class="input-group ms-2">
+                                <span class="input-group-text">To</span>
+                                <input type="number" id="maxYear" class="form-control" name="maxYear" value="<%= new java.util.Date().getYear() + 1900 %>" min="1980" max="<%= new java.util.Date().getYear() + 1900 %>" required>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Uploaded By Dropdown -->
@@ -110,9 +123,17 @@ String coursesJson = gson.toJson(courses);
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Inject the data into JavaScript as global variables -->
     <script>
+        // Inject the courses data into JavaScript as global variables
         const coursesData = <%= coursesJson %>;
+
+        // Get the current year dynamically
+        const currentYear = new Date().getFullYear();
+
+        // Set the max year input to the current year
+        document.getElementById('maxYear').max = currentYear;
+        document.getElementById('maxYear').value = currentYear;
+
     </script>
     <script src="<%=request.getContextPath()%>/elearn/js/course_title.js"></script>
 </body>

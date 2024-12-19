@@ -84,8 +84,8 @@ String coursesJson = gson.toJson(courses);
             <!-- File Upload Input -->
             <div class="mb-3">
                 <label for="fileUpload" class="form-label">Upload File</label>
-                <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".pdf, .doc, .docx" required>
-                <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX</small>
+                <input type="file" class="form-control" id="fileUpload" name="fileUpload" accept=".pdf, .doc, .docx, .ppt, .pptx" required>
+                <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX, PPT, PPTX</small>
             </div>
 
             <!-- Submit Button -->

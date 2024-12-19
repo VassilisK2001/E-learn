@@ -1,6 +1,7 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
+- build a method to check if there are notes for the course selected (searchnotes_Controller.jsp)
 - Implement "open_note" button in my_notes.jsp 
 - Implement "download" button in my_notes.jsp
 - Check if request method is "post" in all pages 
@@ -26,12 +27,12 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     - password 
     - email 
     - desc 
-    - photo                                          * If a photo is not inserted there will be a default photo
+    - photo                                          
     - years_of_experience                                 
     - min_price
     - max_price 
     - List<String> specializations 
-    - List<String> specialization_courses            * Include two constructors, one with specialization courses and one without this field.
+    - List<String> specialization_courses            
     + authenticate(username, password) 
     + insertTeacher(fullname, age, username, password, email, desc, photo, max_price, min_price, specializations, specialization_courses) 
     + checkTeacherExists(username, password) 
@@ -55,16 +56,16 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
 3. Note (Note, NoteDAO): 
     - note_id 
     - title 
-    - file 
+    - file_url 
     - upload_date 
     - uploader_type
     - uploader_name
     - course_title: String
     + searchNotes(String, year, uploader_type) --> List<Note> available_notes
-    + uploadNote(String, title, file, date, uploader_type, uploader_name) 
-    + saveNote(student_id, note_id) 
-    + getFavNotes(student_id) --> List<Notes> fav_notes 
-    + deleteFavNote(student_id, note_id)
+    + uploadNote(String, title, file, date, uploader_type, uploader_name)   20 DEC
+    + saveNote(student_id, note_id)                            21-22 DEC
+    + getFavNotes(student_id) --> List<Notes> fav_notes        21-22
+    + deleteFavNote(student_id, note_id)                       21-22
 
 4. LessonReq (LessonReq, LessonReqDAO):
     - lesson_req_id 
@@ -103,25 +104,22 @@ Eventually, the student has to select one of the courses available
 
 DEADLINE (18 January)
 
-SignUp + SignIn : 22-23 November 
+
 
 Search Teacher: 25 November - 2 December 
 - find_teacher.jsp 
-- teacher_reults.jsp
+- teacher_results.jsp
 
 LessonRequests: 3 December - 5 December 
 - my_lessons.jsp 
 - my_requests.jsp 
+- teacher_results.jsp
 
-Note Management: 6 December - 11 December 
+Note Management: 19 December - 24 December (6 days) 
 - search_notes.jsp
 - available_notes.jsp  
 - my_notes.jsp  
 - upload_material 
-
-Live Chat: 12 December - 30 December 
-
-Adjustments/ Leftovers: 30 December - 18 January
 
 
 

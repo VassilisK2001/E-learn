@@ -1,4 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+<%@ page import="java.util.*"%>
+
+
+<%
+// Get the student object from the session
+Student student = (Student) session.getAttribute("studentObj");
+
+// Get form data
+String course = request.getParameter("courseTitle");
+String from = request.getParameter("minYear");
+String to = request.getParameter("maxYear");
+String uploader_type = request.getParameter("uploaderType");
+
+// Variables for validation and error messages
+int start_year = Integer.parseInt(from);
+int end_year = Integer.parseInt(to);
+List<String> errorMessages = new ArrayList<String>();
+int countErrors = 0;
+String fileUrl = "";
+String iconClass = "";
+
+
+// initialize available_notes list
+List<Note> available_notes = new ArrayList<Note>();
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +50,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as John Doe</b></a>
+                        <a class="nav-link"><b>Signed in as <%=student.getFullName()%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
@@ -42,28 +68,95 @@
         </div>
     </nav>
 
+    <%
+    CourseDAO courseDAO = new CourseDAO();
+
+    try {
+        courseDAO.checkCourseExists(course);
+    } catch(Exception e) {
+        countErrors++;
+        errorMessages.add(e.getMessage());
+    }
+
+    if (start_year >= end_year) {
+        countErrors++;
+        errorMessages.add("The <b>start year</b> must be less than <b>end year</b> in academic year range.");
+    }
+
+    if (countErrors != 0) {
+    %>
+
+     <!-- Main Content -->
+    <main class="container my-4 flex-grow-1">
+
+    <!-- Alert Box for General Error -->
+    <div class="alert alert-danger" role="alert">
+        <strong>The form you filled in has errors.</strong>
+    </div>
+
+    <!-- Card to display detailed errors -->
+    <div class="card">
+        <div class="card-header">
+            <strong>Search Material Form Errors</strong>
+        </div>
+        <div class="card-body">
+            <ol class="list-group list-group-numbered">
+                <% for (String errorMessage : errorMessages) { %>
+                    <li class="list-group-item"><%= errorMessage %></li>
+                <% } %>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Back Button to Search Material form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/search_notes.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Form
+        </a>
+    </div>
+
+    <% } else {  %>
+
     <!-- Main Content -->
     <main class="container my-4 flex-grow-1">
-        <h1 class="mb-4 text-center">Available Notes for Course: Introduction to Machine Learning</h1>
+        <h1 class="mb-4 text-center">Available Notes for Course: <%=course%></h1>
 
         <!-- Card Layout for Notes -->
         <div class="row row-cols-1 row-cols-md-2 g-4">
-            <!-- Sample Card 1 -->
+
+        <%
+        NoteDAO noteDAO = new NoteDAO();
+        available_notes = noteDAO.searchNotes(course, start_year, end_year, uploader_type);
+
+        for (Note note: available_notes) {
+
+            // Get the file URL and determine the extension
+            fileUrl = note.getFile_url();
+            
+            if (fileUrl.endsWith(".pdf")) {
+                iconClass = "fas fa-file-pdf fa-3x text-danger";  // PDF icon
+            } else if (fileUrl.endsWith(".doc") || fileUrl.endsWith(".docx")) {
+                iconClass = "fas fa-file-word fa-3x text-primary";  // Word icon
+            } else if (fileUrl.endsWith(".ppt") || fileUrl.endsWith(".pptx")) {
+                iconClass = "fas fa-file-powerpoint fa-3x text-warning";  // PowerPoint icon
+            }
+        %>
+            <!-- Card Notes -->
             <div class="col">
                 <div class="card h-100 shadow-sm">
                     <div class="row g-0">
                         <!-- Icon Section -->
                         <div class="col-md-3 d-flex align-items-center justify-content-center p-3">
-                            <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                            <i class="<%= iconClass %>"></i>
                         </div>
                         <!-- Content Section -->
                         <div class="col-md-9">
                             <div class="card-body">
-                                <h5 class="card-title">Lecture Notes: Fundamentals of Machine Learning Algorithms</h5>
+                                <h5 class="card-title">Lecture Notes: <%=note.getTitle()%></h5>
                                 <p class="card-text">
-                                    <strong>Uploaded on:</strong> 2024-11-05<br>
-                                    <strong>Uploader:</strong> Alice Johnson<br>
-                                    <strong>Role:</strong> Teacher
+                                    <strong>Uploaded on:</strong> <%=note.getUpload_date()%><br>
+                                    <strong>Uploader:</strong> <%=note.getUploader_name()%><br>
+                                    <strong>Role:</strong> <%=note.getUploader_type()%>
                                 </p>
                             </div>
                             <!-- Card Footer with Actions -->
@@ -75,56 +168,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Sample Card 2 -->
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-3 d-flex align-items-center justify-content-center p-3">
-                            <i class="fas fa-file-word fa-3x text-primary"></i>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body">
-                                <h5 class="card-title">Assignment Solutions: Supervised and Unsupervised Learning</h5>
-                                <p class="card-text">
-                                    <strong>Uploaded on:</strong> 2024-10-20<br>
-                                    <strong>Uploader:</strong> John Smith<br>
-                                    <strong>Role:</strong> Student
-                                </p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i>Download</a>
-                                <a href="#" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sample Card 3 -->
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-3 d-flex align-items-center justify-content-center p-3">
-                            <i class="fas fa-file-excel fa-3x text-success"></i>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body">
-                                <h5 class="card-title">Study Guide: Key Concepts and Techniques in Machine Learning</h5>
-                                <p class="card-text">
-                                    <strong>Uploaded on:</strong> 2024-09-15<br>
-                                    <strong>Uploader:</strong> Sarah Brown<br>
-                                    <strong>Role:</strong> Teacher
-                                </p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i>Download</a>
-                                <a href="#" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <%   }   %>
         </div>
 
         <!-- Back Button Below Teacher Cards -->
@@ -133,6 +177,9 @@
                 <i class="fas fa-arrow-left me-2"></i>Back to search notes form
             </a>
         </div>
+
+    
+    <%  }  %>
     </main>
 
     <!-- Footer -->
