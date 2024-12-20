@@ -3,7 +3,6 @@
 <%@ page import="elearn_classes.*" %>
 <%@ page import="com.google.gson.Gson" %>
 
-
 <%
 // Create CourseDAO object
 CourseDAO courseDAO = new CourseDAO();
@@ -14,9 +13,18 @@ List<String> courses = courseDAO.getCourseTitles();
 // Convert lists to JSON using Gson library
 Gson gson = new Gson();
 String coursesJson = gson.toJson(courses);
+
+// Check if user role and retrieve object from session
+Student student = null;
+Teacher teacher = null;
+boolean isStudent = false;
+if (session.getAttribute("studentObj") != null) {
+    student = (Student) session.getAttribute("studentObj");
+    isStudent = true;
+} else {
+    teacher = (Teacher) session.getAttribute("teacherObj");
+}
 %>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,13 +51,13 @@ String coursesJson = gson.toJson(courses);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as Mary Smith</b></a>
+                        <a class="nav-link"><b>Signed in as <%=((isStudent) ? (student.getFullName()) : (teacher.getName()))%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/<%=((isStudent) ? "home_student.jsp" : "home_teacher.jsp")%>"><b>Home</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp">
@@ -66,7 +74,7 @@ String coursesJson = gson.toJson(courses);
         <h1 class="mb-4 text-center">Upload Educational Material</h1>
         
         <!-- Upload Form -->
-        <form action="<%=request.getContextPath()%>/uploadMaterial" method="post" enctype="multipart/form-data" class="p-4 border rounded bg-light">
+        <form action="<%=request.getContextPath()%>/elearn/UI/newMaterial_Controller.jsp" method="post" enctype="multipart/form-data" class="p-4 border rounded bg-light">
             <!-- Course Title Input -->
             <div class="mb-3 position-relative">
                 <label for="courseTitle" class="form-label">Course Title</label>
@@ -92,9 +100,9 @@ String coursesJson = gson.toJson(courses);
             <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
 
-        <!-- Back Button Below Teacher Cards -->
+        <!-- Back Button -->
         <div class="text-center mt-4">
-            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
+            <a href="<%=request.getContextPath()%>/elearn/UI/<%=((isStudent) ? "home_student.jsp" : "home_teacher.jsp")%>" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Home
             </a>
         </div>

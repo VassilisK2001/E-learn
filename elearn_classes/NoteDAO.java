@@ -1,6 +1,7 @@
 package elearn_classes;
 import java.sql.*;
 import java.util.List;
+
 import java.util.ArrayList;
 
 public class NoteDAO {
@@ -127,6 +128,102 @@ public class NoteDAO {
             }
         }
 
+    }
+
+
+    /**
+ * Inserts a new note into the database for a student, including the note's title, upload date,
+ * the student's ID, the course ID, and the note's file URL.
+ * 
+ * @param note_title     The title of the note to be uploaded.
+ * @param upload_date    The date and time when the note is uploaded.
+ * @param student        The student uploading the note.
+ * @param note_file      The URL or path of the uploaded note file.
+ * @param course_title   The title of the course associated with the note.
+ * @throws Exception     If an error occurs while inserting the note into the database, such as 
+ *                       database connectivity issues or invalid data.
+ */
+    public void insertStudentNote(String note_title, java.sql.Timestamp upload_date, Student student, 
+    String note_file, String course_title) throws Exception {
+
+        Connection con = null;
+        CourseDAO courseDAO = new CourseDAO();
+
+        String insertNoteSQL = "INSERT INTO note (note_title, note_entry_date, student_id, teacher_id, note_file_url, course_id) " +
+        "VALUES (?,?,?,NULL,?,?);";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt =  con.prepareStatement(insertNoteSQL);
+            stmt.setString(1,note_title);
+            stmt.setTimestamp(2,upload_date);
+            stmt.setInt(3,student.getStudentId());
+            stmt.setString(4,note_file);
+            stmt.setInt(5,courseDAO.getCourseId(course_title));
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error inserting note into database: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+
+/**
+ * Inserts a new note into the database for a teacher, including the note's title, upload date,
+ * the teacher's ID, the course ID, and the note's file URL.
+ * 
+ * @param note_title     The title of the note to be uploaded.
+ * @param upload_date    The date and time when the note is uploaded.
+ * @param teacher        The teacher uploading the note.
+ * @param note_file      The URL or path of the uploaded note file.
+ * @param course_title   The title of the course associated with the note.
+ * @throws Exception     If an error occurs while inserting the note into the database, such as 
+ *                       database connectivity issues or invalid data.
+ */
+    public void insertTeacherNote(String note_title, java.sql.Timestamp upload_date, Teacher teacher, 
+    String note_file, String course_title) throws Exception {
+
+        Connection con = null;
+        CourseDAO courseDAO = new CourseDAO();
+
+        String insertNoteSQL = "INSERT INTO note (note_title, note_entry_date, student_id, teacher_id, note_file_url, course_id) " +
+        "VALUES (?,?,NULL,?,?,?);";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt =  con.prepareStatement(insertNoteSQL);
+            stmt.setString(1,note_title);
+            stmt.setTimestamp(2,upload_date);
+            stmt.setInt(3,teacher.getTeacher_id());
+            stmt.setString(4,note_file);
+            stmt.setInt(5,courseDAO.getCourseId(course_title));
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error inserting note into database: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
     }
     
 }

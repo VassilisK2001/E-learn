@@ -68,6 +68,9 @@ List<Note> available_notes = new ArrayList<Note>();
         </div>
     </nav>
 
+     <!-- Main Content -->
+    <main class="container my-4 flex-grow-1">
+
     <%
     CourseDAO courseDAO = new CourseDAO();
 
@@ -85,9 +88,6 @@ List<Note> available_notes = new ArrayList<Note>();
 
     if (countErrors != 0) {
     %>
-
-     <!-- Main Content -->
-    <main class="container my-4 flex-grow-1">
 
     <!-- Alert Box for General Error -->
     <div class="alert alert-danger" role="alert">
@@ -115,18 +115,29 @@ List<Note> available_notes = new ArrayList<Note>();
         </a>
     </div>
 
-    <% } else {  %>
+    <% } else {  
 
-    <!-- Main Content -->
-    <main class="container my-4 flex-grow-1">
+        NoteDAO noteDAO = new NoteDAO();
+        available_notes = noteDAO.searchNotes(course, start_year, end_year, uploader_type);
+
+        if (available_notes.isEmpty()) {
+    %>
+
+    <!-- Warning Box for No Available Notes -->
+    <div class="alert alert-warning d-flex align-items-center justify-content-center text-center" role="alert">
+        <i class="fas fa-exclamation-triangle fa-lg me-2"></i>
+        <span><b>There are no available notes based on your criteria </b></span>
+    </div>
+
+
+    <%  } else {  %>
+
         <h1 class="mb-4 text-center">Available Notes for Course: <%=course%></h1>
 
         <!-- Card Layout for Notes -->
         <div class="row row-cols-1 row-cols-md-2 g-4">
 
         <%
-        NoteDAO noteDAO = new NoteDAO();
-        available_notes = noteDAO.searchNotes(course, start_year, end_year, uploader_type);
 
         for (Note note: available_notes) {
 
@@ -170,6 +181,7 @@ List<Note> available_notes = new ArrayList<Note>();
             </div>
         <%   }   %>
         </div>
+        <%  }   %>
 
         <!-- Back Button Below Teacher Cards -->
         <div class="text-center mt-4">
