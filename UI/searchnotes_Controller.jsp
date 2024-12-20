@@ -143,14 +143,9 @@ List<Note> available_notes = new ArrayList<Note>();
 
             // Get the file URL and determine the extension
             fileUrl = note.getFile_url();
+
+            iconClass = "fas fa-file-pdf fa-3x text-danger";  // PDF icon
             
-            if (fileUrl.endsWith(".pdf")) {
-                iconClass = "fas fa-file-pdf fa-3x text-danger";  // PDF icon
-            } else if (fileUrl.endsWith(".doc") || fileUrl.endsWith(".docx")) {
-                iconClass = "fas fa-file-word fa-3x text-primary";  // Word icon
-            } else if (fileUrl.endsWith(".ppt") || fileUrl.endsWith(".pptx")) {
-                iconClass = "fas fa-file-powerpoint fa-3x text-warning";  // PowerPoint icon
-            }
         %>
             <!-- Card Notes -->
             <div class="col">
@@ -172,9 +167,33 @@ List<Note> available_notes = new ArrayList<Note>();
                             </div>
                             <!-- Card Footer with Actions -->
                             <div class="card-footer d-flex justify-content-between">
-                                <a href="#" class="btn btn-primary"><i class="fas fa-download me-2"></i>Download</a>
+                                <a href="<%= request.getContextPath() + "/elearn/notes/" + fileUrl %>" class="btn btn-primary" download>
+                                    <i class="fas fa-download me-2"></i>Download
+                                </a>
+                                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#openNoteModal<%= note.getNote_id() %>">
+                                    <i class="fas fa-eye me-2"></i>Open Note
+                                </button>
                                 <a href="#" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for displaying the note content -->
+            <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="openNoteModalLabel<%= note.getNote_id() %>">Note: <%= note.getTitle() %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <%-- Handle PDF file for viewing --%>
+                            <embed src="<%= request.getContextPath() %>/elearn/notes/<%= fileUrl %>" width="100%" height="700px" /> 
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

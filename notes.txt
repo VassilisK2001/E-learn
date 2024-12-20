@@ -1,12 +1,12 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
-- build a method to check if there are notes for the course selected (searchnotes_Controller.jsp)
-- Implement "open_note" button in my_notes.jsp 
-- Implement "download" button in my_notes.jsp
 - Check if request method is "post" in all pages 
 - Set sessionTimeOut in all pages
 - Prevent page caching for all pages 
+- make footer a jsp page and incluse it in all pages
+- Get distinct note in sql statement for search_notes method (?)
+- Check if upload_material works for teachers
 
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
@@ -62,7 +62,7 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     - uploader_name
     - course_title: String
     + searchNotes(String, year, uploader_type) --> List<Note> available_notes
-    + uploadNote(String, title, file, date, uploader_type, uploader_name)   20 DEC
+    + insertNote(String, title, file, date, uploader_type, uploader_name)   20 DEC
     + saveNote(student_id, note_id)                            21-22 DEC
     + getFavNotes(student_id) --> List<Notes> fav_notes        21-22
     + deleteFavNote(student_id, note_id)                       21-22
