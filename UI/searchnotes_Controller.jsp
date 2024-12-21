@@ -7,23 +7,37 @@
 // Get the student object from the session
 Student student = (Student) session.getAttribute("studentObj");
 
-// Get form data
-String course = request.getParameter("courseTitle");
-String from = request.getParameter("minYear");
-String to = request.getParameter("maxYear");
-String uploader_type = request.getParameter("uploaderType");
+// Get notes list and course_title from session
+List<Note> notesList = (List<Note>) session.getAttribute("notesList");
+String course_title = (String) session.getAttribute("course_title");
 
-// Variables for validation and error messages
-int start_year = Integer.parseInt(from);
-int end_year = Integer.parseInt(to);
+// Variables for validation and error messages 
+String course = "";
+String from = "";
+String to = "";
+String uploader_type = "";
+int start_year = 0;
+int end_year = 0;
 List<String> errorMessages = new ArrayList<String>();
 int countErrors = 0;
 String fileUrl = "";
 String iconClass = "";
 
-
 // initialize available_notes list
 List<Note> available_notes = new ArrayList<Note>();
+
+if (notesList == null) {
+
+    // Get form data
+    course = request.getParameter("courseTitle");
+    from = request.getParameter("minYear");
+    to = request.getParameter("maxYear");
+    uploader_type = request.getParameter("uploaderType");
+
+    start_year = Integer.parseInt(from);
+    end_year = Integer.parseInt(to);
+}
+
 %>
 
 <!DOCTYPE html>
@@ -72,21 +86,25 @@ List<Note> available_notes = new ArrayList<Note>();
     <main class="container my-4 flex-grow-1">
 
     <%
-    CourseDAO courseDAO = new CourseDAO();
 
-    try {
-        courseDAO.checkCourseExists(course);
-    } catch(Exception e) {
-        countErrors++;
-        errorMessages.add(e.getMessage());
-    }
+    if (notesList == null) {
 
-    if (start_year >= end_year) {
-        countErrors++;
-        errorMessages.add("The <b>start year</b> must be less than <b>end year</b> in academic year range.");
-    }
+        CourseDAO courseDAO = new CourseDAO();
 
-    if (countErrors != 0) {
+        try {
+            courseDAO.checkCourseExists(course);
+        } catch(Exception e) {
+            countErrors++;
+            errorMessages.add(e.getMessage());
+        }
+
+        if (start_year >= end_year) {
+            countErrors++;
+            errorMessages.add("The <b>start year</b> must be less than <b>end year</b> in academic year range.");
+        }
+
+        if (countErrors != 0) {
+    
     %>
 
     <!-- Alert Box for General Error -->
@@ -130,7 +148,12 @@ List<Note> available_notes = new ArrayList<Note>();
     </div>
 
 
-    <%  } else {  %>
+    <%  } else {  
+
+        session.setAttribute("notesList", available_notes);
+        session.setAttribute("course_title", course);
+        
+    %>
 
         <h1 class="mb-4 text-center">Available Notes for Course: <%=course%></h1>
 
@@ -173,7 +196,7 @@ List<Note> available_notes = new ArrayList<Note>();
                                 <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#openNoteModal<%= note.getNote_id() %>">
                                     <i class="fas fa-eye me-2"></i>Open Note
                                 </button>
-                                <a href="#" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
+                                <a href="<%=request.getContextPath()%>/elearn/UI/my_notes_Handler.jsp?student_id=<%=student.getStudentId()%>&note_id=<%=note.getNote_id()%>&add_note=true" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
                             </div>
                         </div>
                     </div>
@@ -210,6 +233,87 @@ List<Note> available_notes = new ArrayList<Note>();
         </div>
 
     
+    <%  }
+    } else { 
+    %>
+
+     <h1 class="mb-4 text-center">Available Notes for Course: <%=course_title%></h1>
+
+    <!-- Card Layout for Notes -->
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+
+    <%
+
+        for (Note note: notesList) {
+
+            // Get the file URL and determine the extension
+            fileUrl = note.getFile_url();
+
+            iconClass = "fas fa-file-pdf fa-3x text-danger";  // PDF icon
+            
+     %>
+            <!-- Card Notes -->
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="row g-0">
+                        <!-- Icon Section -->
+                        <div class="col-md-3 d-flex align-items-center justify-content-center p-3">
+                            <i class="<%= iconClass %>"></i>
+                        </div>
+                        <!-- Content Section -->
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <h5 class="card-title">Lecture Notes: <%=note.getTitle()%></h5>
+                                <p class="card-text">
+                                    <strong>Uploaded on:</strong> <%=note.getUpload_date()%><br>
+                                    <strong>Uploader:</strong> <%=note.getUploader_name()%><br>
+                                    <strong>Role:</strong> <%=note.getUploader_type()%>
+                                </p>
+                            </div>
+                            <!-- Card Footer with Actions -->
+                            <div class="card-footer d-flex justify-content-between">
+                                <a href="<%= request.getContextPath() + "/elearn/notes/" + fileUrl %>" class="btn btn-primary" download>
+                                    <i class="fas fa-download me-2"></i>Download
+                                </a>
+                                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#openNoteModal<%= note.getNote_id() %>">
+                                    <i class="fas fa-eye me-2"></i>Open Note
+                                </button>
+                                <a href="<%=request.getContextPath()%>/elearn/UI/my_notes_Handler.jsp?student_id=<%=student.getStudentId()%>&note_id=<%=note.getNote_id()%>&add_note=true" class="btn btn-outline-secondary"><i class="fas fa-plus me-2"></i>Add to My Notes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for displaying the note content -->
+            <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="openNoteModalLabel<%= note.getNote_id() %>">Note: <%= note.getTitle() %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <%-- Handle PDF file for viewing --%>
+                            <embed src="<%= request.getContextPath() %>/elearn/notes/<%= fileUrl %>" width="100%" height="700px" /> 
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <%   }   %>
+    </div>
+
+        
+        <!-- Back Button Below Teacher Cards -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/search_notes.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to search notes form
+            </a>
+        </div>
+
     <%  }  %>
     </main>
 

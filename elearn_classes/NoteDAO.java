@@ -225,5 +225,69 @@ public class NoteDAO {
             }
         }
     }
+
+    public void saveNote(int student_id, int note_id) throws Exception {
+
+        Connection con = null;
+
+        String sql = "INSERT INTO student_fav_notes (student_id, note_id) VALUES (?, ?);";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,student_id);
+            stmt.setInt(2,note_id);
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error inserting student note into database: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+    public void checkfavNoteExists(int student_id, int note_id) throws Exception {
+
+        Connection con = null;
+
+        String sql = "SELECT * FROM student_fav_notes WHERE student_id = ? AND note_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,student_id);
+            stmt.setInt(2,note_id);
+            rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                throw new Exception("You have already added this note to your favourites list");
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
     
 }

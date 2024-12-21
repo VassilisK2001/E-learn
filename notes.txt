@@ -4,9 +4,13 @@ TO DO
 - Check if request method is "post" in all pages 
 - Set sessionTimeOut in all pages
 - Prevent page caching for all pages 
+- Make navbar dynamic
 - make footer a jsp page and incluse it in all pages
+- make AppError.jsp page
+- Check different browzers
 - Get distinct note in sql statement for search_notes method (?)
-- Check if upload_material works for teachers
+- Check if upload_material works for teachers 
+- Document java methods in NoteDAO 
 
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java

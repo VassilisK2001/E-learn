@@ -4,8 +4,24 @@
 <%@ page import="com.google.gson.Gson" %>
 
 <%
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setDateHeader("Expires", 0);
+
 // Get the student object from the session
 Student student = (Student) session.getAttribute("studentObj");
+
+// // Get notes list and course_title from session
+List<Note> notesList = (List<Note>) session.getAttribute("notesList");
+String course_title = (String) session.getAttribute("course_title");
+
+if (notesList != null) {
+    session.removeAttribute("notesList");
+} 
+
+if (course_title != null) {
+    session.removeAttribute("course_title");
+}
 
 // Create CourseDAO object
 CourseDAO courseDAO = new CourseDAO();
@@ -133,6 +149,12 @@ String coursesJson = gson.toJson(courses);
         // Set the max year input to the current year
         document.getElementById('maxYear').max = currentYear;
         document.getElementById('maxYear').value = currentYear;
+
+            
+        if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD) {
+            location.reload(true); // Force a reload from the server
+        }
+    </script>
 
     </script>
     <script src="<%=request.getContextPath()%>/elearn/js/course_title.js"></script>
