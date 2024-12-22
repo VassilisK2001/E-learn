@@ -8,6 +8,7 @@
 String student = request.getParameter("student_id");
 String note = request.getParameter("note_id");
 String new_note = request.getParameter("add_note");
+String del_note = request.getParameter("del_note");
 
 int student_id = Integer.parseInt(student);
 int note_id = Integer.parseInt(note);
@@ -43,7 +44,7 @@ NoteDAO noteDAO = new NoteDAO();
      <!-- Main Content -->
     <main class="container my-4 flex-grow-1">
 
-    <% if (new_note.equals("true")) {  
+    <% if (new_note != null && new_note.equals("true")) {  
 
         try {
             noteDAO.checkfavNoteExists(student_id, note_id);
@@ -93,9 +94,28 @@ NoteDAO noteDAO = new NoteDAO();
 
         <% }   %>
 
-    <% }  %>
+    <% }  
 
-    
+    if (del_note.equals("true")) {
+        noteDAO.deleteFavNote(student_id, note_id);
+    %>
+
+        <!-- Success Box with Bootstrap success class -->
+        <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+            <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
+            <div>
+                <strong>The note has successfully been deleted from your list!</strong>
+            </div>
+        </div>
+
+        <!-- Back Button  -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/my_notes.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to personal notes
+            </a>
+        </div>
+
+    <%  }  %>
     </main>
 
     <!-- Footer -->

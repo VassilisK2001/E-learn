@@ -226,6 +226,14 @@ public class NoteDAO {
         }
     }
 
+
+    /**
+ * Saves a note to the student's favorite notes list in the database.
+ *
+ * @param student_id The ID of the student adding the note.
+ * @param note_id The ID of the note being added.
+ * @throws Exception If there is an error inserting the note into the database or closing the database connection.
+ */
     public void saveNote(int student_id, int note_id) throws Exception {
 
         Connection con = null;
@@ -255,6 +263,14 @@ public class NoteDAO {
         }
     }
 
+
+    /**
+ * Checks if a note already exists in the student's favorite notes list.
+ *
+ * @param student_id The ID of the student.
+ * @param note_id The ID of the note being checked.
+ * @throws Exception If the note is already in the student's favorites list or if there is an error during the database operation.
+ */
     public void checkfavNoteExists(int student_id, int note_id) throws Exception {
 
         Connection con = null;
@@ -286,6 +302,117 @@ public class NoteDAO {
                 db.close();
             } catch(Exception e) {
                 throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+
+    /**
+ * Retrieves the list of favorite notes for a given student from the database.
+ *
+ * @param student The student whose favorite notes are to be retrieved.
+ * @return A list of favorite notes associated with the student.
+ * @throws Exception If there is an error retrieving the notes or closing the database connection.
+ */
+    public List<Note> getFavNotes(Student student) throws Exception {
+        Connection con = null;
+        List<Note> fav_notes = new ArrayList<>();
+
+        String sql =
+        "SELECT "
+        +   "n.note_id, n.note_title, DATE(n.note_entry_date) AS upload_date, n.note_file_url, "
+        +   "COALESCE(s.full_name, t.full_name) AS uploader_name, "
+        +   "CASE "
+        +       "WHEN n.student_id IS NOT NULL THEN 'student' "
+        +       "WHEN n.teacher_id IS NOT NULL THEN 'teacher' "
+        +       "ELSE NULL END AS uploader_type, "
+        +   "c.course_title "
+        + "FROM "
+        +   "note n "
+        + "INNER JOIN "
+        +   "student_fav_notes fn "
+        + "ON "
+        +   "fn.note_id = n.note_id "   
+        + "LEFT JOIN " 
+        +   "student s " 
+        + "ON "  
+        +   "n.student_id = s.student_id "
+        + "LEFT JOIN " 
+        +   "teacher t " 
+        + "ON "  
+        +   "n.teacher_id = t.teacher_id "
+        + "LEFT JOIN " 
+        +   "course c " 
+        + "ON "  
+        +   "n.course_id = c.course_id "
+        + "WHERE " 
+        +   "fn.student_id = ?;";
+
+        DB db = new DB(); 
+        PreparedStatement stmt = null;
+        ResultSet rs = null;      
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,student.getStudentId());
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                fav_notes.add(new Note(rs.getInt("n.note_id"), rs.getString("n.note_title"), 
+                rs.getString("n.note_file_url"), rs.getDate("upload_date"), rs.getString("uploader_type"),
+                rs.getString("uploader_name"), rs.getString("c.course_title")));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return fav_notes;
+
+        } catch(Exception e) {
+            throw new Exception("Error retrieving favourite notes: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }  
+    }
+
+
+    /**
+ * Deletes a note from the student's favorite notes list in the database.
+ *
+ * @param student_id The ID of the student whose favorite note is to be deleted.
+ * @param note_id The ID of the note to be deleted from the favorites list.
+ * @throws Exception If there is an error deleting the note or closing the database connection.
+ */
+    public void deleteFavNote(int student_id, int note_id) throws Exception {
+        Connection con = null;
+
+        String sql = "DELETE FROM student_fav_notes WHERE student_id = ? AND note_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,student_id);
+            stmt.setInt(2,note_id);
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error deleting the note from database " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database " + e.getMessage());
             }
         }
     }

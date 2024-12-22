@@ -4,6 +4,7 @@ TO DO
 - Check if request method is "post" in all pages 
 - Set sessionTimeOut in all pages
 - Prevent page caching for all pages 
+- Check page navigations
 - Make navbar dynamic
 - make footer a jsp page and incluse it in all pages
 - make AppError.jsp page
