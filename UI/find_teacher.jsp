@@ -4,18 +4,24 @@
 <%@ page import="com.google.gson.Gson" %>
 
 <%
-// Create CourseDAO object
-CourseDAO courseDAO = new CourseDAO();
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    
+    // Get student object from session
+    Student student = (Student) session.getAttribute("studentObj");
 
-// Fetch data from the database
-List<String> courseCategories = courseDAO.getCourseCategoryTitles();
-List<String> courses = courseDAO.getCourseTitles();
+    // Create CourseDAO object
+    CourseDAO courseDAO = new CourseDAO();
 
-// Convert lists to JSON using Gson library
-Gson gson = new Gson();
-String coursesJson = gson.toJson(courses);
+    // Fetch data from the database
+    List<String> courseCategories = courseDAO.getCourseCategoryTitles();
+    List<String> courses = courseDAO.getCourseTitles();
+
+    // Convert lists to JSON using Gson library
+    Gson gson = new Gson();
+    String coursesJson = gson.toJson(courses);
 %>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,8 +34,6 @@ String coursesJson = gson.toJson(courses);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/slider_styles.css">
-
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -45,7 +49,7 @@ String coursesJson = gson.toJson(courses);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as John Doe</b></a>
+                        <a class="nav-link"><b>Signed in as <%= student.getFullName() %></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
@@ -63,25 +67,26 @@ String coursesJson = gson.toJson(courses);
 
     <!-- Main Content -->
     <main class="container my-5 flex-grow-1">
-        <div id="teacherSearchCarousel" class="carousel slide mx-auto" style="max-width: 600px;" data-bs-interval="false">
-            <div class="carousel-inner shadow-lg p-4 rounded bg-white">
+        <!-- The form now encloses the entire carousel -->
+        <form action="<%=request.getContextPath()%>/elearn/UI/find_teacher_Controller.jsp" method="POST">
+            <div id="teacherSearchCarousel" class="carousel slide mx-auto" style="max-width: 600px;" data-bs-interval="false">
+                <div class="carousel-inner shadow-lg p-4 rounded bg-white">
 
-                <!-- Slide 1: Course Information -->
-                <div class="carousel-item active">
-                    <h3 class="mb-4">Course Information</h3>
-                    <form id="teacherSearchForm">
+                    <!-- Slide 1: Course Information -->
+                    <div class="carousel-item active">
+                        <h3 class="mb-4">Course Information</h3>
                         <div class="mb-3">
                             <label for="courseCategory" class="form-label">Course Category</label>
-                            <select id="courseCategory" class="form-select" required>
+                            <select id="courseCategory" name="courseCategory" class="form-select" required>
                                 <option value="">Select Category</option>
-                                <% for(String category:courseCategories) { %>
+                                <% for (String category : courseCategories) { %>
                                     <option value="<%= category %>"><%= category %></option>
                                 <% } %>
                             </select>
                         </div>
                         <div class="mb-3 position-relative">
                             <label for="courseTitle" class="form-label">Course Title</label>
-                            <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title" required oninput="fetchCourseSuggestions(this.value)">
+                            <input type="text" class="form-control" id="courseTitle" name="courseTitle" placeholder="Enter course title" required oninput="fetchCourseSuggestions(this.value)">
                             <div id="courseSuggestions" class="list-group position-absolute w-100">
                                 <!-- Suggestions will be dynamically populated here -->
                             </div>
@@ -89,50 +94,58 @@ String coursesJson = gson.toJson(courses);
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-primary mt-4" onclick="nextSlide()">Next</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                <!-- Slide 2: Teacher Filters -->
-                <div class="carousel-item">
-                    <h3 class="mb-4">Teacher Filters</h3>
-                    <div class="mb-3">
-                        <label for="teacherSpecialty" class="form-label">Teacher Specializations</label>
-                        <select class="form-select" id="teacherSpecialty" multiple onchange="addTag('teacherSpecialty', 'specialtyTags')">
-                            <% for(String category: courseCategories) { %>
-                                <option value="<%= category %>"><%= category %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <h5>Selected Specializations:</h5>
-                        <div id="specialtyTags"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="experienceRange" class="form-label">Years of Experience</label>
-                        <div id="experienceRange" class="range-slider"></div>
-                        <div>Selected: <span id="experienceOutput">0 - 40 years</span></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="priceRange" class="form-label">Price Range</label>
-                        <div id="priceRange" class="range-slider"></div>
-                        <div>Selected: <span id="priceOutput"> 0 - 100</span></div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextSlide()">Next</button>
-                    </div>
-                </div>
+                    <!-- Slide 2: Teacher Filters -->
+                    <div class="carousel-item">
+                        <h3 class="mb-4">Teacher Filters</h3>
+                        <div class="mb-3">
+                            <label for="teacherSpecialty" class="form-label">Teacher Specializations (Hold Ctrl key to select)</label>
+                            <select class="form-select" id="teacherSpecialty" name="teacherSpecialty" multiple onchange="addTag('teacherSpecialty', 'specialtyTags')">
+                                <% for (String category : courseCategories) { %>
+                                    <option value="<%= category %>"><%= category %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <h5>Selected Specializations:</h5>
+                            <div id="specialtyTags"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="experienceRange" class="form-label">Years of Experience range</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="minYears" name="minYears" placeholder="Minimum years of experience"  required>
+                                <input type="text" class="form-control" id="maxYears" name="maxYears" placeholder="Maximum years of experience"  required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priceRange" class="form-label">Price range (&euro;)</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" id="minPrice" name="minPrice"  placeholder="Minimum price per hour" required>
+                                <input type="text" class="form-control" id="maxPrice" name="maxPrice"  placeholder="Maximum price per hour" required>
+                            </div>
+                        </div>
 
-                <!-- Slide 3: Submit -->
-                <div class="carousel-item">
-                    <h3 class="mb-4">Submit Criteria</h3>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <!-- Hidden Field for Tags -->
+                        <input type="hidden" id="teacherSpecializationsHidden" name="teacherSpecializationsTags">
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
+                            <button type="button" class="btn btn-primary" onclick="nextSlide()">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Submit -->
+                    <div class="carousel-item">
+                        <h3 class="mb-4">Submit Criteria</h3>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary" onclick="prevSlide()">Back</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
         <!-- Back Button Below Teacher Cards -->
         <div class="text-center mt-4">
@@ -142,8 +155,6 @@ String coursesJson = gson.toJson(courses);
         </div>
     </main>
 
-    
-
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
         <p class="mb-0"><b>© 2024 E-Learn. All rights reserved.</b></p>
@@ -151,7 +162,6 @@ String coursesJson = gson.toJson(courses);
 
     <!-- Include Bootstrap, noUiSlider, and your JavaScript file -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
     <script>
         const coursesData = <%= coursesJson %>;
     </script>

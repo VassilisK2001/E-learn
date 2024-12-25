@@ -6,12 +6,13 @@ TO DO
 - Prevent page caching for all pages 
 - Check page navigations
 - Make navbar dynamic
-- make footer a jsp page and incluse it in all pages
+- make footer a jsp page and include it in all pages
 - make AppError.jsp page
 - Check different browzers
 - Get distinct note in sql statement for search_notes method (?)
-- Check if upload_material works for teachers 
-- Document java methods in NoteDAO 
+- Check if upload_material works for teachers
+- Fix the bug in signup.jsp when the user does not select with Ctrl key 
+
 
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java

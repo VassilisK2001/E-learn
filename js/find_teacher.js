@@ -54,6 +54,36 @@ function fetchCourseSuggestions(query) {
 function nextSlide() {
     const carousel = document.getElementById('teacherSearchCarousel');
     const bootstrapCarousel = new bootstrap.Carousel(carousel);
+
+    // Identify the current active slide
+    const currentSlide = document.querySelector(".carousel-item.active");
+
+     // Collect all required fields on the current slide
+     const requiredFields = currentSlide.querySelectorAll("input[required]");
+     let allFieldsFilled = true;
+     
+     requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            allFieldsFilled = false; // Mark as invalid if any required field is empty
+        }
+    });
+
+    // Check if on the specialization slide and validate the tag section
+    if (currentSlide.querySelector("#specialtyTags") && !document.querySelector("#specialtyTags .tag")) {
+        allFieldsFilled = false;
+    }
+
+    if (!allFieldsFilled) {
+        alert("Please fill out all fields");
+        return;
+    }
+
+    // Update hidden inputs before moving to the next slide
+    updateHiddenInputs();
+
+    // Log values of specializations
+    logSelectedValues();
+
     bootstrapCarousel.next();
 }
 
@@ -70,12 +100,17 @@ function addTag(selectId, containerId) {
     const container = document.getElementById(containerId);
     const selectedOptions = Array.from(selectElement.selectedOptions);
 
-    // Loop through each selected option and create a new tag
     selectedOptions.forEach(option => {
+        // Check if the tag already exists to prevent duplicates
+        if (container.querySelector(`[data-value="${option.value}"]`)) {
+            return; // Skip if the tag is already present
+        }
+
         // Create the tag element
         const tag = document.createElement("span");
-        tag.classList.add("tag", "bg-primary", "me-2"); // Added Bootstrap classes for styling
+        tag.classList.add("tag", "bg-primary", "me-2", "p-2", "rounded"); // Added Bootstrap classes for styling
         tag.textContent = option.text;
+        tag.dataset.value = option.value; // Set the data-value to the option's value
 
         // Create a remove button for the tag
         const removeButton = document.createElement("span");
@@ -96,41 +131,15 @@ function addTag(selectId, containerId) {
     });
 }
 
-// Function to initialize the range sliders for experience and price
-function initializeRangeSliders() {
-    const experienceSlider = document.getElementById('experienceRange');
-    const priceSlider = document.getElementById('priceRange');
-    
-    noUiSlider.create(experienceSlider, {
-        start: [0, 40],
-        connect: true,
-        range: {
-            'min': 0,
-            'max': 40
-        },
-        step: 1
-    });
-
-    noUiSlider.create(priceSlider, {
-        start: [0, 100],
-        connect: true,
-        range: {
-            'min': 0,
-            'max': 100
-        },
-        step: 0.5
-    });
-
-    experienceSlider.noUiSlider.on('update', (values) => {
-        document.getElementById('experienceOutput').textContent = `${values[0]} - ${values[1]} years`;
-    });
-
-    priceSlider.noUiSlider.on('update', (values) => {
-        document.getElementById('priceOutput').textContent = `${values[0]} - ${values[1]} USD`;
-    });
+// Helper to update hidden inputs with tag values
+function updateHiddenInputs() {
+    const specializationsTags = Array.from(document.querySelectorAll("#specialtyTags .tag")).map(tag => tag.dataset.value);
+    document.getElementById("teacherSpecializationsHidden").value = specializationsTags.join(",");     // Convert array to comma-separated string
 }
 
-// Initialize range sliders when the page is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    initializeRangeSliders();
-});
+// Function to log values to the console
+function logSelectedValues() {
+    // Log Specializations
+    const specializationsTags = Array.from(document.querySelectorAll("#specialtyTags .tag")).map(tag => tag.dataset.value);
+    console.log("Selected Specializations: ", specializationsTags);
+}

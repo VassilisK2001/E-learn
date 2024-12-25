@@ -1,8 +1,7 @@
 package elearn_classes;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TeacherDAO {
 
@@ -296,6 +295,102 @@ public class TeacherDAO {
                 db.close();
             } catch(Exception e) {
 
+            }
+        }
+    }
+
+
+    public List<Teacher> getTeacherResults(String course_cat, String course_title, List<String> teacher_specializations, int min_experience, 
+    int max_experience, double min_price, double max_price) throws Exception {
+
+        Connection con = null;
+        List<Integer> teacher_ids = new ArrayList<>();
+        List<Teacher> teachers = new ArrayList<>();
+        
+
+        CourseDAO courseDAO = new CourseDAO();
+
+        String specializationSQL = "SELECT teacher_id FROM teacher_course_category WHERE course_cat_id = ?;";
+
+        String teacherSQL = 
+        "SELECT " +
+        "   t.teacher_id, t.full_name, t.age, t.username, t.password, t.email, t.description, " +
+        "   t.photo_url, t.years_of_experience, t.min_price, t.max_price " +
+        "FROM " +
+        "   teacher t " +
+        "INNER JOIN " +
+        "   teacher_course tc " +
+        "ON " +
+        "   t.teacher_id = tc.teacher_id " +
+        "WHERE " +
+        "   ? IN (SELECT course_id FROM teacher_course) AND " +
+        "   t.teacher_id = ? AND " +
+        "   (t.years_of_experience BETWEEN ? AND ?) AND " +
+        "   (t.min_price BETWEEN ? AND ?) AND " +
+        "   (t.max_price BETWEEN ? AND ?);";
+
+        DB db = new DB();
+        PreparedStatement specstmt = null;
+        PreparedStatement teacherstmt = null;
+        ResultSet specrs = null;
+        ResultSet teacherrs= null;
+
+        try {
+            con = db.getConnection();
+            for (String specialization: teacher_specializations) {
+                specstmt = con.prepareStatement(specializationSQL);
+                specstmt.setInt(1, courseDAO.getCourseCategoryId(specialization));
+                specrs = specstmt.executeQuery();
+                while(specrs.next()) {
+                    teacher_ids.add(specrs.getInt("teacher_id"));
+                }
+            }
+            specrs.close();
+            specstmt.close();
+
+            if (teacher_ids.isEmpty()) {
+                throw new Exception("There are no available teachers based on your criteria.");
+            } else {
+                Set<Integer> uniqueIds = new HashSet<>(teacher_ids); // Removes duplicates
+                teacher_ids = new ArrayList<>(uniqueIds); 
+
+                for (Integer teacher_id: teacher_ids) {
+                    teacherstmt = con.prepareStatement(teacherSQL);
+                    teacherstmt.setInt(1,courseDAO.getCourseId(course_title));
+                    teacherstmt.setInt(2,teacher_id);
+                    teacherstmt.setInt(3, min_experience);
+                    teacherstmt.setInt(4, max_experience);
+                    teacherstmt.setDouble(5, min_price);
+                    teacherstmt.setDouble(6,max_price);
+                    teacherstmt.setDouble(7, min_price);
+                    teacherstmt.setDouble(8,max_price);
+                    teacherrs = teacherstmt.executeQuery();
+
+                    while(teacherrs.next()) {
+                        teachers.add(new Teacher(teacherrs.getInt("t.teacher_id"), teacherrs.getString("t.full_name"),
+                        teacherrs.getInt("t.age"), teacherrs.getString("t.username"), teacherrs.getString("t.password"),
+                        teacherrs.getString("t.email"), teacherrs.getString("t.description"), teacherrs.getString("t.photo_url"),
+                        teacherrs.getInt("t.years_of_experience"), teacherrs.getDouble("t.min_price"), teacherrs.getDouble("t.max_price"),
+                        retrieveSpecializations(teacher_id), retrieveSpecializationCourses(teacher_id)));
+                    } 
+                }
+
+                teacherrs.close();
+                teacherstmt.close();
+
+                if (teachers.isEmpty()) {
+                    throw new Exception("There are no available teachers based on your criteria.");
+                }
+
+                return teachers;
+            }
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
             }
         }
     }
