@@ -14,12 +14,16 @@ TO DO
 - Fix the bug in signup.jsp when the user does not select with Ctrl key 
 
 
+
+POTENTIAL IMPROVEMENTS
+- When the student adds or deletes a note then do not use a back button to redirect to the previous page. Instead use html to redirect back to the previous page 
+
+
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
 
 LINK
 C:\\Program Files\\Apache Software Foundation\\Tomcat 6.0\\webapps\\ismgroup63\\images
-
 
 
 CLASSES + DATABASE (18 NOV - 24 NOV)
@@ -78,8 +82,9 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     - schedule_date    
     - request_status
     - course: String  
-    - sent_from: Student 
-    - sent_to: Teacher
+    - sent_from: int
+    - sent_to: int  
+    + insertLessonRequest() 
     + getLessonRequests(teacher_id) --> List<LessonReq> requests 
     + updateLessonRequest(lesson_req_id) 
     + getLessons(student_id) --> List<LessonReq> lessons   
@@ -94,18 +99,10 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
 
 
 
-
-
-FIND TEACHER USE CASE
---> Student selects course category from dropdown
---> Student enters course title in the text field. As the course is typed, the course options are displayed.
-Eventually, the student has to select one of the courses available 
---> Student select teacher specializations and other criteria 
---> In teacher_results.jsp:
-    --> all the teachers that have at least one of the filtered teacher specializations and meet student 
-    criteria will be displayed 
-    --> if a teacher specializes in the course the student has entered, this teacher will be displayed higher in the page. 
-
+Lesson request 
+- If a student has sent a previous lesson request to a teacher for a specific course at a specific date and it is pending and tries to send
+another request for this lesson at this date then there will be a message: 
+"It seems that the status of your request is pending. Be patient until the teacher approves your request." 
 
 
 DEADLINE (18 January)

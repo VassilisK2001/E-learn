@@ -7,20 +7,35 @@
 // Get student object from session
 Student student = (Student) session.getAttribute("studentObj");
 
+// Get teacher results from session
+List<Teacher> teacher_results = (List<Teacher>) session.getAttribute("teacher_results");
+String course = (String) session.getAttribute("course");
+List<String> specializations = (List<String>) session.getAttribute("specializations"); 
+
 // Initialize CourseDAO object
 CourseDAO courseDAO = new CourseDAO();
 
 // Initialize TeacherDAO object
 TeacherDAO teacherDAO = new TeacherDAO();
 
-// Get form data
-String course_category = request.getParameter("courseCategory");
-String course_title = request.getParameter("courseTitle");
-String teacher_specialties_tags = request.getParameter("teacherSpecializationsTags");
-String min_years_exp = request.getParameter("minYears");
-String max_years_exp = request.getParameter("maxYears");
-String min_price = request.getParameter("minPrice");
-String max_price = request.getParameter("maxPrice");
+String course_category = "";
+String course_title = "";
+String teacher_specialties_tags = "";
+String min_years_exp = "";
+String max_years_exp = "";
+String min_price = "";
+String max_price = "";
+
+if (teacher_results == null) {
+    // Get form data
+    course_category = request.getParameter("courseCategory");
+    course_title = request.getParameter("courseTitle");
+    teacher_specialties_tags = request.getParameter("teacherSpecializationsTags");
+    min_years_exp = request.getParameter("minYears");
+    max_years_exp = request.getParameter("maxYears");
+    min_price = request.getParameter("minPrice");
+    max_price = request.getParameter("maxPrice");
+}
 
 // Variables for validation and error messages 
 List<String> errorMessages = new ArrayList<String>();
@@ -143,67 +158,67 @@ public static int countDecimals(double number) {
 
     <% 
         // Validation checks for all fields
+        if (teacher_results == null) {
 
-        try {
-            courseDAO.checkCourseExists(course_title);
-        } catch(Exception e) {
-            countErrors++;
-            errorMessages.add(e.getMessage());
-        }
+            try {
+                courseDAO.checkCourseExists(course_title);
+            } catch(Exception e) {
+                countErrors++;
+                errorMessages.add(e.getMessage());
+            }
 
-        // Populate teacher specializations list
-        teacher_specializations = convertStringToList(teacher_specialties_tags);
+            // Populate teacher specializations list
+            teacher_specializations = convertStringToList(teacher_specialties_tags);
 
-        if (teacher_specializations.size() > 5) {
-            countErrors++;
-            errorMessages.add("You can select up to <b> 5 teacher specializations.</b>");
-        }
+            if (teacher_specializations.size() > 5) {
+                countErrors++;
+                errorMessages.add("You can select up to <b> 5 teacher specializations.</b>");
+            }
 
-        if (!isInteger(min_years_exp) || !isInteger(max_years_exp)) {
-            countErrors++;
-            invalid_exp = true;
-        } else {
-            min_exp = Integer.parseInt(min_years_exp);
-            max_exp = Integer.parseInt(max_years_exp);
-            if (min_exp <= 0 || min_exp >= 70 || max_exp <= 0 || max_exp >= 70) {
+            if (!isInteger(min_years_exp) || !isInteger(max_years_exp)) {
                 countErrors++;
                 invalid_exp = true;
             } else {
-                if (min_exp >= max_exp) {
+                min_exp = Integer.parseInt(min_years_exp);
+                max_exp = Integer.parseInt(max_years_exp);
+                if (min_exp <= 0 || min_exp >= 70 || max_exp <= 0 || max_exp >= 70) {
                     countErrors++;
-                    errorMessages.add("<b>Minimum years of experience</b> must be lower than <b>maximum years of experience</b>.");
+                    invalid_exp = true;
+                } else {
+                    if (min_exp >= max_exp) {
+                        countErrors++;
+                        errorMessages.add("<b>Minimum years of experience</b> must be lower than <b>maximum years of experience</b>.");
+                    }
                 }
             }
-        }
 
-        if (invalid_exp) {
-            errorMessages.add("The value for <b> years of experience </b> must be a positive integer lower than 70");
-        }
+            if (invalid_exp) {
+                errorMessages.add("The value for <b> years of experience </b> must be a positive integer lower than 70");
+            }
            
         
-
-       if (!isDouble(min_price) || !isDouble(max_price)) {
-        countErrors++;
-        invalid_price = true;
-       } else {
-        minimum_price = Double.parseDouble(min_price);
-        maximum_price = Double.parseDouble(max_price);
-        if (minimum_price <= 0 || maximum_price <= 0 || minimum_price > 100 || maximum_price > 100 || countDecimals(minimum_price) > 2 || countDecimals(maximum_price) > 2 ) {
-            countErrors++;
-            invalid_price = true;
-        } else {
-            if (minimum_price >= maximum_price) {
+            if (!isDouble(min_price) || !isDouble(max_price)) {
                 countErrors++;
-                errorMessages.add("<b>Maximum price</b> must be greater than <b>minimum price</b>.");
+                invalid_price = true;
+            } else {
+                minimum_price = Double.parseDouble(min_price);
+                maximum_price = Double.parseDouble(max_price);
+                if (minimum_price <= 0 || maximum_price <= 0 || minimum_price > 100 || maximum_price > 100 || countDecimals(minimum_price) > 2 || countDecimals(maximum_price) > 2 ) {
+                    countErrors++;
+                    invalid_price = true;
+                } else {
+                    if (minimum_price >= maximum_price) {
+                        countErrors++;
+                        errorMessages.add("<b>Maximum price</b> must be greater than <b>minimum price</b>.");
+                    }
+                }
             }
-        }
-       }
 
-        if (invalid_price) {
-            errorMessages.add("<b>Price</b> value must be a positive number up to 100 euros with up to 2 decimals.");
-        }
+            if (invalid_price) {
+                errorMessages.add("<b>Price</b> value must be a positive number up to 100 euros with up to 2 decimals.");
+            }
 
-        if (countErrors !=  0) {
+            if (countErrors !=  0) { 
     %>
 
         <!-- Alert Box for General Error -->
@@ -240,7 +255,7 @@ public static int countDecimals(double number) {
             teacher_error = true;    
     %>
 
-        <!-- Warning Box for No Available Notes -->
+        <!-- Warning Box for No Available Teachers -->
         <div class="alert alert-warning d-flex align-items-center justify-content-center text-center" role="alert">
             <i class="fas fa-exclamation-triangle fa-lg me-2"></i>
             <span><b><%= e.getMessage()%></b></span>
@@ -248,6 +263,9 @@ public static int countDecimals(double number) {
 
     <%  }  
         if (!teacher_error) { 
+            session.setAttribute("teacher_results", teachers);   
+            session.setAttribute("course", course_title);   
+            session.setAttribute("specializations", teacher_specializations);   
     %>
 
         <h1 class="mb-4">Available Teachers</h1>
@@ -300,9 +318,9 @@ public static int countDecimals(double number) {
                                             </div>
                                             <% } %>
                                             <p><strong>Specialization courses:</strong></p>
-                                            <% for(String course: teacher.getSpecialization_courses()) { %>
+                                            <% for(String crs: teacher.getSpecialization_courses()) { %>
                                             <div>
-                                                <span class="badge bg-secondary me-2"><%= course%></span>
+                                                <span class="badge bg-secondary me-2"><%= crs%></span>
                                             </div>
                                             <% } %>
                                             <p class="mt-2"><strong>Experience:</strong> <%= teacher.getYears_of_experience()%> years</p>
@@ -318,6 +336,7 @@ public static int countDecimals(double number) {
                     <!-- Footer with Action Buttons -->
                     <div class="card-footer text-center">
                         <button class="btn btn-outline-primary schedule-btn"
+                            data-bs-toggle="modal" 
                             data-teacher-id="<%= teacher.getTeacher_id()%>" 
                             data-teacher-name="<%= teacher.getName()%>">
                             Schedule Lesson
@@ -339,7 +358,164 @@ public static int countDecimals(double number) {
                 <i class="fas fa-arrow-left me-2"></i>Back to search teacher form
             </a>
         </div>
-    <%  } %>
+    <%  }   %>
+
+        <!-- Modal -->
+        <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="scheduleModalLabel">Schedule Lesson</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="scheduleForm" method="post" action="<%=request.getContextPath()%>/elearn/UI/submit_lesson_request.jsp">
+                            <input type="hidden" id="teacherIdInput" name="teacher_id" value="">
+                            <input type="hidden" name="student_id" value="<%= student.getStudentId() %>">
+                            <input type="hidden" name="course_title" value="<%= course_title %>">
+                            <div class="mb-3">
+                                <label for="teacherName" class="form-label">Teacher</label>
+                                <input type="text" id="teacherName" name="teacherName" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="scheduleDate" class="form-label">Date</label>
+                                <input type="date" id="scheduleDate" name="scheduleDate" class="form-control" required min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <% } else {  %>
+
+    <h1 class="mb-4">Available Teachers</h1>
+
+        <!-- Teacher Profile Cards -->
+        <div class="row">
+
+            <% for (Teacher teacher: teacher_results) { %>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-lg">
+                    <div class="row g-0">
+                        <!-- Left Side: Teacher Photo -->
+                        <div class="col-4">
+                            <img src="<%=request.getContextPath()%>/elearn/images/<%=teacher.getPhoto()%>" class="img-fluid rounded-start" alt="Teacher Photo">
+                        </div>
+
+                        <!-- Right Side: Carousel with Teacher Info -->
+                        <div class="col-8">
+                            <div id="teacherCarousel<%= teacher.getTeacher_id() %>" class="carousel slide" data-bs-interval="false">
+                                <div class="carousel-inner">
+                                    <!-- Slide 1: Basic Information -->
+                                    <div class="carousel-item active">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <% 
+                                                // If teacher has all specializations selected by user, then display "Recommended" badge 
+                                                if (teacher.getTeacher_specializations().containsAll(specializations)) { %>
+                                                <span class="badge bg-primary ms-2 d-flex align-items-center text-truncate" style="max-width: 150px;">
+                                                    <i class="fa-solid fa-check me-1"></i>Recommended
+                                                </span>
+                                                <% } %>
+                                                <span class="mt-2 d-block">
+                                                    <%= teacher.getName() %>
+                                                </span>
+                                            </h5>     
+                                            <p class="card-text"><strong>Age:</strong> <%=teacher.getAge()%></p>
+                                            <p class="card-text"><%= teacher.getDesc()%></p>
+                                            <button class="btn btn-primary mt-3" data-bs-target="#teacherCarousel<%= teacher.getTeacher_id() %>" data-bs-slide="next">Next</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Slide 2: Additional Information -->
+                                    <div class="carousel-item">
+                                        <div class="card-body">
+                                            <p><strong>Specializations:</strong></p>
+                                            <% for(String specialization: teacher.getTeacher_specializations()) { %>
+                                            <div>
+                                                <span class="badge bg-secondary me-2"><%= specialization%></span>
+                                            </div>
+                                            <% } %>
+                                            <p><strong>Specialization courses:</strong></p>
+                                            <% for(String course_name: teacher.getSpecialization_courses()) { %>
+                                            <div>
+                                                <span class="badge bg-secondary me-2"><%= course_name%></span>
+                                            </div>
+                                            <% } %>
+                                            <p class="mt-2"><strong>Experience:</strong> <%= teacher.getYears_of_experience()%> years</p>
+                                            <p><strong>Price Range:</strong> &euro;<%= teacher.getMin_price()%> - &euro;<%= teacher.getMax_price()%></p>
+                                            <button class="btn btn-secondary mt-3" data-bs-target="#teacherCarousel<%= teacher.getTeacher_id() %>" data-bs-slide="prev">Back</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer with Action Buttons -->
+                    <div class="card-footer text-center">
+                        <button class="btn btn-outline-primary schedule-btn"
+                            data-bs-toggle="modal" 
+                            data-teacher-id="<%= teacher.getTeacher_id()%>" 
+                            data-teacher-name="<%= teacher.getName()%>">
+                            Schedule Lesson
+                        </button>
+                        <a href="<%=request.getContextPath()%>/elearn/UI/contactTeacher.jsp?teacherId=1" class="btn btn-outline-secondary">Contact Teacher</a>
+                    </div>
+                </div>
+            </div>
+
+        <% }  %>
+
+        </div>
+
+        <!-- Back Button Below Teacher Cards -->
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher.jsp" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to search teacher form
+            </a>
+        </div>
+
+         <!-- Modal -->
+        <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="scheduleModalLabel">Schedule Lesson</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="scheduleForm" method="post" action="<%=request.getContextPath()%>/elearn/UI/submit_lesson_request.jsp">
+                            <input type="hidden" id="teacherIdInput" name="teacher_id" value="">
+                            <input type="hidden" name="student_id" value="<%= student.getStudentId() %>">
+                            <input type="hidden" name="course_title" value="<%= course %>">
+                            <div class="mb-3">
+                                <label for="teacherName" class="form-label">Teacher</label>
+                                <input type="text" id="teacherName" name="teacherName" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="scheduleDate" class="form-label">Date</label>
+                                <input type="date" id="scheduleDate" name="scheduleDate" class="form-control" required min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    
+    
+    <% } %>
     </main>
 
     <footer class="text-center text-lg-start mt-auto">
@@ -348,40 +524,23 @@ public static int countDecimals(double number) {
         </div>
     </footer>
 
-    <!-- Modal -->
-    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scheduleModalLabel">Schedule Lesson</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="scheduleForm" method="post" action="<%=request.getContextPath()%>/elearn/submitSchedule">
-                        <div class="mb-3">
-                            <label for="teacherName" class="form-label">Teacher</label>
-                            <input type="text" id="teacherName" name="teacherName" class="form-control" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="scheduleDate" class="form-label">Date</label>
-                            <input type="date" id="scheduleDate" name="scheduleDate" class="form-control" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>   
         if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD) {
             location.reload(true); // Force a reload from the server
         }
+
+        // Modal event listener to update teacher-specific data dynamically
+        document.addEventListener('click', function (event) {
+            if (event.target.matches('[data-bs-toggle="modal"]')) {
+                const teacherId = event.target.getAttribute('data-teacher-id');
+                
+                document.getElementById('teacherIdInput').value = teacherId;
+            }
+        });
     </script>
-    <script src="<%=request.getContextPath()%>/elearn/js/schedule_lesson.js"></script>
+    <script src="<%=request.getContextPath()%>/elearn/js/schedule_lesson.js"></script> 
 </body>
 </html>

@@ -11,6 +11,23 @@
     // Get student object from session
     Student student = (Student) session.getAttribute("studentObj");
 
+    // Get teacher results from session
+    List<Teacher> teacher_results = (List<Teacher>) session.getAttribute("teacher_results");
+    String course = (String) session.getAttribute("course");
+    List<String> specializations = (List<String>) session.getAttribute("specializations");
+
+    if (teacher_results !=  null) {
+        session.removeAttribute("teacher_results");
+    }
+
+    if (course != null) {
+        session.removeAttribute("course");
+    }
+
+    if (specializations != null) {
+        session.removeAttribute("specializations");
+    }
+
     // Create CourseDAO object
     CourseDAO courseDAO = new CourseDAO();
 

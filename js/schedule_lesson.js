@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             teacherNameInput.value = teacherName;
 
             // Optionally set the action URL dynamically based on teacher ID
-            scheduleForm.action = `<%=request.getContextPath()%>/elearn/submitSchedule?teacherId=${teacherId}`;
+            /*scheduleForm.action = `<%=request.getContextPath()%>/elearn/submitSchedule?teacherId=${teacherId}`; */
 
             // Show the modal
             scheduleModal.show();

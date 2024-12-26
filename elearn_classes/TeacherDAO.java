@@ -300,6 +300,19 @@ public class TeacherDAO {
     }
 
 
+   /**
+ * Retrieves a list of teachers based on specified search criteria, including course category,
+ * course title, teacher specializations, years of experience, and price range.
+ * @param course_cat            The category of the course to filter teachers by.
+ * @param course_title          The title of the course to filter teachers by.
+ * @param teacher_specializations A list of teacher specializations to filter teachers by.
+ * @param min_experience        The minimum number of years of experience required.
+ * @param max_experience        The maximum number of years of experience allowed.
+ * @param min_price             The minimum price per lesson for teachers.
+ * @param max_price             The maximum price per lesson for teachers.
+ * @return List<Teacher>        A list of teachers that match the specified criteria.
+ * @throws Exception            If there is any error during database interaction or if no teachers match the criteria.
+ */
     public List<Teacher> getTeacherResults(String course_cat, String course_title, List<String> teacher_specializations, int min_experience, 
     int max_experience, double min_price, double max_price) throws Exception {
 
