@@ -8,11 +8,11 @@ public class LessonRequest {
     private Date schedule_date;
     private String request_status;
     private String course;
-    private int sent_from;
-    private int sent_to;
+    private String sent_from;
+    private String sent_to;
 
     // Constructor
-    public LessonRequest(int lesson_req_id, Date schedule_date, String request_status, String course, int sent_from, int sent_to) {
+    public LessonRequest(int lesson_req_id, Date schedule_date, String request_status, String course, String sent_from, String sent_to) {
         this.lesson_req_id = lesson_req_id;
         this.schedule_date = schedule_date;
         this.request_status = request_status;
@@ -64,22 +64,22 @@ public class LessonRequest {
     }
 
     // Get sent_from
-    public int getSent_from() {
+    public String getSent_from() {
         return sent_from;
     }
 
     // Set sent_from
-    public void setSent_from(int sent_from) {
+    public void setSent_from(String sent_from) {
         this.sent_from = sent_from;
     }
 
     // Get sent_to
-    public int getSent_to() {
+    public String getSent_to() {
         return sent_to;
     }
 
     // Set sent_to
-    public void setSent_to(int sent_to) {
+    public void setSent_to(String sent_to) {
         this.sent_to = sent_to;
     }
 

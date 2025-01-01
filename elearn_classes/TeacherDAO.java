@@ -408,4 +408,54 @@ public class TeacherDAO {
         }
     }
 
+    /**
+ * Retrieves the photo URL of a teacher based on their full name.
+ * 
+ * This method queries the `teacher` table in the database to fetch the `photo_url` 
+ * for a teacher whose `full_name` matches the provided parameter. 
+ * 
+ * @param teacher_name The full name of the teacher whose photo URL is to be retrieved.
+ * @return A {@link String} containing the URL of the teacher's photo. Returns `null` if no teacher is found with the given name.
+ * @throws Exception If an error occurs while accessing the database or closing the database connection.
+ * 
+ * @throws Exception with the message "Error fetching teacher photo url: {details}" if an issue occurs during the query.
+ * @throws Exception with the message "Error closing database: {details}" if there is a problem closing the database connection.
+ */
+
+    public String getTeacherPhoto(String teacher_name) throws Exception {
+        Connection con = null;
+        String photo_url = null;
+        String sql = "SELECT photo_url FROM teacher WHERE full_name = ?;";
+
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1,teacher_name);
+            rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                photo_url = rs.getString("photo_url");
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return photo_url;
+        } catch(Exception e) {
+            throw new Exception("Error fetching teacher photo url: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing database: " + e.getMessage());
+            }
+        }
+    }
+
 }

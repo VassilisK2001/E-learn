@@ -181,6 +181,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const coursesData = <%= coursesJson %>;
+
+        if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD) {
+            location.reload(true); // Force a reload from the server
+        }
     </script>
     <script src="<%=request.getContextPath()%>/elearn/js/find_teacher.js"></script>
 </body>

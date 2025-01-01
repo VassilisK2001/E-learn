@@ -2,6 +2,8 @@ package elearn_classes;
 
 import java.sql.*;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 public class LessonReqDAO {
 
@@ -99,6 +101,87 @@ public class LessonReqDAO {
                 if (stmt != null) stmt.close();
                 db.close();
             } catch (Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+
+    /**
+ * Retrieves a list of lesson requests sent by a specific student.
+ * 
+ * This method fetches lesson requests from the database where the `student_id` matches the provided parameter. 
+ * It joins the `lesson_request` table with the `teacher`, `student`, and `course` tables to include details 
+ * about the teacher, student, course title, schedule date, and request status.
+ * 
+ * @param student_id The ID of the student whose lesson requests are to be retrieved.
+ * @return A list of {@link LessonRequest} objects representing the lesson requests sent by the student.
+ * @throws Exception If an error occurs while accessing the database or if no lesson requests are found for the student.
+ * 
+ * @throws Exception with the message "You have not sent any lesson requests yet" if the student has not sent any requests.
+ * @throws Exception with an appropriate error message if there are issues connecting to or querying the database.
+ */
+    public List<LessonRequest> getLessonRequests(int student_id) throws Exception {
+
+        Connection con = null;
+        List<LessonRequest> lessons = new ArrayList<>();
+
+        String sql = 
+        "SELECT " +
+        "    req.request_id, " +
+        "    s.full_name AS student_name, " +
+        "    t.full_name AS teacher_name, " +
+        "    DATE(req.schedule_date) AS schedule_date, " +
+        "    req.request_status, " +
+        "    c.course_title " +
+        "FROM " +
+        "    lesson_request req " +
+        "INNER JOIN " +
+        "    teacher t " +
+        "ON " +
+        "    req.teacher_id = t.teacher_id " +
+        "INNER JOIN " +
+        "    student s " +
+        "ON " +
+        "    req.student_id = s.student_id " +
+        "INNER JOIN " +
+        "    course c " +
+        "ON " +
+        "    req.course_id = c.course_id " +
+        "WHERE " +
+        "    req.student_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,student_id);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                lessons.add(new LessonRequest(rs.getInt("req.request_id"), rs.getDate("schedule_date"), rs.getString("req.request_status"),
+                rs.getString("c.course_title"), rs.getString("student_name"), rs.getString("teacher_name")));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            if (lessons.isEmpty()) {
+                throw new Exception("You have not sent any lesson requests yet");
+            }
+
+            return lessons;
+
+        } catch(Exception e) {
+            throw new Exception("Error fetching student lesson requests: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
                 throw new Exception("Error closing the database: " + e.getMessage());
             }
         }
