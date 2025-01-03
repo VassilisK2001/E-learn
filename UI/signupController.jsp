@@ -239,7 +239,11 @@ public static List<String> convertStringToList(String input) {
 
                     if (fieldName.equals("subjectsOfInterestTags")) {
                     interestSubjects = fieldValue;
-                    subjects = convertStringToList(interestSubjects); 
+                    subjects = convertStringToList(interestSubjects);
+                    if(subjects.size() > 6) {
+                        countErrors++;
+                        errorMessages.add("You can select up to <b>6 subjects of interest</b>.");
+                    } 
                     }
 
                     if (fieldName.equals("description")) {
@@ -267,7 +271,11 @@ public static List<String> convertStringToList(String input) {
 
                     if (fieldName.equals("teacherSpecializationsTags")) {
                         specializations = fieldValue;
-                        teacherSpecializations = convertStringToList(specializations);  
+                        teacherSpecializations = convertStringToList(specializations);
+                        if (teacherSpecializations.size() > 6) {
+                            countErrors++;
+                            errorMessages.add("You can select up to <b>6 teacher specializations</b>.");
+                        }  
                     }
 
                     if (fieldName.equals("specializationCoursesTags")) {
@@ -277,15 +285,19 @@ public static List<String> convertStringToList(String input) {
                         } else {
                             courses = fieldValue;
                             specializationCourses = convertStringToList(courses); 
+                            if (specializationCourses.size() > 6) {
+                                countErrors++;
+                                errorMessages.add("You can select up to <b>6 specialization courses</b>.");
+                            }
                         }  
                     }
 
                     if (fieldName.equals("minPrice")) {
                         if(isDouble(fieldValue)) {
                             minPrice = Double.parseDouble(fieldValue);
-                            if (minPrice < 0 || minPrice > 500 || countDecimals(minPrice) > 2) {
+                            if (minPrice < 0 || minPrice > 100 || countDecimals(minPrice) > 2) {
                                 countErrors ++;
-                                errorMessages.add("<b>Minimum price</b> needs to be a number greater than 0 and less than 500, containing up to two decimals.");
+                                errorMessages.add("<b>Minimum price</b> needs to be a number greater than 0 and less than 100, containing up to two decimals.");
                             } else {
                                  validMinPrice = true;
                             }
@@ -298,9 +310,9 @@ public static List<String> convertStringToList(String input) {
                     if (fieldName.equals("maxPrice")) {
                         if(isDouble(fieldValue)) {
                             maxPrice = Double.parseDouble(fieldValue);
-                            if (maxPrice < 0 || maxPrice > 500 || countDecimals(maxPrice) > 2) {
+                            if (maxPrice < 0 || maxPrice > 100 || countDecimals(maxPrice) > 2) {
                                 countErrors ++;
-                                errorMessages.add("<b>Maximum price</b> needs to be a number greater than 0 and less than 500, containing up to two decimals.");
+                                errorMessages.add("<b>Maximum price</b> needs to be a number greater than 0 and less than 100, containing up to two decimals.");
                             } else {
                                  validMaxPrice = true;
                             }

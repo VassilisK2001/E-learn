@@ -76,7 +76,7 @@
                 <div class="card functionality-card p-4">
                     <div class="functionality-title">Communication Platform</div>
                     <div class="functionality-description">
-                        An integrated messaging system for easy communication between students and teachers.
+                        An integrated messaging system in which students and teachers can communicate by sending email.
                     </div>
                 </div>
             </div>

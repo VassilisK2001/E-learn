@@ -85,40 +85,16 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     + updateLessonRequest(lesson_req_id) 
     + getLessons(student_id) --> List<LessonReq> lessons   
 
-5. Message (Message, MessageDAO):
-    - message_id 
-    - message_content 
-    - sent_date 
-    - from
-    - to 
+5. Email (Email, EmailDAO): 
+   
 
 
-
-
-Lesson request 
-- If a student has sent a previous lesson request to a teacher for a specific course at a specific date and it is pending and tries to send
-another request for this lesson at this date then there will be a message: 
-"It seems that the status of your request is pending. Be patient until the teacher approves your request." 
 
 
 DEADLINE (18 January)
 
 
-
-Search Teacher: 25 November - 2 December 
-- find_teacher.jsp 
-- teacher_results.jsp
-
-LessonRequests: 3 December - 5 December 
-- my_lessons.jsp 
-- my_requests.jsp 
-- teacher_results.jsp
-
-Note Management: 19 December - 24 December (6 days) 
-- search_notes.jsp
-- available_notes.jsp  
-- my_notes.jsp  
-- upload_material 
+Send email: 4 December - 10 December 
 
 
 

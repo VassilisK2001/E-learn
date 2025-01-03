@@ -3,13 +3,16 @@
 <%@ page import="java.util.*"%>
 
 <%
+// Get form data
 String request_status = request.getParameter("status");
 String request_id = request.getParameter("lessonReqId");
 
-int lesson_request_id = Integer.parseInt(request_id);
+int lesson_request_id = Integer.parseInt(request_id); // Convert request_id to integer
 
+// Initialize LessonReqDAO object
 LessonReqDAO lessonReqDAO = new LessonReqDAO();
 
+// Call method to update lesson request status
 lessonReqDAO.updateLessonRequestStatus(lesson_request_id, request_status);
 %>
 

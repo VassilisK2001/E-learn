@@ -261,6 +261,16 @@ public class StudentDAO {
         }
     }
 
+
+    /**
+ * Retrieves the unique student ID from the database based on the student's full name.
+ * This method executes a `SELECT` query to fetch the `student_id` corresponding to the provided student name 
+ * from the `student` table.
+ * 
+ * @param student_name  The full name of the student for whom the ID is being requested.
+ * @return              The student ID associated with the provided student name.
+ * @throws Exception    If an error occurs while querying the database or closing resources.
+ */
     public int getStudentIdByName (String student_name) throws Exception {
         Connection con = null;
         int student_id = 0;

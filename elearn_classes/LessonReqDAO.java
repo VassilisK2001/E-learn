@@ -187,6 +187,20 @@ public class LessonReqDAO {
         }
     }
 
+
+    /**
+ * Retrieves a list of lesson requests sent to a specific teacher. 
+ * This method queries the `lesson_request` table and retrieves details of the requests, including 
+ * student name, teacher name, course title, schedule date, and request status.
+ *
+ * The query returns all lesson requests where the specified teacher is the recipient (i.e., the `teacher_id` matches the input).
+ * If there are no requests for the given teacher, an exception is thrown.
+ *
+ * @param teacher_id   The ID of the teacher for whom the lesson requests are being fetched.
+ * @return            A list of `LessonRequest` objects representing the requests sent to the specified teacher.
+ * @throws Exception  If an error occurs while querying the database or processing the results, an exception is thrown.
+ *                    Additionally, if no lesson requests are found for the teacher, an exception is thrown.
+ */
     public List<LessonRequest> getTeacherLessonRequests(int teacher_id) throws Exception {
         Connection con = null;
         List<LessonRequest> lesson_requests = new ArrayList<>();
@@ -249,6 +263,17 @@ public class LessonReqDAO {
         }
     }
 
+
+    /**
+ * Updates the status of a specific lesson request in the `lesson_request` table.
+ * This method allows changing the request status (e.g., "pending", "accepted", "rejected") of a lesson request based on its unique request ID.
+ * 
+ * The method executes an `UPDATE` query that modifies the `request_status` for the lesson request identified by the given `lesson_request_id`.
+ * 
+ * @param lesson_request_id  The unique identifier of the lesson request whose status needs to be updated.
+ * @param request_status     The new status to be set for the lesson request. It can be a value such as "pending", "accepted", or "rejected".
+ * @throws Exception         If an error occurs while updating the lesson request in the database or while closing resources.
+ */
     public void updateLessonRequestStatus(int lesson_request_id, String request_status) throws Exception {
         Connection con = null;
 

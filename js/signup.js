@@ -2,6 +2,7 @@ function nextSlide() {
     const carousel = new bootstrap.Carousel(document.querySelector('#signupCarousel'));
     const currentSlide = document.querySelector('.carousel-item.active');
     const isFirstSlide = currentSlide === document.querySelector('.carousel-item:first-child');
+    const isSecondSlide = currentSlide === document.querySelector('.carousel-item:nth-child(2)');
     const role = document.getElementById("role").value;
 
     // Check if on the first slide and validate the role field
@@ -14,12 +15,35 @@ function nextSlide() {
     const requiredFields = currentSlide.querySelectorAll("input[required], textarea[required], select[required]");
     let allFieldsFilled = true;
     let emailValid = true;
+    let filledInterestSubjects = true;
+    let teacherSpecializations = true;
+    let teacherSpecializationCourses = true;
+
+    // Validation for the second slide if role is "student"
+    if (isSecondSlide && role === "student") {
+        const subjectTagsContainer = document.getElementById("subjectTags");
+        if (!subjectTagsContainer || subjectTagsContainer.children.length === 0) {
+            filledInterestSubjects = false;
+        }
+    }
+
+    // Additional validation for the second slide if role is "teacher"
+    if (isSecondSlide && role === "teacher") {
+        const specializationTagsContainer = document.getElementById("specializationTags");
+        if (!specializationTagsContainer || specializationTagsContainer.children.length === 0) {
+            teacherSpecializations = false;
+        }
+        const courseTagsContainer = document.getElementById("selectedTags");
+        if (!courseTagsContainer || courseTagsContainer.children.length === 0) {
+            teacherSpecializationCourses = false;
+        }
+    }
 
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
             allFieldsFilled = false; // Mark as invalid if any required field is empty
         }
-
+        
         // Check for email validity specifically if it's an email field
         if (field.id === "email") {
             const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -33,7 +57,7 @@ function nextSlide() {
     if (!allFieldsFilled && !emailValid) {
         alert("Please fill out all fields and enter a valid email.");
         return;
-    } else if (!allFieldsFilled) {
+    } else if (!allFieldsFilled || !filledInterestSubjects || !teacherSpecializations || !teacherSpecializationCourses) {
         alert("Please fill out all fields.");
         return;
     } else if (!emailValid) {
