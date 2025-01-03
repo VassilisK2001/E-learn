@@ -1,4 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+<%@ page import="java.util.*"%>
+
+<%
+// Get Teacher object from session
+Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+
+//Initialize LessonReqDAO object
+LessonReqDAO lessonreqDAO = new LessonReqDAO();
+
+// Initialize StudentDAO and Student objects
+StudentDAO studentDAO = new StudentDAO();
+Student student = null;
+
+// Initialize list with teacher lesson requests
+List<LessonRequest> lesson_requests = new ArrayList<LessonRequest>();
+
+// Variable for checking error
+boolean req_error = false;
+
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +44,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as Mary Smith</b></a>
+                        <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp"><b>Home</b></a>
@@ -36,48 +61,98 @@
     </nav>
 
     <main class="container my-4 flex-grow-1">
+
+    <%  try {
+        lesson_requests = lessonreqDAO.getTeacherLessonRequests(teacher.getTeacher_id());
+    } catch(Exception e) { 
+        req_error = true;
+    %>
+
+        <!-- Info Alert Box -->
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="fas fa-info-circle fa-2x me-3"></i>
+            <div> <%= e.getMessage()%> </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
+
+
+    <% }
+    if(!req_error) { 
+    %>
         <h1 class="mb-4">Lesson Requests</h1>
 
         <!-- Lesson Request Cards -->
         <div class="row">
+        <% for (LessonRequest req: lesson_requests) { 
+            student = studentDAO.getStudentDetails(studentDAO.getStudentIdByName(req.getSent_from())); 
+        %>
+
             <!-- Lesson Request 1: Pending -->
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-lg">
                     <div class="row g-0">
                         <!-- Left Side: Student Photo -->
                         <div class="col-4">
-                            <img src="<%=request.getContextPath()%>/elearn/teacher_photo.jpg" class="img-fluid rounded-start" alt="Student Photo">
+                            <img src="<%=request.getContextPath()%>/elearn/images/<%= student.getPhotoUrl()%>" class="img-fluid rounded-start" alt="Student Photo">
                         </div>
 
                         <!-- Right Side: Carousel with Student Info and Lesson Info -->
                         <div class="col-8">
-                            <div id="studentCarousel1" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
+                            <div id="studentCarousel<%=req.getLesson_req_id()%>" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
                                 <div class="carousel-inner">
                                     <!-- Slide 1: Student Info -->
                                     <div class="carousel-item active">
                                         <div class="card-body">
-                                            <h5 class="card-title">Alice Johnson</h5>
-                                            <p class="card-text"><strong>Age:</strong> 25</p>
-                                            <p class="card-text">A dedicated student focused on improving her skills in mathematics.</p>
-                                            <button class="btn btn-primary mt-3" data-bs-target="#studentCarousel1" data-bs-slide="next">Next</button>
+                                            <h5 class="card-title"><%= req.getSent_from()%></h5>
+                                            <p class="card-text"><strong>Age:</strong> <%= student.getAge()%></p>
+                                            <p class="card-text"><%= student.getDescription()%></p>
+                                            <button class="btn btn-primary mt-3" 
+                                                data-bs-target="#studentCarousel<%=req.getLesson_req_id()%>"
+                                                data-bs-slide="next">Next
+                                            </button>
                                         </div>
                                     </div>
 
                                     <!-- Slide 2: Lesson Info -->
                                     <div class="carousel-item">
                                         <div class="card-body">
-                                            <p><strong>Course:</strong> Algebra 101</p>
-                                            <p><strong>Lesson Date:</strong> 2024-11-10</p>
+                                            <p><strong>Course:</strong> <%= req.getCourse()%></p>
+                                            <p><strong>Lesson Date:</strong> <%= req.getSchedule_date()%></p>
                                             <div class="mb-3">
-                                                <label for="status1" class="form-label">Update request state</label>
-                                                <select class="form-select" id="status1" onchange="updateStatus('status1')">
-                                                    <option value="pending" selected>Pending</option>
-                                                    <option value="accepted">Accepted</option>
-                                                    <option value="rejected">Rejected</option>
-                                                </select>
+                                                <form action="<%=request.getContextPath()%>/elearn/UI/updateLessonRequest.jsp" method="POST">
+                                                    <label for="status<%=req.getLesson_req_id()%>" class="form-label">Update request state</label>
+                                                    <select class="form-select" 
+                                                        id="status<%=req.getLesson_req_id()%>" 
+                                                        name="status" 
+                                                        data-initial-value="<%=req.getRequest_status()%>" 
+                                                        onchange="updateStatus('status<%=req.getLesson_req_id()%>')">
+                                                        <% if(req.getRequest_status().equals("pending")) { %>
+                                                        <option value="pending" selected>Pending</option>
+                                                        <option value="accepted">Accepted</option>
+                                                        <option value="rejected">Rejected</option>
+                                                        <% } else if (req.getRequest_status().equals("accepted")) { %>
+                                                        <option value="accepted" selected>Accepted</option>
+                                                        <option value="rejected">Rejected</option>
+                                                        <% } else { %>
+                                                        <option value="rejected" selected>Rejected</option>
+                                                        <option value="accepted">Accepted</option>
+                                                        <% } %>
+                                                    </select>
+
+                                                    <!-- Hidden Input to Pass Additional Data -->
+                                                    <input type="hidden" name="lessonReqId" value="<%=req.getLesson_req_id()%>">
+
                                             </div>
-                                            <p>Status: <span id="statusValue1">Pending</span></p>
-                                            <button class="btn btn-secondary mt-3" data-bs-target="#studentCarousel1" data-bs-slide="prev">Back</button>
+                                            <p>Status: <span id="statusValue<%=req.getLesson_req_id()%>"><%= req.getRequest_status()%></span></p>
+                                           <button class="btn btn-secondary mt-3" 
+                                                data-bs-target="#studentCarousel<%=req.getLesson_req_id()%>"
+                                                data-bs-slide="prev">Back
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -87,117 +162,15 @@
 
                     <!-- Footer: Conditional Buttons -->
                     <div class="card-footer text-center">
+                        <button type="submit" id="submitBtn<%=req.getLesson_req_id()%>" class="btn btn-primary d-none">Submit</button>
+                        </form>
                         <button type="button" class="btn btn-outline-secondary">Contact Student</button>
-                        <button type="button" id="submitBtn1" class="btn btn-primary d-none">Submit</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Lesson Request 2: Accepted -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card shadow-lg">
-                    <div class="row g-0">
-                        <!-- Left Side: Student Photo -->
-                        <div class="col-4">
-                            <img src="<%=request.getContextPath()%>/elearn/teacher_photo.jpg" class="img-fluid rounded-start" alt="Student Photo">
-                        </div>
+            <% } %>
 
-                        <!-- Right Side: Carousel with Student Info and Lesson Info -->
-                        <div class="col-8">
-                            <div id="studentCarousel2" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
-                                <div class="carousel-inner">
-                                    <!-- Slide 1: Student Info -->
-                                    <div class="carousel-item active">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Bob Martin</h5>
-                                            <p class="card-text"><strong>Age:</strong> 22</p>
-                                            <p class="card-text">A passionate student with a focus on computer science.</p>
-                                            <button class="btn btn-primary mt-3" data-bs-target="#studentCarousel2" data-bs-slide="next">Next</button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Slide 2: Lesson Info -->
-                                    <div class="carousel-item">
-                                        <div class="card-body">
-                                            <p><strong>Course:</strong> Computer Science 101</p>
-                                            <p><strong>Lesson Date:</strong> 2024-11-12</p>
-                                            <div class="mb-3">
-                                                <label for="status2" class="form-label">Update request state</label>
-                                                <select class="form-select" id="status2" onchange="updateStatus('status2')">
-                                                    <option value="pending">Pending</option>
-                                                    <option value="accepted" selected>Accepted</option>
-                                                    <option value="rejected">Rejected</option>
-                                                </select>
-                                            </div>
-                                            <p>Status: <span id="statusValue2">Accepted</span></p>
-                                            <button class="btn btn-secondary mt-3" data-bs-target="#studentCarousel2" data-bs-slide="prev">Back</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer: Conditional Buttons -->
-                    <div class="card-footer text-center">
-                        <button type="button" class="btn btn-outline-secondary">Contact Student</button>
-                        <button type="button" id="submitBtn2" class="btn btn-primary d-none">Submit</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lesson Request 3: Rejected -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card shadow-lg">
-                    <div class="row g-0">
-                        <!-- Left Side: Student Photo -->
-                        <div class="col-4">
-                            <img src="<%=request.getContextPath()%>/elearn/teacher_photo.jpg" class="img-fluid rounded-start" alt="Student Photo">
-                        </div>
-
-                        <!-- Right Side: Carousel with Student Info and Lesson Info -->
-                        <div class="col-8">
-                            <div id="studentCarousel3" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
-                                <div class="carousel-inner">
-                                    <!-- Slide 1: Student Info -->
-                                    <div class="carousel-item active">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Charlie Brown</h5>
-                                            <p class="card-text"><strong>Age:</strong> 30</p>
-                                            <p class="card-text">An enthusiastic student looking to improve his skills in physics.</p>
-                                            <button class="btn btn-primary mt-3" data-bs-target="#studentCarousel3" data-bs-slide="next">Next</button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Slide 2: Lesson Info -->
-                                    <div class="carousel-item">
-                                        <div class="card-body">
-                                            <p><strong>Course:</strong> Physics 101</p>
-                                            <p><strong>Lesson Date:</strong> 2024-11-18</p>
-                                            <div class="mb-3">
-                                                <label for="status3" class="form-label">Update request state</label>
-                                                <select class="form-select" id="status3" onchange="updateStatus('status3')">
-                                                    <option value="pending">Pending</option>
-                                                    <option value="accepted">Accepted</option>
-                                                    <option value="rejected" selected>Rejected</option>
-                                                </select>
-                                            </div>
-                                            <p>Status: <span id="statusValue3">Rejected</span></p>
-                                            <button class="btn btn-secondary mt-3" data-bs-target="#studentCarousel3" data-bs-slide="prev">Back</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer: Conditional Buttons -->
-                    <div class="card-footer text-center">
-                        <button type="button" class="btn btn-outline-secondary">Contact Student</button>
-                        <button type="button" id="submitBtn3" class="btn btn-primary d-none">Submit</button>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Back Button Below Teacher Cards -->
@@ -206,6 +179,8 @@
                 <i class="fas fa-arrow-left me-2"></i>Back to Home
             </a>
         </div>
+
+        <% } %>
 
     </main>
 

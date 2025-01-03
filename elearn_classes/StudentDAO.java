@@ -223,4 +223,77 @@ public class StudentDAO {
         }
     }
 
+    public Student getStudentDetails(int student_id) throws Exception {
+        Connection con = null;
+        Student student = null;
+
+        String sql = "SELECT * FROM student WHERE student_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, student_id);
+            rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                student = new Student(rs.getInt("student_id"), rs.getString("full_name"), rs.getInt("age"),
+                rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("description"),
+                rs.getString("photo_url"), getSubjectsInterest(student_id));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return student;
+        } catch(Exception e) {
+            throw new Exception("Error fetching student details: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+    public int getStudentIdByName (String student_name) throws Exception {
+        Connection con = null;
+        int student_id = 0;
+
+        String sql = "SELECT student_id FROM student WHERE full_name = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1,student_name);
+            rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                student_id = rs.getInt("student_id");
+            }
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return student_id;
+        } catch(Exception e) {
+            throw new Exception("Error fetching student id: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
 }

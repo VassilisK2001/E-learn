@@ -186,4 +186,99 @@ public class LessonReqDAO {
             }
         }
     }
+
+    public List<LessonRequest> getTeacherLessonRequests(int teacher_id) throws Exception {
+        Connection con = null;
+        List<LessonRequest> lesson_requests = new ArrayList<>();
+
+        String sql = "SELECT " +
+             "    req.request_id, " +
+             "    DATE(req.schedule_date) AS schedule_date, " +
+             "    req.request_status, " +
+             "    c.course_title, " +
+             "    s.full_name AS student_name, " +
+             "    t.full_name AS teacher_name " +
+             "FROM " +
+             "    lesson_request req " +
+             "INNER JOIN " +
+             "    student s " +
+             "ON " +
+             "    req.student_id = s.student_id " +
+             "INNER JOIN " +
+             "    teacher t " +
+             "ON " +
+             "    req.teacher_id = t.teacher_id " +
+             "INNER JOIN " +
+             "    course c " +
+             "ON " +
+             "    req.course_id = c.course_id " +
+             "WHERE " +
+             "    t.teacher_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,teacher_id);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                lesson_requests.add(new LessonRequest(rs.getInt("req.request_id"), rs.getDate("schedule_date"),
+                rs.getString("req.request_status"), rs.getString("c.course_title"), rs.getString("student_name"), rs.getString("teacher_name")));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            if (lesson_requests.isEmpty()) {
+                throw new Exception("There are no students requesting a lesson yet");
+            }
+            return lesson_requests;
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing database: " + e.getMessage());
+            }
+        }
+    }
+
+    public void updateLessonRequestStatus(int lesson_request_id, String request_status) throws Exception {
+        Connection con = null;
+
+        String sql = 
+        "UPDATE lesson_request " +
+        "SET request_status = ? " +
+        "WHERE request_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1,request_status);
+            stmt.setInt(2,lesson_request_id);
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error while updating lesson request: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+    
 }
