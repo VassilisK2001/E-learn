@@ -5,14 +5,10 @@ TO DO
 - Set sessionTimeOut in all pages
 - Prevent page caching for all pages 
 - Check page navigations
-- Make navbar dynamic
 - make footer a jsp page and include it in all pages
 - make AppError.jsp page
 - Check different browsers
-- Get distinct note in sql statement for search_notes method (?)
-- Check if upload_material works for teachers
-- Fix the bug in signup.jsp when the user does not select with Ctrl key 
-- Check cases where lesson request is accepted or rejected in my_lessons.jsp page
+
 
 
 COMPILE CLASSES

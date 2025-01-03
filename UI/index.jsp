@@ -1,4 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="elearn_classes.*" %>
+
+<%
+// Get Student object from session
+Student student = (Student) session.getAttribute("studentObj");
+
+// Get Teacher object from session
+Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Learn - Connect Students & Teachers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="<%=request.getContextPath()%>/elearn/css/styles.css">
     
 </head>
@@ -22,6 +32,39 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                <% if (student != null) { %>
+
+                  <li class="nav-item">
+                        <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp">
+                            <span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span>
+                        </a>
+                    </li>
+
+                <% } else if (teacher != null) { %>
+
+                <li class="nav-item">
+                        <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp"><b>Home</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span></a>
+                    </li>
+
+                <% } else { %>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">About</a>
                     </li>
@@ -31,6 +74,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp"><b>Sign In</b></a>
                     </li>
+                <% } %>
                 </ul>
             </div>
         </div>
