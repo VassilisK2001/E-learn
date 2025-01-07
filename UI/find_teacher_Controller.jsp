@@ -337,11 +337,18 @@ public static int countDecimals(double number) {
                     <div class="card-footer text-center">
                         <button class="btn btn-outline-primary schedule-btn"
                             data-bs-toggle="modal" 
+                            data-bs-target="#scheduleModal" 
                             data-teacher-id="<%= teacher.getTeacher_id()%>" 
                             data-teacher-name="<%= teacher.getName()%>">
                             Schedule Lesson
                         </button>
-                        <a href="<%=request.getContextPath()%>/elearn/UI/contactTeacher.jsp?teacherId=1" class="btn btn-outline-secondary">Contact Teacher</a>
+                        <button class="btn btn-outline-primary contact-btn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#contactTeacherModal" 
+                            data-teacher-id="<%= teacher.getTeacher_id() %>" 
+                            data-teacher-name="<%= teacher.getName() %>">
+                            Contact Teacher
+                        </button>
                     </div>
                 </div>
             </div>
@@ -360,7 +367,7 @@ public static int countDecimals(double number) {
         </div>
     <%  }   %>
 
-        <!-- Modal -->
+        <!-- Send lesson request modal -->
         <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -387,6 +394,45 @@ public static int countDecimals(double number) {
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Contact Teacher Modal -->
+        <div class="modal fade" id="contactTeacherModal" tabindex="-1" aria-labelledby="contactTeacherModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<%=request.getContextPath()%>/elearn/UI/sendMessageController.jsp" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactTeacherModalLabel">Contact Teacher</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="studentMessage" name="studentMessage" value="1">
+                            <input type="hidden" id="teacherId" name="teacherId" value="">
+
+                            <!-- Teacher Full Name -->
+                            <div class="mb-3">
+                                <label for="teacherName" class="form-label">Teacher Full Name</label>
+                                <input type="text" class="form-control" id="teacherFullName" name="teacherName" readonly>
+                            </div>
+                            <!-- Message Subject -->
+                            <div class="mb-3">
+                                <label for="emailSubject" class="form-label">Message Subject</label>
+                                <input type="text" class="form-control" id="messageSubject" name="messageSubject" maxlength="100" placeholder="Enter subject (up to 5 words)" required>
+                            </div>
+                            <!-- Message Body -->
+                            <div class="mb-3">
+                                <label for="emailBody" class="form-label">Message Body</label>
+                                <textarea class="form-control" id="messageBody" name="messageBody" rows="4" maxlength="200" placeholder="Enter your message (up to 20 words)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -462,11 +508,18 @@ public static int countDecimals(double number) {
                     <div class="card-footer text-center">
                         <button class="btn btn-outline-primary schedule-btn"
                             data-bs-toggle="modal" 
+                            data-bs-target="#scheduleModal" 
                             data-teacher-id="<%= teacher.getTeacher_id()%>" 
                             data-teacher-name="<%= teacher.getName()%>">
                             Schedule Lesson
                         </button>
-                        <a href="<%=request.getContextPath()%>/elearn/UI/contactTeacher.jsp?teacherId=1" class="btn btn-outline-secondary">Contact Teacher</a>
+                        <button class="btn btn-outline-primary contact-btn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#contactTeacherModal" 
+                            data-teacher-id="<%= teacher.getTeacher_id() %>" 
+                            data-teacher-name="<%= teacher.getName() %>">
+                            Contact Teacher
+                        </button>
                     </div>
                 </div>
             </div>
@@ -482,7 +535,7 @@ public static int countDecimals(double number) {
             </a>
         </div>
 
-         <!-- Modal -->
+         <!-- Modal to send lesson request -->
         <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -512,6 +565,44 @@ public static int countDecimals(double number) {
                 </div>
             </div>
         </div>
+
+        
+        <!-- Contact Teacher Modal -->
+        <div class="modal fade" id="contactTeacherModal" tabindex="-1" aria-labelledby="contactTeacherModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<%=request.getContextPath()%>/elearn/UI/sendMessageController.jsp" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactTeacherModalLabel">Contact Teacher</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="studentMessage" name="studentMessage" value="1">
+                            <input type="hidden" id="teacherId" name="teacherId" value="">
+                            <!-- Teacher Full Name -->
+                            <div class="mb-3">
+                                <label for="teacherName" class="form-label">Teacher</label>
+                                <input type="text" class="form-control" id="teacherFullName" name="teacherName" readonly>
+                            </div>
+                            <!-- Message Subject -->
+                            <div class="mb-3">
+                                <label for="emailSubject" class="form-label">Message Subject</label>
+                                <input type="text" class="form-control" id="messageSubject" name="messageSubject" maxlength="100" placeholder="Enter subject (up to 5 words)" required>
+                            </div>
+                            <!-- Message Body -->
+                            <div class="mb-3">
+                                <label for="emailBody" class="form-label">Message Body</label>
+                                <textarea class="form-control" id="messageBody" name="messageBody" rows="4" maxlength="200" placeholder="Enter your message (up to 20 words)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Send message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
    
     
     
@@ -532,12 +623,26 @@ public static int countDecimals(double number) {
             location.reload(true); // Force a reload from the server
         }
 
-        // Modal event listener to update teacher-specific data dynamically
         document.addEventListener('click', function (event) {
-            if (event.target.matches('[data-bs-toggle="modal"]')) {
+            // Handle Schedule Lesson button
+            if (event.target.matches('.schedule-btn')) {
                 const teacherId = event.target.getAttribute('data-teacher-id');
+                const teacherName = event.target.getAttribute('data-teacher-name');
                 
+                // Populate Schedule Modal fields
                 document.getElementById('teacherIdInput').value = teacherId;
+                document.getElementById('teacherName').value = teacherName;
+            }
+
+            // Handle Contact Teacher button
+            if (event.target.matches('.contact-btn')) {
+                const teacherId = event.target.getAttribute('data-teacher-id');
+                const teacherName = event.target.getAttribute('data-teacher-name');
+                
+                
+                // Populate Contact Teacher Modal fields
+                document.getElementById('teacherId').value = teacherId;
+                document.getElementById('teacherFullName').value = teacherName;
             }
         });
     </script>

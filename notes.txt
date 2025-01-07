@@ -8,6 +8,15 @@ TO DO
 - make footer a jsp page and include it in all pages
 - make AppError.jsp page
 - Check different browsers
+- Check how student/teacher images appear
+- Check min and max price in teacher table (Signup form) 
+- Check that is_replied column in message table is updated (teacher messages)
+
+
+POTENTIAL IMPROVEMENTS
+--> Make note documents open in full screen
+--> Make navbar sticky 
+--> Add Replied/Reply pending tags on student/teacher messages
 
 
 
@@ -81,16 +90,41 @@ CLASSES + DATABASE (18 NOV - 24 NOV)
     + updateLessonRequest(lesson_req_id) 
     + getLessons(student_id) --> List<LessonReq> lessons   
 
-5. Email (Email, EmailDAO): 
+5. Message (Messaage, MessageDAO) :
+    - message_id: int
+    - is_replied: boolean
+    - sender_type: String
+    - sender_id: String
+    - recipient_id: String
+    - message_date: Datetime
+    - message_subject: String
+    - message_content: String
+    + insertMessage()
+    + getStudentMessages()
+    + getTeacherMessages()
+    + getMessageReply()
+
+    Message table (SQL)
+    - message_id: int autoencriment not null --> The id of the message
+    - reply to: int foreign key references message (message_id)  --> the id of the message that replies to 
+    - is_replied: boolean
+    - sender_type: String --> the role of sender (student/teacher)
+    - sender_teacher_id: int foreign key references teacher (teacher_id)  
+    - sender_student_id: int foreign key references student (student_id)
+    - recipient_teacher_id: int foreign key references teacher (teacher_id)
+    - recipient_student_id: int foreign key references student (student_id)
+    - sent_date: datetime
+    - message_subject: String
+    - message_body: String
+
+
    
-
-
-
-
 DEADLINE (18 January)
+- Teacher Messages  (7 January)
+- Student Messages  (8-10 January)
 
 
-Send email: 4 December - 10 December 
+
 
 
 
