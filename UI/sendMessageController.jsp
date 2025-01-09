@@ -31,6 +31,7 @@ boolean email_error = false;
 int student_id = 0;
 int teacher_id = 0;
 int reply_to_id = 0;
+int message_id = 0;
 
 // Get form data for teacher reply
 String teacher_reply = request.getParameter("teacherReply");
@@ -44,6 +45,10 @@ String student_message = request.getParameter("studentMessage");
 String recipient_teacher_id = request.getParameter("teacherId");
 String message_subject = request.getParameter("messageSubject");
 String message_body = request.getParameter("messageBody");
+
+// Get form data for marking message as read
+String mark_message_read = request.getParameter("markMessageRead");
+String message_read_id = request.getParameter("messageId");
 
 %>
 
@@ -190,7 +195,7 @@ String message_body = request.getParameter("messageBody");
         </div>
     </div>
 
-      <!-- Back Button to message form -->
+    <!-- Back Button to message form -->
     <div class="text-center mt-4">
         <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher_Controller.jsp" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left me-2"></i>Back
@@ -199,7 +204,29 @@ String message_body = request.getParameter("messageBody");
 
     <% }
     }
+
+    if (mark_message_read != null) {
+        message_id = Integer.parseInt(message_read_id);
+        messageDAO.updateIsReadMessage(message_id);
     %>
+
+    <!-- Success Box with Bootstrap success class -->
+    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+        <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
+        <div>
+            <strong>Message marked as read!</strong>
+        </div>
+    </div>
+
+    <!-- Back Button to message form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/teacher_messages.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <% } %>
+    
     </main>
 
     <footer class="text-center text-lg-start mt-auto">

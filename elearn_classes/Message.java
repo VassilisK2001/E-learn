@@ -7,6 +7,7 @@ public class Message {
 
     private int messageId;
     private Integer replyToMessageId; // ID of the original message, null if not a reply
+    private boolean isRead;
     private boolean isReplied;
     private String senderType;
     private int senderId;
@@ -16,10 +17,11 @@ public class Message {
     private String messageContent;
 
     // Constructor
-    public Message(int messageId, Integer replyToMessageId, boolean isReplied, String senderType, int senderId, 
+    public Message(int messageId, Integer replyToMessageId, boolean isRead ,boolean isReplied, String senderType, int senderId, 
                    int recipientId, LocalDateTime messageDate, String messageSubject, String messageContent) {
         this.messageId = messageId;
         this.replyToMessageId = replyToMessageId;
+        this.isRead = isRead;
         this.isReplied = isReplied;
         this.senderType = senderType;
         this.senderId = senderId;
@@ -106,5 +108,13 @@ public class Message {
 
     public void setMessageContent(String messageContent) {
         this.messageContent = messageContent;
+    }
+
+    public boolean getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
     }
 }

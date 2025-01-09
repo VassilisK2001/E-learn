@@ -9,6 +9,16 @@ Teacher teacher = (Teacher) session.getAttribute("teacherObj");
 // Initialize MessageDAO object
 MessageDAO messageDAO = new MessageDAO();
 
+// Check for unread messages
+String unreadMessagesAlert = null;
+try {
+    messageDAO.hasUnreadMessages(teacher.getTeacher_id());
+} catch (Exception e) {
+    unreadMessagesAlert = e.getMessage(); // Capture the exception message
+}
+
+// Get conversations for the teacher
+Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(teacher.getTeacher_id());
 %>
 
 <!DOCTYPE html>
@@ -52,66 +62,93 @@ MessageDAO messageDAO = new MessageDAO();
 
     <main class="container my-4 flex-grow-1">
 
+        <%-- Check if there are conversations --%>
+        <% if (conversations.isEmpty()) { %>
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>You do not have any conversations</strong>
+            </div>
+        <% } else { %>
+
         <div class="container">
+
+            <!-- Display unread messages alert if exists -->
+            <% if (unreadMessagesAlert != null) { %>
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span><%= unreadMessagesAlert %></span>
+                </div>
+            <% } %>
+
             <h1 class="mb-4">Teacher Messages</h1>
 
-            <%
-                Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(teacher.getTeacher_id());
-            %>
-
-            <%
-                // Loop through each student's conversation
+                <%-- Loop through each student's conversation --%>
+                <%
                 for (Map.Entry<Student, List<Message>> entry : conversations.entrySet()) {
                     Student student = entry.getKey();
                     List<Message> messages = entry.getValue();
-            %>
+                %>
 
-            <!-- Student Section -->
-            <div class="mb-4">
-                <!-- Display Conversation Title Once -->
-                <h5>Conversation with <strong><%= student.getFullName() %></strong></h5>
+                <!-- Student Section -->
+                <div class="mb-4">
+                    <!-- Display Conversation Title Once -->
+                    <h5>Conversation with <strong><%= student.getFullName() %></strong></h5>
 
-                <!-- Messages Section -->
-                <div class="card">
-                    <div class="card-body">
-                        <% for (Message message : messages) { 
-                            String senderPhoto = message.getSenderType().equals("teacher") 
-                                ? teacher.getPhoto() // Assuming `teacher` has a `getPhoto()` method
-                                : student.getPhotoUrl(); // Assuming `student` has a `getPhoto()` method
+                    <!-- Messages Section -->
+                    <div class="card">
+                        <div class="card-body">
+                            <% for (Message message : messages) { 
+                                String senderPhoto = message.getSenderType().equals("teacher") 
+                                    ? teacher.getPhoto() // Assuming `teacher` has a `getPhoto()` method
+                                    : student.getPhotoUrl(); // Assuming `student` has a `getPhoto()` method
 
-                            // Find the original message if it's a reply
-                            Message originalMessage = messageDAO.findOriginalMessage(messages, message.getReplyToMessageId());
-                        %>
-                            <div class="mb-3 d-flex">
-                                <!-- Sender Photo -->
-                                <img src="<%=request.getContextPath()%>/elearn/images/<%=senderPhoto%>" alt="<%= message.getSenderType().equals("teacher") ? "Your Photo" : student.getFullName() %>"
-                                     class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                // Find the original message if it's a reply
+                                Message originalMessage = messageDAO.findOriginalMessage(messages, message.getReplyToMessageId());
+                            %>
+                                <div class="mb-3 d-flex">
+                                    <!-- Sender Photo -->
+                                    <img src="<%=request.getContextPath()%>/elearn/images/<%=senderPhoto%>" alt="<%= message.getSenderType().equals("teacher") ? "Your Photo" : student.getFullName() %>"
+                                         class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
 
-                                <div>
-                                    <!-- Sender Name and Timestamp -->
-                                    <strong><%= message.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
-                                    <small class="text-muted">(<%= message.getMessageDate() %>)</small>
+                                    <div>
+                                        <!-- Sender Name and Timestamp -->
+                                        <strong><%= message.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
+                                        <small class="text-muted">(<%= message.getMessageDate() %>)</small>
 
-                                    <!-- Message Content -->
-                                    <div class="alert <%= message.getSenderType().equals("teacher") ? "alert-primary" : "alert-secondary" %>">
-                                        <strong>Subject:</strong> <%= message.getMessageSubject() %><br>
-                                        <strong>Body:</strong> <%= message.getMessageContent() %>
+                                        <!-- Message Content -->
+                                        <div class="alert <%= message.getSenderType().equals("teacher") ? "alert-primary" : "alert-secondary" %>">
+                                            <strong>Subject:</strong> <%= message.getMessageSubject() %><br>
+                                            <strong>Body:</strong> <%= message.getMessageContent() %>
 
-                                        <!-- Reply Information -->
-                                        <% if (originalMessage != null) { %>
-                                            <hr>
-                                            <small class="text-muted">
-                                                Reply to: <strong><%= originalMessage.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
-                                                (<%= originalMessage.getMessageSubject() %>)
-                                            </small>
-                                        <% } %>
+                                            <!-- Reply Information -->
+                                            <% if (originalMessage != null) { %>
+                                                <hr>
+                                                <small class="text-muted">
+                                                    Reply to: <strong><%= originalMessage.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
+                                                    (<%= originalMessage.getMessageSubject() %>)
+                                                </small>
+                                            <% } %>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <% } %>
+                        </div>
 
-                            <!-- Footer Section -->
-                            <% if (message.getSenderType().equals("student") && !message.isReplied()) { %>
-                                <div class="card-footer text-end">
+                        <!-- Footer Section with Buttons -->
+                        <div class="card-footer text-end">
+                            <% for (Message message : messages) { %>
+                                <% if (message.getSenderType().equals("student")) { %>
+                                    <% if (message.getIsRead()) { %>
+                                        <button class="btn btn-success btn-sm me-2" disabled>
+                                            <i class="fas fa-check-circle"></i> Read
+                                        </button>
+                                    <% } else { %>
+                                        <form action="<%= request.getContextPath() %>/elearn/UI/sendMessageController.jsp" method="POST" class="d-inline">
+                                            <input type="hidden" name="markMessageRead" value="1">
+                                            <input type="hidden" name="messageId" value="<%= message.getMessageId() %>">
+                                            <button type="submit" class="btn btn-secondary btn-sm me-2">Mark as Read</button>
+                                        </form>
+                                    <% } %>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#replyModal"
                                             data-student-id="<%= student.getStudentId() %>" 
                                             data-student-name="<%= student.getFullName() %>" 
@@ -119,52 +156,50 @@ MessageDAO messageDAO = new MessageDAO();
                                             data-message-subject="<%= message.getMessageSubject() %>">
                                         Reply
                                     </button>
-                                </div>
+                                <% } %>
                             <% } %>
-                        <% } %>
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
-            <!-- Horizontal Line to Separate Conversations -->
-            <hr class="my-4">
+                <!-- Horizontal Line to Separate Conversations -->
+                <hr class="my-4">
 
-            <%
-                }
-            %>
+                <% } %>
+            <% } %>
 
-            <!-- Reply Modal -->
-            <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="<%= request.getContextPath() %>/elearn/UI/sendMessageController.jsp" method="POST">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="replyModalLabel">Reply to <span id="studentName"></span></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Reply Modal -->
+        <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<%= request.getContextPath() %>/elearn/UI/sendMessageController.jsp" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="replyModalLabel">Reply to <span id="studentName"></span></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="studentId" name="studentId">
+                            <input type="hidden" id="messageId" name="messageId">
+                            <input type="hidden" id="teacherReply" name="teacherReply" value="1">
+                            <div class="mb-3">
+                                <label for="replySubject" class="form-label">Subject</label>
+                                <input type="text" id="replySubject" name="replySubject" class="form-control" readonly>
                             </div>
-                            <div class="modal-body">
-                                <input type="hidden" id="studentId" name="studentId">
-                                <input type="hidden" id="messageId" name="messageId">
-                                <input type="hidden" id="teacherReply" name="teacherReply" value="1">
-                                <div class="mb-3">
-                                    <label for="replySubject" class="form-label">Subject</label>
-                                    <!-- Pre-fill subject with "Re: <original subject>" and make it readonly -->
-                                    <input type="text" id="replySubject" name="replySubject" class="form-control" readonly>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="replyBody" class="form-label">Message</label>
-                                    <textarea id="replyBody" name="replyBody" class="form-control" rows="4" required></textarea>
-                                </div>
+                            <div class="mb-3">
+                                <label for="replyBody" class="form-label">Message</label>
+                                <textarea id="replyBody" name="replyBody" class="form-control" rows="4" required></textarea>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Send</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
         </div>
 
         <!-- Back Button to message form -->
@@ -187,21 +222,17 @@ MessageDAO messageDAO = new MessageDAO();
         const replyModal = document.getElementById('replyModal');
         replyModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
+            const studentName = button.getAttribute('data-student-name');
             const studentId = button.getAttribute('data-student-id');
             const messageId = button.getAttribute('data-message-id');
-            const studentName = button.getAttribute('data-student-name');
-            const originalSubject = button.getAttribute('data-message-subject'); // Retrieve the original subject
+            const messageSubject = button.getAttribute('data-message-subject');
 
-            // Debugging: Log the original subject to the console
-            console.log('Original Subject:', originalSubject);
-
-            replyModal.querySelector('#studentId').value = studentId;
-            replyModal.querySelector('#messageId').value = messageId;
-            replyModal.querySelector('#studentName').textContent = studentName;
-
-            // Pre-fill the subject with "Re: <original subject>"
-            replyModal.querySelector('#replySubject').value = originalSubject ;
+            document.getElementById('studentName').textContent = studentName;
+            document.getElementById('studentId').value = studentId;
+            document.getElementById('messageId').value = messageId;
+            document.getElementById('replySubject').value = messageSubject;
         });
     </script>
+
 </body>
 </html>

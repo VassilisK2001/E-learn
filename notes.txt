@@ -16,7 +16,7 @@ TO DO
 POTENTIAL IMPROVEMENTS
 --> Make note documents open in full screen
 --> Make navbar sticky 
---> Add Replied/Reply pending tags on student/teacher messages
+--> Add "Read"/"Mark as read" functionality 
 
 
 

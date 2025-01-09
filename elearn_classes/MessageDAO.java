@@ -9,8 +9,8 @@ public class MessageDAO {
     String subject, String body) throws Exception {
         Connection con = null;
         String sql =
-        "INSERT INTO message (reply_to, is_replied, sender_type, sender_teacher_id, sender_student_id, recipient_teacher_id, recipient_student_id, sent_date, message_subject, message_body) " +
-        "VALUES (NULL, ?, ?, NULL, ?, ?, NULL, ?, ?, ?);";
+        "INSERT INTO message (reply_to, is_replied, sender_type, sender_teacher_id, sender_student_id, recipient_teacher_id, recipient_student_id, sent_date, message_subject, message_body, is_read) " +
+        "VALUES (NULL, ?, ?, NULL, ?, ?, NULL, ?, ?, ?, 0);";
 
         DB db = new DB();
         PreparedStatement stmt = null;
@@ -45,8 +45,8 @@ public class MessageDAO {
     String body) throws Exception {
         Connection con = null;
         String sql = 
-        "INSERT INTO message (reply_to, is_replied, sender_type, sender_teacher_id, sender_student_id, recipient_teacher_id, recipient_student_id, sent_date, message_subject, message_body) " +
-        "VALUES (?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?);";
+        "INSERT INTO message (reply_to, is_replied, sender_type, sender_teacher_id, sender_student_id, recipient_teacher_id, recipient_student_id, sent_date, message_subject, message_body, is_read) " +
+        "VALUES (?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, 0);";
 
         DB db = new DB();
         PreparedStatement stmt = null;
@@ -107,6 +107,7 @@ public class MessageDAO {
                 message.setSenderId((rs.getString("sender_type")).equals("student") ? rs.getInt("sender_student_id") : rs.getInt("sender_teacher_id"));
                 message.setRecipientId(rs.getString("sender_type").equals("student") ? rs.getInt("recipient_teacher_id") : rs.getInt("recipient_student_id"));
                 message.setReplied(rs.getBoolean("is_replied"));
+                message.setIsRead(rs.getBoolean("is_read"));
 
                 // Retrieve the sent_date as a Timestamp
                 Timestamp timestamp = rs.getTimestamp("sent_date");
@@ -183,6 +184,66 @@ public class MessageDAO {
         }
     }
 
+    public void updateIsReadMessage(int message_id) throws Exception {
+        Connection con = null;
+        String sql = 
+        "UPDATE message " +
+        "SET is_read = 1 " +
+        "WHERE message_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,message_id);
+            stmt.executeUpdate();
+
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception("Error updating message table: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing database: " + e.getMessage());
+            }
+        }
+    }
+
+    public void hasUnreadMessages(int teacher_id) throws Exception {
+        Connection con = null;
+        String sql = "SELECT * FROM message WHERE recipient_teacher_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1,teacher_id);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                throw new Exception("You have unread messages");
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing database: " + e.getMessage());
+            }
+        }
+    }
 
     
 }
