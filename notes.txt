@@ -6,12 +6,6 @@ January 12
 - Check different browsers
 - Inform all team members to test site 
 
-
-POTENTIAL IMPROVEMENTS
---> Make note documents open in full screen
---> Make navbar sticky 
-
-
 COMPILE CLASSES
 javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
 

@@ -12,22 +12,17 @@ if((session.getAttribute("studentObj") == null && session.getAttribute("teacherO
 
 <% } 
 
-// Prevent browser from caching page
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 response.setHeader("Pragma", "no-cache");
 response.setDateHeader("Expires", 0);
 
-// Set session timeout to 15 minutes
 int sessionTimeoutSeconds = 15 * 60;
 session.setMaxInactiveInterval(sessionTimeoutSeconds);
 
-// Retrive student object from session
 Student student = (Student) session.getAttribute("studentObj");
 
-// Initialize NoteDAO object
 NoteDAO noteDAO = new NoteDAO();
 
-// Initialize favourite notes list
 List<Note> fav_notes = new ArrayList<Note>();
 %>
 
@@ -57,7 +52,7 @@ List<Note> fav_notes = new ArrayList<Note>();
                     <li class="nav-item">
                         <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
@@ -75,14 +70,13 @@ List<Note> fav_notes = new ArrayList<Note>();
 
     <!-- Main Content -->
     <main class="container my-4 flex-grow-1">
-
         <%
         fav_notes = noteDAO.getFavNotes(student);
 
         if (fav_notes.isEmpty()) {
         %>
 
-       <!-- Info Alert Box -->
+        <!-- Info Alert Box -->
         <div class="alert alert-info text-center" role="alert">
             <i class="fas fa-info-circle me-2"></i>
             Your personal notes list is empty.
@@ -93,7 +87,7 @@ List<Note> fav_notes = new ArrayList<Note>();
 
         <% for(Note note: fav_notes) {  %>
 
-        <!-- Sample Cards for Notes -->
+        <!-- Note Card -->
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-2 d-flex align-items-center justify-content-center">
@@ -122,30 +116,30 @@ List<Note> fav_notes = new ArrayList<Note>();
             </div>
         </div>
 
-        <!-- Modal for displaying the note content -->
+        <!-- Modal -->
         <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="openNoteModalLabel<%= note.getNote_id() %>">Note: <%= note.getTitle() %></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title">Note: <%= note.getTitle() %></h5>
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary me-2" id="fullscreenButton<%= note.getNote_id() %>">
+                                <i class="fas fa-expand-arrows-alt"></i> Full Screen
+                            </button>
+                            <button type="button" class="btn-close" id="closeButton<%= note.getNote_id() %>" data-bs-dismiss="modal"></button>
+                        </div>
                     </div>
                     <div class="modal-body">
-                        <%-- Handle PDF file for viewing --%>
-                        <embed src="<%= request.getContextPath() %>/elearn/notes/<%=note.getFile_url()%>" width="100%" height="700px" /> 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <embed src="<%= request.getContextPath() %>/elearn/notes/<%=note.getFile_url()%>" width="100%" height="700px" />
                     </div>
                 </div>
             </div>
         </div>
 
         <% } %>
+        <% } %>
 
-    <%  }  %>
-
-        <!-- Back Button Below Teacher Cards -->
+        <!-- Back Button -->
         <div class="text-center mt-4">
             <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Home
@@ -162,5 +156,40 @@ List<Note> fav_notes = new ArrayList<Note>();
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <% for (Note note : fav_notes) { %>
+            const fullscreenButton<%= note.getNote_id() %> = document.getElementById('fullscreenButton<%= note.getNote_id() %>');
+            const closeButton<%= note.getNote_id() %> = document.getElementById('closeButton<%= note.getNote_id() %>');
+            const modalContent<%= note.getNote_id() %> = document.querySelector('#openNoteModal<%= note.getNote_id() %> .modal-content');
+            const embedElement<%= note.getNote_id() %> = modalContent<%= note.getNote_id() %>.querySelector('embed');
+
+            fullscreenButton<%= note.getNote_id() %>.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    modalContent<%= note.getNote_id() %>.requestFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "100vh";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-compress-arrows-alt"></i> Exit Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'none';
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "700px";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'block';
+                    });
+                }
+            });
+
+            document.addEventListener('fullscreenchange', function () {
+                if (!document.fullscreenElement) {
+                    embedElement<%= note.getNote_id() %>.style.height = "700px";
+                    fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                    closeButton<%= note.getNote_id() %>.style.display = 'block';
+                }
+            });
+            <% } %>
+        });
+    </script>
+
 </body>
 </html>
