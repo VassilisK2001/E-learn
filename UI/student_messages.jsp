@@ -148,7 +148,8 @@ Map<Teacher, List<Message>> conversations = messageDAO.getStudentConversarions(s
                                             <input type="hidden" name="messageId" value="<%= message.getMessageId() %>">
                                             <button type="submit" class="btn btn-secondary btn-sm me-2">Mark as Read</button>
                                         </form>
-                                    <% } %>
+                                    <% } 
+                                    if (!message.isReplied()) { %>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#replyModal"
                                             data-teacher-id="<%= teacher.getTeacher_id() %>" 
                                             data-teacher-name="<%= teacher.getName() %>" 
@@ -156,6 +157,7 @@ Map<Teacher, List<Message>> conversations = messageDAO.getStudentConversarions(s
                                             data-message-subject="<%= message.getMessageSubject() %>">
                                         Reply
                                     </button>
+                                    <% } %>
                                 <% } %>
                             <% } %>
                         </div>
