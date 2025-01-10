@@ -1,23 +1,20 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
 TO DO
-- Check if request method is "post" in all pages 
-- Set sessionTimeOut in all pages
+
+January 10
 - Prevent page caching for all pages 
-- Check page navigations
-- make footer a jsp page and include it in all pages
-- make AppError.jsp page
+- Check page navigations 
+       
+January 12
+- Testing on all pages 
 - Check different browsers
-- Check how student/teacher images appear
-- Check min and max price in teacher table (Signup form) 
-- Check that is_replied column in message table is updated (teacher messages)
+- Inform all team members to test site 
 
 
 POTENTIAL IMPROVEMENTS
 --> Make note documents open in full screen
 --> Make navbar sticky 
---> Add "Read"/"Mark as read" functionality 
-
 
 
 COMPILE CLASSES
@@ -26,102 +23,16 @@ javac -cp "./lib/*;." -d "./build/" ./elearn_classes/*.java
 LINK
 C:\\Program Files\\Apache Software Foundation\\Tomcat 6.0\\webapps\\ismgroup63\\images
 
-
-CLASSES + DATABASE (18 NOV - 24 NOV)
-- Implement classes
-- Insert dummy data into database 
-1. Teacher (Teacher, TeacherDAO): 
-    - teacher_id
-    - fullname 
-    - age 
-    - username 
-    - password 
-    - email 
-    - desc 
-    - photo                                          
-    - years_of_experience                                 
-    - min_price
-    - max_price 
-    - List<String> specializations 
-    - List<String> specialization_courses            
-    + authenticate(username, password) 
-    + insertTeacher(fullname, age, username, password, email, desc, photo, max_price, min_price, specializations, specialization_courses) 
-    + checkTeacherExists(username, password) 
-    + getTeacherResults(String, String, specializations, min_exp, max_exp, min_price, max_price) --> List<Teacher> teacher_results 
+DEADLINE (18 January)
 
 
-2. Student (Student, StudentDAO): 
-    - student_id
-    - fullname 
-    - age 
-    - username 
-    - password 
-    - email 
-    - desc 
-    - photo 
-    - List<String> interest_subjects                            
-    + authenticate(username, password)
-    + insertStudent(fullname, age, username, password, email, desc, photo, interest_subjects)
-    + checkStudentExists(username, password)                
 
-3. Note (Note, NoteDAO): 
-    - note_id 
-    - title 
-    - file_url 
-    - upload_date 
-    - uploader_type
-    - uploader_name
-    - course_title: String
-    + searchNotes(String, year, uploader_type) --> List<Note> available_notes
-    + insertNote(String, title, file, date, uploader_type, uploader_name)   20 DEC
-    + saveNote(student_id, note_id)                            21-22 DEC
-    + getFavNotes(student_id) --> List<Notes> fav_notes        21-22
-    + deleteFavNote(student_id, note_id)                       21-22
 
-4. LessonReq (LessonReq, LessonReqDAO):
-    - lesson_req_id 
-    - schedule_date    
-    - request_status
-    - course: String  
-    - sent_from: int
-    - sent_to: int  
-    + insertLessonRequest() 
-    + getLessonRequests(teacher_id) --> List<LessonReq> requests 
-    + updateLessonRequest(lesson_req_id) 
-    + getLessons(student_id) --> List<LessonReq> lessons   
 
-5. Message (Messaage, MessageDAO) :
-    - message_id: int
-    - is_replied: boolean
-    - sender_type: String
-    - sender_id: String
-    - recipient_id: String
-    - message_date: Datetime
-    - message_subject: String
-    - message_content: String
-    + insertMessage()
-    + getStudentMessages()
-    + getTeacherMessages()
-    + getMessageReply()
 
-    Message table (SQL)
-    - message_id: int autoencriment not null --> The id of the message
-    - reply to: int foreign key references message (message_id)  --> the id of the message that replies to 
-    - is_replied: boolean
-    - sender_type: String --> the role of sender (student/teacher)
-    - sender_teacher_id: int foreign key references teacher (teacher_id)  
-    - sender_student_id: int foreign key references student (student_id)
-    - recipient_teacher_id: int foreign key references teacher (teacher_id)
-    - recipient_student_id: int foreign key references student (student_id)
-    - sent_date: datetime
-    - message_subject: String
-    - message_body: String
 
 
    
-DEADLINE (18 January)
-- Teacher Messages  (7 January)
-- Student Messages  (8-10 January)
 
 
 

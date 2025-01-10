@@ -1,7 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page errorPage="AppError.jsp" %>
 <%@ page import="elearn_classes.*" %>
 
 <%
+// Check if the user is not signed in, set an error message, and forward to the login page
+if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) {
+    request.setAttribute("message","You are not authorized to access this page. Please sign in.");
+%>
+
+<jsp:forward page="signin.jsp"/>
+
+<% }
+
+// Set session timeout to 15 minutes
+int sessionTimeoutSeconds = 15 * 60;
+session.setMaxInactiveInterval(sessionTimeoutSeconds);
+
 // Get the student object from session
 Student student = (Student) session.getAttribute("studentObj");
 %>

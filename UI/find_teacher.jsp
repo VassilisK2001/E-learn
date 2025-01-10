@@ -2,8 +2,20 @@
 <%@ page import="java.util.*" %>
 <%@ page import="elearn_classes.*" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page errorPage="AppError.jsp" %>
 
 <%
+if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) { 
+    request.setAttribute("message","You are not authorized to access this page. Please sign in.");   
+%>
+            
+<jsp:forward page="signin.jsp"/>
+
+<% } 
+    // Set session timeout to 15 minutes
+    int sessionTimeoutSeconds = 15 * 60;
+    session.setMaxInactiveInterval(sessionTimeoutSeconds);
+    
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);

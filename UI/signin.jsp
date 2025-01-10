@@ -1,5 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="elearn_classes.*" %>
+<%@ page errorPage="AppError.jsp" %>
+
+<%
+// Get Student object from session
+Student student = (Student) session.getAttribute("studentObj");
+
+// Get Teacher object from session
+Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+
+// Initialize variable
+int sessionTimeoutSeconds = 0;
+if (student != null || teacher != null) {
+    // Set session timeout to 15 minutes
+    sessionTimeoutSeconds = 15 * 60;
+    session.setMaxInactiveInterval(sessionTimeoutSeconds);
+}
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +30,7 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg mb-5">
+     <nav class="navbar navbar-expand-lg mb-5">
         <div class="container-fluid">
             <a class="navbar-brand">
                 <img src="<%=request.getContextPath()%>/elearn/logo.svg" alt="Logo" width="150" height="48">
@@ -23,15 +40,49 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                <% if (student != null) { %>
+
+                  <li class="nav-item">
+                        <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp">
+                            <span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span>
+                        </a>
+                    </li>
+
+                <% } else if (teacher != null) { %>
+
+                <li class="nav-item">
+                        <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signup.jsp"><b>Sign Up</b></a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp"><b>Home</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp"><b>Sign In</b></a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span></a>
                     </li>
+
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="<%=request.getContextPath()%>/elearn/UI/signup.jsp"><b>Sign Up</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signin.jsp"><b>Sign In</b></a>
+                    </li>
+                <% } %>
                 </ul>
             </div>
         </div>

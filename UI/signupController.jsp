@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page errorPage="AppError.jsp" %>
 <%@ page import="elearn_classes.*" %>
 <%@ page import="java.io.*"%>
 <%@ page import="java.nio.file.Files"%>
@@ -12,6 +13,18 @@
 <%@ page import="org.apache.commons.io.IOUtils"%>
 
 <%
+if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) { 
+    request.setAttribute("message","You are not authorized to access this page. Please sign in.");   
+%>
+            
+<jsp:forward page="signin.jsp"/>
+
+<% } 
+
+// Set session timeout to 15 minutes
+int sessionTimeoutSeconds = 15 * 60;
+session.setMaxInactiveInterval(sessionTimeoutSeconds);
+
 // Variables for validation and error messages
 List<String> errorMessages = new ArrayList<String>();
 String photo = "";

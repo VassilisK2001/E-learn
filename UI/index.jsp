@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="elearn_classes.*" %>
+<%@ page errorPage="AppError.jsp" %>
 
 <%
 // Get Student object from session
@@ -7,6 +8,14 @@ Student student = (Student) session.getAttribute("studentObj");
 
 // Get Teacher object from session
 Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+
+// Initialize variable
+int sessionTimeoutSeconds = 0;
+if (student != null || teacher != null) {
+    // Set session timeout to 15 minutes
+    sessionTimeoutSeconds = 15 * 60;
+    session.setMaxInactiveInterval(sessionTimeoutSeconds);
+}
 %>
 
 <!DOCTYPE html>
