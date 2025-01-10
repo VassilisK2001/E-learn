@@ -109,6 +109,18 @@ Student student = (Student) session.getAttribute("studentObj");
                     </div>
                 </a>
             </div>
+
+             <!-- Functionality Section 6 -->
+            <div class="col-md-4 my-3">
+                <a href="<%=request.getContextPath()%>/elearn/UI/student_messages.jsp" class="text-decoration-none">
+                    <div class="card functionality-card p-4">
+                        <div class="functionality-title">Check your messages</div>
+                        <div class="functionality-description">
+                            Have a look at conversations with other teachers and reply to their messages.
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
 
     </main>

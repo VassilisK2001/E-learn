@@ -458,4 +458,43 @@ public class TeacherDAO {
         }
     }
 
+    public Teacher getTeacherDetails(int teacher_id) throws Exception {
+        Connection con = null;
+        Teacher teacher = null;
+
+        String sql = "SELECT * FROM teacher WHERE teacher_id = ?;";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, teacher_id);
+            rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                teacher = new Teacher(rs.getInt("teacher_id"), rs.getString("full_name"), rs.getInt("age"),
+                rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("description"),
+                rs.getString("photo_url"), rs.getInt("years_of_experience"), rs.getDouble("min_price"), rs.getDouble("max_price"),
+		        retrieveSpecializations(teacher_id), retrieveSpecializationCourses(teacher_id));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return teacher;
+        } catch(Exception e) {
+            throw new Exception("Error fetching teacher details: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e) {
+                throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
 }

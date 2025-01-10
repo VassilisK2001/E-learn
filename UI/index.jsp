@@ -120,7 +120,7 @@ Teacher teacher = (Teacher) session.getAttribute("teacherObj");
                 <div class="card functionality-card p-4">
                     <div class="functionality-title">Communication Platform</div>
                     <div class="functionality-description">
-                        An integrated messaging system in which students and teachers can communicate by sending email.
+                        An integrated messaging system in which students and teachers can communicate.
                     </div>
                 </div>
             </div>

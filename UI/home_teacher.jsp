@@ -79,7 +79,7 @@ Teacher teacher = (Teacher) session.getAttribute("teacherObj");
                     <div class="card functionality-card p-4">
                         <div class="functionality-title">Check your messages</div>
                         <div class="functionality-description">
-                            Have a look at messages sent to you by other students and reply to their messages.
+                            Have a look at conversations with other students and reply to their messages.
                         </div>
                     </div>
                 </a>

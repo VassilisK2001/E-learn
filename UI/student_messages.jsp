@@ -3,8 +3,8 @@
 <%@ page import="java.util.*"%>
 
 <%
-// Get Teacher object from session
-Teacher teacher = (Teacher) session.getAttribute("teacherObj");
+// Get Student object from session
+Student student = (Student) session.getAttribute("studentObj");
 
 // Initialize MessageDAO object
 MessageDAO messageDAO = new MessageDAO();
@@ -12,13 +12,13 @@ MessageDAO messageDAO = new MessageDAO();
 // Check for unread messages
 String unreadMessagesAlert = null;
 try {
-    messageDAO.hasUnreadMessagesTeacher(teacher.getTeacher_id());
+    messageDAO.hasUnreadMessagesStudent(student.getStudentId());
 } catch (Exception e) {
     unreadMessagesAlert = e.getMessage(); // Capture the exception message
 }
 
-// Get conversations for the teacher
-Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(teacher.getTeacher_id());
+// Get conversations for the student
+Map<Teacher, List<Message>> conversations = messageDAO.getStudentConversarions(student.getStudentId());
 %>
 
 <!DOCTYPE html>
@@ -44,13 +44,13 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
+                        <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp"><b>Home</b></a>
+                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/signout.jsp"><span><b>Sign out<i class="fas fa-arrow-right-from-bracket ms-2"></i></b></span></a>
@@ -80,19 +80,19 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                 </div>
             <% } %>
 
-            <h1 class="mb-4">Teacher Messages</h1>
+            <h1 class="mb-4">Student Messages</h1>
 
-                <%-- Loop through each student's conversation --%>
+                <%-- Loop through each teacher's conversation --%>
                 <%
-                for (Map.Entry<Student, List<Message>> entry : conversations.entrySet()) {
-                    Student student = entry.getKey();
+                for (Map.Entry<Teacher, List<Message>> entry : conversations.entrySet()) {
+                    Teacher teacher = entry.getKey();
                     List<Message> messages = entry.getValue();
                 %>
 
                 <!-- Student Section -->
                 <div class="mb-4">
                     <!-- Display Conversation Title Once -->
-                    <h5>Conversation with <strong><%= student.getFullName() %></strong></h5>
+                    <h5>Conversation with <strong><%= teacher.getName() %></strong></h5>
 
                     <!-- Messages Section -->
                     <div class="card">
@@ -107,16 +107,16 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                             %>
                                 <div class="mb-3 d-flex">
                                     <!-- Sender Photo -->
-                                    <img src="<%=request.getContextPath()%>/elearn/images/<%=senderPhoto%>" alt="<%= message.getSenderType().equals("teacher") ? "Your Photo" : student.getFullName() %>"
+                                    <img src="<%=request.getContextPath()%>/elearn/images/<%=senderPhoto%>" alt="<%= message.getSenderType().equals("student") ? "Your Photo" : teacher.getName() %>"
                                          class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
 
                                     <div>
                                         <!-- Sender Name and Timestamp -->
-                                        <strong><%= message.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
+                                        <strong><%= message.getSenderType().equals("student") ? "You" : teacher.getName() %></strong>
                                         <small class="text-muted">(<%= message.getMessageDate() %>)</small>
 
                                         <!-- Message Content -->
-                                        <div class="alert <%= message.getSenderType().equals("teacher") ? "alert-primary" : "alert-secondary" %>">
+                                        <div class="alert <%= message.getSenderType().equals("student") ? "alert-primary" : "alert-secondary" %>">
                                             <strong>Subject:</strong> <%= message.getMessageSubject() %><br>
                                             <strong>Body:</strong> <%= message.getMessageContent() %>
 
@@ -124,7 +124,7 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                                             <% if (originalMessage != null) { %>
                                                 <hr>
                                                 <small class="text-muted">
-                                                    Reply to: <strong><%= originalMessage.getSenderType().equals("teacher") ? "You" : student.getFullName() %></strong>
+                                                    Reply to: <strong><%= originalMessage.getSenderType().equals("student") ? "You" : teacher.getName() %></strong>
                                                     (<%= originalMessage.getMessageSubject() %>)
                                                 </small>
                                             <% } %>
@@ -137,7 +137,7 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                         <!-- Footer Section with Buttons -->
                         <div class="card-footer text-end">
                             <% for (Message message : messages) { %>
-                                <% if (message.getSenderType().equals("student")) { %>
+                                <% if (message.getSenderType().equals("teacher")) { %>
                                     <% if (message.getIsRead()) { %>
                                         <button class="btn btn-success btn-sm me-2" disabled>
                                             <i class="fas fa-check-circle"></i> Read
@@ -150,8 +150,8 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                                         </form>
                                     <% } %>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#replyModal"
-                                            data-student-id="<%= student.getStudentId() %>" 
-                                            data-student-name="<%= student.getFullName() %>" 
+                                            data-teacher-id="<%= teacher.getTeacher_id() %>" 
+                                            data-teacher-name="<%= teacher.getName() %>" 
                                             data-message-id="<%= message.getMessageId() %>"
                                             data-message-subject="<%= message.getMessageSubject() %>">
                                         Reply
@@ -177,13 +177,13 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
                 <div class="modal-content">
                     <form action="<%= request.getContextPath() %>/elearn/UI/sendMessageController.jsp" method="POST">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="replyModalLabel">Reply to <span id="studentName"></span></h5>
+                            <h5 class="modal-title" id="replyModalLabel">Reply to <span id="teacherName"></span></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" id="studentId" name="studentId">
+                            <input type="hidden" id="teacherId" name="teacherId">
                             <input type="hidden" id="messageId" name="messageId">
-                            <input type="hidden" id="teacherReply" name="teacherReply" value="1">
+                            <input type="hidden" id="studentReply" name="studentReply" value="1">
                             <div class="mb-3">
                                 <label for="replySubject" class="form-label">Subject</label>
                                 <input type="text" id="replySubject" name="replySubject" class="form-control" readonly>
@@ -204,7 +204,7 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
 
         <!-- Back Button to message form -->
         <div class="text-center mt-4">
-            <a href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp" class="btn btn-outline-primary">
+            <a href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left me-2"></i>Back to Home
             </a>
         </div>
@@ -222,13 +222,13 @@ Map<Student, List<Message>> conversations = messageDAO.getTeacherConversarions(t
         const replyModal = document.getElementById('replyModal');
         replyModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
-            const studentName = button.getAttribute('data-student-name');
-            const studentId = button.getAttribute('data-student-id');
+            const teacherName = button.getAttribute('data-teacher-name');
+            const teacherId = button.getAttribute('data-teacher-id');
             const messageId = button.getAttribute('data-message-id');
             const messageSubject = button.getAttribute('data-message-subject');
 
-            document.getElementById('studentName').textContent = studentName;
-            document.getElementById('studentId').value = studentId;
+            document.getElementById('teacherName').textContent = teacherName;
+            document.getElementById('teacherId').value = teacherId;
             document.getElementById('messageId').value = messageId;
             document.getElementById('replySubject').value = "Re: " + messageSubject;
         });

@@ -33,6 +33,12 @@ int teacher_id = 0;
 int reply_to_id = 0;
 int message_id = 0;
 
+// Get form data for teacher message
+String teacher_message = request.getParameter("teacherMessage");
+String rec_student_id = request.getParameter("studentId");
+String subject = request.getParameter("messageSubject");
+String body = request.getParameter("messageBody");
+
 // Get form data for teacher reply
 String teacher_reply = request.getParameter("teacherReply");
 String recipient_student_id = request.getParameter("studentId");
@@ -45,6 +51,13 @@ String student_message = request.getParameter("studentMessage");
 String recipient_teacher_id = request.getParameter("teacherId");
 String message_subject = request.getParameter("messageSubject");
 String message_body = request.getParameter("messageBody");
+
+// Get form data for student reply
+String student_reply = request.getParameter("studentReply");
+String rec_teacher_id = request.getParameter("teacherId");
+String reply_message_id = request.getParameter("messageId");
+String rep_subject = request.getParameter("replySubject");
+String rep_body = request.getParameter("replyBody");
 
 // Get form data for marking message as read
 String mark_message_read = request.getParameter("markMessageRead");
@@ -220,13 +233,142 @@ String message_read_id = request.getParameter("messageId");
 
     <!-- Back Button to message form -->
     <div class="text-center mt-4">
-        <a href="<%=request.getContextPath()%>/elearn/UI/teacher_messages.jsp" class="btn btn-outline-primary">
+        <a href="<%=request.getContextPath()%>/elearn/UI/<%=(teacher == null) ? "student_messages.jsp" : "teacher_messages.jsp"%>" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left me-2"></i>Back
         </a>
     </div>
 
-    <% } %>
+    <% } 
+
+    if (teacher_message != null) {
+        student_id = Integer.parseInt(rec_student_id);
+        if (countWords(subject) > 5) {
+            countErrors++;
+            errorMessages.add("<b>Message subject</b> must be up to <b>5 words</b>.");
+        }
+        if (countWords(body) > 20) {
+            countErrors++;
+            errorMessages.add("<b>Message body</b> must be up to <b>20 words</b>.");
+        }
+        if(countErrors != 0) { 
+    %>
+
+    <!-- Alert Box for General Error -->
+    <div class="alert alert-danger" role="alert">
+        <strong>Your message has errors.</strong>
+    </div>
+
+    <!-- Card to display detailed errors -->
+    <div class="card">
+        <div class="card-header">
+            <strong>Message Errors</strong>
+        </div>
+        <div class="card-body">
+            <ol class="list-group list-group-numbered">
+                <% for (String errorMessage : errorMessages) { %>
+                    <li class="list-group-item"><%= errorMessage %></li>
+                <% } %>
+            </ol>
+        </div>
+    </div>
+
+     <!-- Back Button to message form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/my_requests.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <% } else { 
+        // Get message sent datetime
+        java.time.LocalDateTime currDateTime = java.time.LocalDateTime.now(); 
+        java.sql.Timestamp currTimestamp = java.sql.Timestamp.valueOf(currDateTime); 
+
+        messageDAO.insertTeacherMessage(false, "teacher", teacher.getTeacher_id(), student_id, currTimestamp, subject, body);
+    %>
+
+    <!-- Success Box with Bootstrap success class -->
+    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+        <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
+        <div>
+            <strong>Your message was sent successfully!</strong>
+        </div>
+    </div>
+
+    <!-- Back Button to message form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/my_requests.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <% }
+    }
+    if (student_reply != null) {
+        teacher_id = Integer.parseInt(rec_teacher_id);
+        message_id = Integer.parseInt(reply_message_id);
+        if (countWords(rep_body) > 20) {
+            countErrors++;
+            errorMessages.add("Your <b>message body</b> must be up to 20 words.");
+        }
+
+        if (countErrors != 0) {
+    %> 
+
+       <!-- Alert Box for General Error -->
+    <div class="alert alert-danger" role="alert">
+        <strong>Your message has errors.</strong>
+    </div>
+
+    <!-- Card to display detailed errors -->
+    <div class="card">
+        <div class="card-header">
+            <strong>Message Errors</strong>
+        </div>
+        <div class="card-body">
+            <ol class="list-group list-group-numbered">
+                <% for (String errorMessage : errorMessages) { %>
+                    <li class="list-group-item"><%= errorMessage %></li>
+                <% } %>
+            </ol>
+        </div>
+    </div>
+
+     <!-- Back Button to message form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/student_messages.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+
+    <% } else { 
+
+        java.time.LocalDateTime curDateTime = java.time.LocalDateTime.now(); 
+        java.sql.Timestamp curTimestamp = java.sql.Timestamp.valueOf(curDateTime); 
+
+        messageDAO.insertStudentReply(message_id, false, student.getStudentId(), teacher_id, curTimestamp, rep_subject, rep_body);
+        messageDAO.updateIsReplied(message_id);
+    %>
+
+     <!-- Success Box with Bootstrap success class -->
+    <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+        <i class="fas fa-check-circle me-3" style="font-size: 1.5rem;"></i>
+        <div>
+            <strong>Your message was sent successfully!</strong>
+        </div>
+    </div>
+
+      <!-- Back Button to message form -->
+    <div class="text-center mt-4">
+        <a href="<%=request.getContextPath()%>/elearn/UI/student_messages.jsp" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
     
+    <% }
+    }
+    %>
+
     </main>
 
     <footer class="text-center text-lg-start mt-auto">

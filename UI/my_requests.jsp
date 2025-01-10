@@ -164,13 +164,58 @@ boolean req_error = false;
                     <div class="card-footer text-center">
                         <button type="submit" id="submitBtn<%=req.getLesson_req_id()%>" class="btn btn-primary d-none">Submit</button>
                         </form>
-                        <button type="button" class="btn btn-outline-secondary">Contact Student</button>
+                         <button class="btn btn-outline-secondary contact-btn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#contactStudentModal" 
+                            data-student-id="<%= student.getStudentId() %>" 
+                            data-student-name="<%= student.getFullName() %>">
+                            Contact Student
+                        </button>
                     </div>
                 </div>
             </div>
 
             <% } %>
 
+        </div>
+
+         <!-- Contact Student Modal -->
+        <div class="modal fade" id="contactStudentModal" tabindex="-1" aria-labelledby="contactStudentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<%=request.getContextPath()%>/elearn/UI/sendMessageController.jsp" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactStudentModalLabel">Contact Student</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="teacherMessage" name="teacherMessage" value="1">
+                            <input type="hidden" id="studentId" name="studentId" value="">
+
+                            <!-- Student Full Name -->
+                            <div class="mb-3">
+                                <label for="studentName" class="form-label">Student Full Name</label>
+                                <input type="text" class="form-control" id="studentFullName" name="studentName" readonly>
+                            </div>
+                            <!-- Message Subject -->
+                            <div class="mb-3">
+                                <label for="emailSubject" class="form-label">Message Subject</label>
+                                <input type="text" class="form-control" id="messageSubject" name="messageSubject" maxlength="100" placeholder="Enter subject (up to 5 words)" required>
+                            </div>
+                            <!-- Message Body -->
+                            <div class="mb-3">
+                                <label for="emailBody" class="form-label">Message Body</label>
+                                <textarea class="form-control" id="messageBody" name="messageBody" rows="4" maxlength="200" placeholder="Enter your message (up to 20 words)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Back Button Below Teacher Cards -->
@@ -192,6 +237,21 @@ boolean req_error = false;
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<%=request.getContextPath()%>/elearn/js/my_requests.js"></script>
+    <script>  
+        document.addEventListener('click', function (event) {
+            // Handle Contact Student button
+            if (event.target.matches('.contact-btn')) {
+
+                const studentId = event.target.getAttribute('data-student-id');
+                const studentName = event.target.getAttribute('data-student-name');
+                
+                
+                // Populate Contact Student Modal fields
+                document.getElementById('studentId').value = studentId;
+                document.getElementById('studentFullName').value = studentName;
+            }
+        });
+    </script>
 
 </body>
 </html>
