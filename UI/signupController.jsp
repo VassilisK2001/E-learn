@@ -13,13 +13,10 @@
 <%@ page import="org.apache.commons.io.IOUtils"%>
 
 <%
-if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) { 
-    request.setAttribute("message","You are not authorized to access this page. Please sign in.");   
-%>
-            
-<jsp:forward page="signin.jsp"/>
-
-<% } 
+// Prevent browser from caching page
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setDateHeader("Expires", 0);
 
 // Set session timeout to 15 minutes
 int sessionTimeoutSeconds = 15 * 60;

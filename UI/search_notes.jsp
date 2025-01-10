@@ -13,13 +13,14 @@ if((session.getAttribute("studentObj") == null && session.getAttribute("teacherO
 
 <% }
 
-// Set session timeout to 15 minutes
-int sessionTimeoutSeconds = 15 * 60;
-session.setMaxInactiveInterval(sessionTimeoutSeconds);
-
+// Prevent browser from caching page
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 response.setHeader("Pragma", "no-cache");
 response.setDateHeader("Expires", 0);
+
+// Set session timeout to 15 minutes
+int sessionTimeoutSeconds = 15 * 60;
+session.setMaxInactiveInterval(sessionTimeoutSeconds);
 
 // Get the student object from the session
 Student student = (Student) session.getAttribute("studentObj");

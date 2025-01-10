@@ -47,7 +47,7 @@ if (student != null || teacher != null) {
                         <a class="nav-link"><b>Signed in as <%= student.getFullName()%></b></a>
                     </li>
                      <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_student.jsp"><b>Home</b></a>
@@ -64,7 +64,7 @@ if (student != null || teacher != null) {
                         <a class="nav-link"><b>Signed in as <%= teacher.getName()%></b></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
+                        <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/elearn/UI/index.jsp"><b>About</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<%=request.getContextPath()%>/elearn/UI/home_teacher.jsp"><b>Home</b></a>
@@ -140,7 +140,13 @@ if (student != null || teacher != null) {
             <h2>Join E-Learn Today!</h2>
             <p>Sign up to connect with expert teachers or eager students.</p>
             <p>Empower your learning journey or share your knowledge!</p>
+            <% if (student != null) { %>
+            <a href="home_student.jsp" class="btn btn-custom btn-lg">Go to Student Home page</a>
+            <% } else if (teacher != null) { %>
+            <a href="home_teacher.jsp" class="btn btn-custom btn-lg">Go to Teacher Home page</a>
+            <% } else { %> 
             <a href="signup.jsp" class="btn btn-custom btn-lg">Sign Up Now</a>
+            <% } %>
         </div>
     </main>
 

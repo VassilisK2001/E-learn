@@ -243,9 +243,9 @@ public class TeacherDAO {
             teacherStmt.setInt(5, age);
             teacherStmt.setString(6, teacherDescription);
             teacherStmt.setString(7, photo);
-            teacherStmt.setDouble(9, minPrice);
-            teacherStmt.setDouble(10, maxPrice);
-            teacherStmt.setInt(8, experience);
+            teacherStmt.setDouble(8, minPrice);
+            teacherStmt.setDouble(9, maxPrice);
+            teacherStmt.setInt(10, experience);
             teacherStmt.executeUpdate();
 
             // Retrieve the generated teacher ID

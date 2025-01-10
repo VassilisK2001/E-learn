@@ -10,6 +10,10 @@ if((session.getAttribute("studentObj") == null && session.getAttribute("teacherO
 <jsp:forward page="signin.jsp"/>
 
 <% }
+// Prevent browser from caching page
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setDateHeader("Expires", 0);
 
 // Set session timeout to 15 minutes
 int sessionTimeoutSeconds = 15 * 60;

@@ -1,10 +1,5 @@
 http://ism.dmst.aueb.gr/ismgroup63/elearn/UI/index.jsp
 
-TO DO
-
-January 10
-- Prevent page caching for all pages 
-- Check page navigations 
        
 January 12
 - Testing on all pages 
