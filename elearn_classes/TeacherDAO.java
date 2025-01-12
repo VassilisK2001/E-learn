@@ -118,6 +118,46 @@ public class TeacherDAO {
         }
     }
 
+    public List<String> retrieveSpecializationsFromName(String teacher_name) throws Exception {
+
+        Connection con = null;
+        List<String> specializations = new ArrayList<String>();
+
+        String sql = "SELECT course_cat_title FROM teacher_course_category " +
+                     "JOIN course_category ON teacher_course_category.course_cat_id = course_category.course_cat_id " +
+                     "WHERE teacher_course_category.teacher_id = (SELECT teacher_id FROM teacher WHERE full_name = ?)";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, teacher_name);
+            rs = stmt.executeQuery();
+
+            while(rs.next()){
+                specializations.add(rs.getString("course_cat_title"));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return specializations;
+
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch(Exception e){
+
+            }
+        }
+    }
+
     /**
      * Retrieves the teacher's courses based on the teacher ID.
      *
@@ -143,6 +183,45 @@ public class TeacherDAO {
             con = db.getConnection();
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, teacher_id);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                specialization_courses.add(rs.getString("course_title"));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return specialization_courses;
+        } catch(Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try{
+                db.close();
+            } catch(Exception e) {
+
+            }
+        }
+    }
+
+    public List<String> retrieveSpecializationCoursesFromName(String teacher_name) throws Exception {
+
+        Connection con = null;
+        List<String> specialization_courses = new ArrayList<String>();
+
+        String sql = "SELECT course_title FROM course " +
+                     "JOIN teacher_course ON course.course_id = teacher_course.course_id " +
+                     "WHERE teacher_course.teacher_id = (SELECT teacher_id FROM teacher WHERE full_name = ?)";
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, teacher_name);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
@@ -493,6 +572,44 @@ public class TeacherDAO {
                 db.close();
             } catch(Exception e) {
                 throw new Exception("Error closing the database: " + e.getMessage());
+            }
+        }
+    }
+
+    public Teacher getTeacherFromName(String teacher_name) throws Exception {
+        Connection con = null;
+        String sql = "SELECT * FROM teacher WHERE full_name = ?;";
+        Teacher teacher = null;
+
+        DB db = new DB();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = db.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, teacher_name);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                teacher = new Teacher(rs.getInt("teacher_id"), rs.getString("full_name"), rs.getInt("age"),
+                rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("description"),
+                rs.getString("photo_url"), rs.getInt("years_of_experience"), rs.getDouble("min_price"), rs.getDouble("max_price"),
+		        retrieveSpecializationsFromName(teacher_name), retrieveSpecializationCoursesFromName(teacher_name));
+            }
+
+            rs.close();
+            stmt.close();
+            db.close();
+
+            return teacher;
+        } catch (Exception e) {
+            throw new Exception("Error fetching teacher object: " + e.getMessage());
+        } finally {
+            try {
+                db.close();
+            } catch (Exception e) {
+                throw new Exception("Error closing database: " + e.getMessage());
             }
         }
     }

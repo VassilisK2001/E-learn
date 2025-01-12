@@ -32,6 +32,9 @@ List<LessonRequest> lessons = new ArrayList<LessonRequest>();
 // Initialize TeacherDAO object
 TeacherDAO teacherDAO = new TeacherDAO();
 
+// Initialize teacher object
+Teacher teacher = null;
+
 // Initialize variable for error checking
 boolean lesson_req_error = false;
 
@@ -106,7 +109,10 @@ boolean lesson_req_error = false;
         <!-- Lessons Cards -->
         <div class="row">
 
-        <% for(LessonRequest lesson: lessons) { %>
+        <% for(LessonRequest lesson: lessons) { 
+            teacher = teacherDAO. getTeacherFromName(lesson.getSent_to());
+        %>
+
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-lg">
                     <div class="row g-0">
@@ -135,12 +141,59 @@ boolean lesson_req_error = false;
                     </div>
 
                     <div class="card-footer text-center">
-                        <button type="button" id="submitBtn1" class="btn btn-outline-secondary">Contact Teacher</button>
+                        <button class="btn btn-outline-secondary contact-btn"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#contactTeacherModal" 
+                            data-teacher-id="<%= teacher.getTeacher_id() %>" 
+                            data-teacher-name="<%= teacher.getName() %>">
+                            Contact Teacher 
+                        </button>
                     </div>
                 </div>
             </div>
 
             <% } %>  
+
+        </div>
+
+        <!-- Contact Teacher Modal -->
+        <div class="modal fade" id="contactTeacherModal" tabindex="-1" aria-labelledby="contactTeacherModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<%=request.getContextPath()%>/elearn/UI/sendMessageController.jsp" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactTeacherModalLabel">Contact Teacher</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="studentMessage" name="studentMessage" value="1">
+                            <input type="hidden" id="mylessons" name="mylessons" value="1">
+                            <input type="hidden" id="teacherId" name="teacherId" value="">
+
+                            <!-- Teacher Full Name -->
+                            <div class="mb-3">
+                                <label for="teacherName" class="form-label">Teacher Full Name</label>
+                                <input type="text" class="form-control" id="teacherFullName" name="teacherName" readonly>
+                            </div>
+                            <!-- Message Subject -->
+                            <div class="mb-3">
+                                <label for="emailSubject" class="form-label">Message Subject</label>
+                                <input type="text" class="form-control" id="messageSubject" name="messageSubject" maxlength="100" placeholder="Enter subject (up to 5 words)" required>
+                            </div>
+                            <!-- Message Body -->
+                            <div class="mb-3">
+                                <label for="emailBody" class="form-label">Message Body</label>
+                                <textarea class="form-control" id="messageBody" name="messageBody" rows="4" maxlength="200" placeholder="Enter your message (up to 20 words)" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Back Button Below Teacher Cards -->
@@ -160,5 +213,19 @@ boolean lesson_req_error = false;
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script> 
+    document.addEventListener('click', function (event) {
+        // Handle Contact Teacher button
+        if (event.target.matches('.contact-btn')) {
+            const teacherId = event.target.getAttribute('data-teacher-id');
+            const teacherName = event.target.getAttribute('data-teacher-name');
+            
+            
+            // Populate Contact Teacher Modal fields
+            document.getElementById('teacherId').value = teacherId;
+            document.getElementById('teacherFullName').value = teacherName;
+        }
+    });  
+    </script>
 </body>
 </html>

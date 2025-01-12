@@ -66,6 +66,7 @@ String reply_body = request.getParameter("replyBody");
 
 // Get form data for student message
 String student_message = request.getParameter("studentMessage");
+String message_from_my_lessons_page = request.getParameter("mylessons");
 String recipient_teacher_id = request.getParameter("teacherId");
 String message_subject = request.getParameter("messageSubject");
 String message_body = request.getParameter("messageBody");
@@ -205,7 +206,7 @@ String message_read_id = request.getParameter("messageId");
 
      <!-- Back Button to message form -->
     <div class="text-center mt-4">
-        <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher_Controller.jsp" class="btn btn-outline-primary">
+        <a href="<%=request.getContextPath()%>/elearn/UI/<%=(message_from_my_lessons_page != null ? "my_lessons.jsp" : "find_teacher_Controller.jsp")%>" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left me-2"></i>Back
         </a>
     </div>
@@ -228,7 +229,7 @@ String message_read_id = request.getParameter("messageId");
 
     <!-- Back Button to message form -->
     <div class="text-center mt-4">
-        <a href="<%=request.getContextPath()%>/elearn/UI/find_teacher_Controller.jsp" class="btn btn-outline-primary">
+        <a href="<%=request.getContextPath()%>/elearn/UI/<%=(message_from_my_lessons_page != null ? "my_lessons.jsp" : "find_teacher_Controller.jsp")%>" class="btn btn-outline-primary">
             <i class="fas fa-arrow-left me-2"></i>Back
         </a>
     </div>

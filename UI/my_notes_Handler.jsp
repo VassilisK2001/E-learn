@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="elearn_classes.*" %>
-<%@ page import="java.util.*"%>
 <%@ page errorPage="AppError.jsp" %>
+<%@ page import="java.util.*"%>
 
 
 <%
@@ -114,7 +114,7 @@ NoteDAO noteDAO = new NoteDAO();
 
     <% }  
 
-    if (del_note.equals("true")) {
+    if (del_note != null && del_note.equals("true")) {
         noteDAO.deleteFavNote(student_id, note_id);
     %>
 

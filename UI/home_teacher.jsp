@@ -73,7 +73,7 @@ Teacher teacher = (Teacher) session.getAttribute("teacherObj");
                         <div class="card functionality-card p-4">
                             <div class="functionality-title">Requested lessons</div>
                             <div class="functionality-description">
-                                View  the students who have sent you a request to schedule a lesson or have sent you a message and chat  with them online.
+                                View the students who have sent you a request to schedule a lesson.
                             </div>
                         </div>
                     </a>

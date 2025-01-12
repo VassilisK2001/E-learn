@@ -222,23 +222,24 @@ if (notesList == null) {
             </div>
 
             <!-- Modal for displaying the note content -->
-            <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="openNoteModalLabel<%= note.getNote_id() %>">Note: <%= note.getTitle() %></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title">Note: <%= note.getTitle() %></h5>
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary me-2" id="fullscreenButton<%= note.getNote_id() %>">
+                                <i class="fas fa-expand-arrows-alt"></i> Full Screen
+                            </button>
+                            <button type="button" class="btn-close" id="closeButton<%= note.getNote_id() %>" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body">
-                            <%-- Handle PDF file for viewing --%>
-                            <embed src="<%= request.getContextPath() %>/elearn/notes/<%= fileUrl %>" width="100%" height="700px" /> 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <embed src="<%= request.getContextPath() %>/elearn/notes/<%=note.getFile_url()%>" width="100%" height="700px" />
                     </div>
                 </div>
             </div>
+        </div>
         <%   }   %>
         </div>
         <%  }   %>
@@ -304,23 +305,24 @@ if (notesList == null) {
             </div>
 
             <!-- Modal for displaying the note content -->
-            <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="openNoteModalLabel<%= note.getNote_id() %>">Note: <%= note.getTitle() %></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="openNoteModal<%= note.getNote_id() %>" tabindex="-1" aria-labelledby="openNoteModalLabel<%= note.getNote_id() %>" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title">Note: <%= note.getTitle() %></h5>
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary me-2" id="fullscreenButton<%= note.getNote_id() %>">
+                                <i class="fas fa-expand-arrows-alt"></i> Full Screen
+                            </button>
+                            <button type="button" class="btn-close" id="closeButton<%= note.getNote_id() %>" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body">
-                            <%-- Handle PDF file for viewing --%>
-                            <embed src="<%= request.getContextPath() %>/elearn/notes/<%= fileUrl %>" width="100%" height="700px" /> 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <embed src="<%= request.getContextPath() %>/elearn/notes/<%=note.getFile_url()%>" width="100%" height="700px" />
                     </div>
                 </div>
             </div>
+        </div>
         <%   }   %>
     </div>
 
@@ -343,5 +345,73 @@ if (notesList == null) {
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <% if (notesList == null) { %>
+            <% for (Note note : available_notes) { %>
+            const fullscreenButton<%= note.getNote_id() %> = document.getElementById('fullscreenButton<%= note.getNote_id() %>');
+            const closeButton<%= note.getNote_id() %> = document.getElementById('closeButton<%= note.getNote_id() %>');
+            const modalContent<%= note.getNote_id() %> = document.querySelector('#openNoteModal<%= note.getNote_id() %> .modal-content');
+            const embedElement<%= note.getNote_id() %> = modalContent<%= note.getNote_id() %>.querySelector('embed');
+
+            fullscreenButton<%= note.getNote_id() %>.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    modalContent<%= note.getNote_id() %>.requestFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "100vh";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-compress-arrows-alt"></i> Exit Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'none';
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "700px";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'block';
+                    });
+                }
+            });
+
+            document.addEventListener('fullscreenchange', function () {
+                if (!document.fullscreenElement) {
+                    embedElement<%= note.getNote_id() %>.style.height = "700px";
+                    fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                    closeButton<%= note.getNote_id() %>.style.display = 'block';
+                }
+            });
+            <% } %>
+            <% } else { %>
+            <% for (Note note : notesList) { %>
+            const fullscreenButton<%= note.getNote_id() %> = document.getElementById('fullscreenButton<%= note.getNote_id() %>');
+            const closeButton<%= note.getNote_id() %> = document.getElementById('closeButton<%= note.getNote_id() %>');
+            const modalContent<%= note.getNote_id() %> = document.querySelector('#openNoteModal<%= note.getNote_id() %> .modal-content');
+            const embedElement<%= note.getNote_id() %> = modalContent<%= note.getNote_id() %>.querySelector('embed');
+
+            fullscreenButton<%= note.getNote_id() %>.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    modalContent<%= note.getNote_id() %>.requestFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "100vh";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-compress-arrows-alt"></i> Exit Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'none';
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        embedElement<%= note.getNote_id() %>.style.height = "700px";
+                        fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                        closeButton<%= note.getNote_id() %>.style.display = 'block';
+                    });
+                }
+            });
+
+            document.addEventListener('fullscreenchange', function () {
+                if (!document.fullscreenElement) {
+                    embedElement<%= note.getNote_id() %>.style.height = "700px";
+                    fullscreenButton<%= note.getNote_id() %>.innerHTML = '<i class="fas fa-expand-arrows-alt"></i> Full Screen';
+                    closeButton<%= note.getNote_id() %>.style.display = 'block';
+                }
+            });
+            <% } %>
+            <% } %>
+        });
+    </script>
+
 </body>
 </html>

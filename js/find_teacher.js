@@ -59,7 +59,7 @@ function nextSlide() {
     const currentSlide = document.querySelector(".carousel-item.active");
 
      // Collect all required fields on the current slide
-     const requiredFields = currentSlide.querySelectorAll("input[required]");
+     const requiredFields = currentSlide.querySelectorAll("input[required], select[required]");
      let allFieldsFilled = true;
      
      requiredFields.forEach(field => {
