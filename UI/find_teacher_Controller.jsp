@@ -5,11 +5,6 @@
 
 
 <%
-// Check if the request method is POST; otherwise, throw an exception
-if(!request.getMethod().equals("POST")) {
-    throw new Exception("No parameters specified. Please visit <a href='signup.jsp'>registration form</a>");
-}
-
 if((session.getAttribute("studentObj") == null)) { 
     request.setAttribute("message","You are not authorized to access this page. Please sign in.");   
 %>

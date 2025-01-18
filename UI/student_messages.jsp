@@ -250,7 +250,12 @@ Map<Teacher, List<Message>> conversations = messageDAO.getStudentConversarions(s
             document.getElementById('teacherName').textContent = teacherName;
             document.getElementById('teacherId').value = teacherId;
             document.getElementById('messageId').value = messageId;
-            document.getElementById('replySubject').value = "Re: " + messageSubject;
+            // Conditional check for the message subject
+            const replySubject = messageSubject.startsWith("Re") 
+                ? messageSubject 
+                : "Re: " + messageSubject;
+
+            document.getElementById('replySubject').value = replySubject;
         });
     </script>
 

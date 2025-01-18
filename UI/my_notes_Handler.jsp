@@ -87,7 +87,7 @@ NoteDAO noteDAO = new NoteDAO();
         if (!note_exists) {
 
             // Call method to insert student note into database
-            noteDAO.saveNote(student_id, note_id);        
+            noteDAO.saveNote(student_id, note_id); 
     %>
 
         <!-- Success Box with Bootstrap success class -->
