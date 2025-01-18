@@ -3,6 +3,10 @@
 <%@ page errorPage="AppError.jsp" %>
 
 <%
+// Check if the request method is POST; otherwise, throw an exception
+if(!request.getMethod().equals("POST")) {
+    throw new Exception("No parameters specified. Please visit <a href='signup.jsp'>registration form</a>");
+}
 String email = request.getParameter("email");
 String username = request.getParameter("username");
 String password = request.getParameter("password");

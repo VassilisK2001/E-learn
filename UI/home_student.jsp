@@ -4,7 +4,7 @@
 
 <%
 // Check if the user is not signed in, set an error message, and forward to the login page
-if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) {
+if((session.getAttribute("studentObj") == null)) {
     request.setAttribute("message","You are not authorized to access this page. Please sign in.");
 %>
 

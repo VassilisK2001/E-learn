@@ -13,6 +13,11 @@
 <%@ page import="org.apache.commons.io.IOUtils"%>
 
 <%
+// Check if the request method is POST; otherwise, throw an exception
+if(!request.getMethod().equals("POST")) {
+    throw new Exception("No parameters specified. Please visit <a href='signup.jsp'>registration form</a>");
+}
+
 // Prevent browser from caching page
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 response.setHeader("Pragma", "no-cache");

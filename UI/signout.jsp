@@ -2,6 +2,13 @@
 <%@ page errorPage="AppError.jsp" %>
 
 <%
+if((session.getAttribute("studentObj") == null && session.getAttribute("teacherObj") == null)) { 
+    request.setAttribute("message","You are not authorized to access this page. Please sign in.");   
+%>
+            
+<jsp:forward page="signin.jsp"/>
+
+<% }
 session.invalidate();
 %>
 
